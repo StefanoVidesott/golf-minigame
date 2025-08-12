@@ -4,8 +4,13 @@ namespace GameScene {
 
     void MenuScene::Start() {
         // Initialize the menu scene
-        rectangle.setSize(sf::Vector2f(200, 100));
-        rectangle.setFillColor(sf::Color::Green);
+        this->rectangle.setSize(sf::Vector2f(200, 100));
+        this->rectangle.setFillColor(sf::Color::Green);
+
+        Engine::ResourceManager::ResourceManager::loadFont("TitleFont", "res/font/font.ttf");
+        this->titleFont = &Engine::ResourceManager::ResourceManager::getFont("TitleFont");
+
+        this->titleText = new sf::Text(*this->titleFont, "Golf Minigame");
     }
 
     void MenuScene::FixedUpdate(float fixedDeltaTime) {
@@ -24,6 +29,7 @@ namespace GameScene {
         // Render the menu scene
         if (window) {
             window->draw(rectangle);
+            window->draw(*titleText);
         }
     }
 

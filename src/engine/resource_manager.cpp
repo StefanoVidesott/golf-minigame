@@ -49,6 +49,9 @@ namespace Engine {
 
         // ---- RESOURCE MANAGER ----
 
+        TextureManager ResourceManager::textureManager;
+        FontManager ResourceManager::fontManager;
+
         void ResourceManager::loadTexture(const std::string& name, const std::string& filePath) {
             textureManager.loadTexture(name, filePath);
         }

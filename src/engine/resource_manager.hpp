@@ -39,15 +39,15 @@ namespace Engine {
             ResourceManager() = default;
             ~ResourceManager() = default;
 
-            void loadTexture(const std::string& name, const std::string& filePath);
-            sf::Texture& getTexture(const std::string& name);
+            static void loadTexture(const std::string& name, const std::string& filePath);
+            static sf::Texture& getTexture(const std::string& name);
 
-            void loadFont(const std::string& name, const std::string& filePath);
-            sf::Font& getFont(const std::string& name);
+            static void loadFont(const std::string& name, const std::string& filePath);
+            static sf::Font& getFont(const std::string& name);
 
         private:
-            TextureManager textureManager;
-            FontManager fontManager;
+            static TextureManager textureManager;
+            static FontManager fontManager;
         };
 
     } // namespace ResourceManager

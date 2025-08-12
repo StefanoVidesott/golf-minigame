@@ -17,6 +17,8 @@ namespace GameScene {
 
         private:
             sf::RectangleShape rectangle;
+            sf::Font *titleFont;
+            sf::Text *titleText;
         };
 
 } // namespace GameScene
