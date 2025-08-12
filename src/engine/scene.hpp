@@ -1,6 +1,6 @@
 #pragma once
 
-#include <SFML/Graphics.hpp>
+#include "resource_manager.hpp"
 
 namespace Engine {
     namespace Scene {
@@ -16,10 +16,10 @@ namespace Engine {
                 virtual void HandleEvent(const std::optional<sf::Event>& event) = 0;
                 virtual void Render() = 0;
 
-                sf::RenderWindow* window = nullptr; // Pointer to the window for rendering
-                bool continueInPause = false; // Flag to check if the scene should continue in pause
-                bool loaded = false; // Flag to check if the scene is loaded
-                bool active = false; // Flag to check if the scene is active
+                sf::RenderWindow* window = nullptr;
+                bool continueInPause = false;
+                bool loaded = false;
+                bool active = false;
         };
 
     } // namespace Scene

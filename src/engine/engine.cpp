@@ -10,6 +10,14 @@ namespace Engine {
 
     Engine::~Engine() {
         delete window;
+        while (!scenes.empty()) {
+            delete scenes.top();
+            scenes.pop();
+        }
+        if (currentScene) {
+            delete currentScene;
+            currentScene = nullptr;
+        }
     }
 
     void Engine::LoadScene(Scene::Scene *scene) {
