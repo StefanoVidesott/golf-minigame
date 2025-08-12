@@ -1,4 +1,5 @@
 #include "application.hpp"
+#include "scenes/menu_scene.hpp"
 
 Application::Application() {
     this->engine = new Engine::Engine();
@@ -9,6 +10,6 @@ Application::~Application() {
 }
 
 void Application::Run() {
-    // TODO: Load menu scene
+    this->engine->LoadScene(new GameScene::MenuScene());
     this->engine->Run();
 }

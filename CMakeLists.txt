@@ -14,6 +14,7 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(golf-minigame src/main.cpp
     src/engine/engine.cpp
-    src/game/application.cpp)
+    src/game/application.cpp
+    src/game/scenes/menu_scene.cpp)
 target_compile_features(golf-minigame PRIVATE cxx_std_17)
 target_link_libraries(golf-minigame PRIVATE SFML::Graphics)

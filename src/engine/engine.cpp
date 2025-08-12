@@ -4,6 +4,7 @@ namespace Engine {
 
     Engine::Engine() {
         this->window = new sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Golf-Minigame");
+        this->window->setVerticalSyncEnabled(true);
         this->window->setFramerateLimit(144);
     }
 
@@ -18,7 +19,9 @@ namespace Engine {
             scene->loaded = true;
             scene->active = true;
             scene->window = this->window;
-            this->currentScene->active = false;
+            if (this->currentScene) {
+                this->currentScene->active = false;
+            }
             this->currentScene = scene;
         }
     }
@@ -51,6 +54,12 @@ namespace Engine {
                     {
                         this->window->close();
                     }
+                    else if (const auto* resized = event->getIf<sf::Event::Resized>())
+                    {
+                        // update the view to the new size of the window
+                        sf::FloatRect visibleArea({0.f, 0.f}, sf::Vector2f(resized->size));
+                        this->window->setView(sf::View(visibleArea));
+                    }
                     this->currentScene->HandleEvent(event);
                 }
 
@@ -70,7 +79,23 @@ namespace Engine {
                 this->window->display();
             }
         }
-
     }
-
 }
+
+// Preserve ratio:
+
+// else if (const auto* resizeEvent = event->getIf<sf::Event::Resized>()) {
+//     float windowRatio = static_cast<float>(resizeEvent->size.x) / static_cast<float>(resizeEvent->size.y);
+//     float targetRatio = 1920.f / 1080.f; // rapporto del gioco
+
+//     sf::View view = this->window->getView();
+//     if (windowRatio > targetRatio) {
+//         float viewportWidth = targetRatio / windowRatio;
+//         view.setViewport(sf::FloatRect(sf::Vector2f((1.f - viewportWidth) / 2.f, 0.f), sf::Vector2f(viewportWidth, 1.f)));
+//     }
+//     else {
+//         float viewportHeight = windowRatio / targetRatio;
+//         view.setViewport(sf::FloatRect(sf::Vector2f(0.f, (1.f - viewportHeight) / 2.f), sf::Vector2f(1.f, viewportHeight)));
+//     }
+//     this->window->setView(view);
+// }

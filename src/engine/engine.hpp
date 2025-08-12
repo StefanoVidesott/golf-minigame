@@ -26,6 +26,5 @@ namespace Engine {
 
             float fixedDeltaTime;
             float deltaTime;
-
         };
 };
