@@ -15,8 +15,8 @@ namespace Engine {
             TextureManager() = default;
             ~TextureManager() = default;
 
-            void loadTexture(const std::string& name, const std::string& filePath);
-            sf::Texture& getTexture(const std::string& name);
+            void loadTexture(const std::string&, const std::string&);
+            sf::Texture& getTexture(const std::string&);
 
         private:
             std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textures;
@@ -27,8 +27,8 @@ namespace Engine {
             FontManager() = default;
             ~FontManager() = default;
 
-            void loadFont(const std::string& name, const std::string& filePath);
-            sf::Font& getFont(const std::string& name);
+            void loadFont(const std::string&, const std::string&);
+            sf::Font& getFont(const std::string&);
 
         private:
             std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
@@ -39,11 +39,11 @@ namespace Engine {
             ResourceManager() = default;
             ~ResourceManager() = default;
 
-            static void loadTexture(const std::string& name, const std::string& filePath);
-            static sf::Texture& getTexture(const std::string& name);
+             static void loadTexture(const std::string&, const std::string&);
+            static sf::Texture& getTexture(const std::string&);
 
-            static void loadFont(const std::string& name, const std::string& filePath);
-            static sf::Font& getFont(const std::string& name);
+            static void loadFont(const std::string&, const std::string&);
+            static sf::Font& getFont(const std::string&);
 
         private:
             static TextureManager textureManager;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "resource_manager.hpp"
+#include "entity.hpp"
 
 namespace Engine {
     namespace Scene {
@@ -11,15 +11,16 @@ namespace Engine {
                 virtual ~Scene() = default;
 
                 virtual void Start() = 0;
-                virtual void FixedUpdate(float fixedDeltaTime) = 0;
-                virtual void Update(float deltaTime) = 0;
-                virtual void HandleEvent(const std::optional<sf::Event>& event) = 0;
+                virtual void FixedUpdate(float) = 0;
+                virtual void Update(float) = 0;
+                virtual void HandleEvent(const std::optional<sf::Event>&) = 0;
                 virtual void Render() = 0;
 
                 sf::RenderWindow* window = nullptr;
                 bool continueInPause = false;
                 bool loaded = false;
                 bool active = false;
+                std::vector<Entity*> entities;
         };
 
     } // namespace Scene

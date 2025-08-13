@@ -8,9 +8,12 @@ namespace GameScene {
         this->rectangle.setFillColor(sf::Color::Green);
 
         Engine::ResourceManager::ResourceManager::loadFont("TitleFont", "res/font/font.ttf");
-        this->titleFont = &Engine::ResourceManager::ResourceManager::getFont("TitleFont");
 
-        this->titleText = new sf::Text(*this->titleFont, "Golf Minigame");
+        Engine::Entity *titleEntity = new Engine::Entity();
+        Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Golf Minigame", 50);
+        titleEntity->AddComponent(titleTextComponent);
+        this->entities.push_back(titleEntity);
+
     }
 
     void MenuScene::FixedUpdate(float fixedDeltaTime) {
@@ -29,7 +32,6 @@ namespace GameScene {
         // Render the menu scene
         if (window) {
             window->draw(rectangle);
-            window->draw(*titleText);
         }
     }
 

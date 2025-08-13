@@ -6,6 +6,8 @@ namespace Engine {
         this->window = new sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Golf-Minigame");
         this->window->setVerticalSyncEnabled(true);
         this->window->setFramerateLimit(144);
+
+        ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
     }
 
     Engine::~Engine() {
@@ -53,6 +55,9 @@ namespace Engine {
             if(currentScene) {
                 this->fixedDeltaTime = this->deltaClock.reset().asSeconds();
                 this->currentScene->FixedUpdate(this->fixedDeltaTime);
+                for(Entity* entity : this->currentScene->entities) {
+                    entity->Update(this->fixedDeltaTime);
+                }
                 this->deltaTime = this->fixedDeltaTime + this->deltaClock.restart().asSeconds();
                 this->currentScene->Update(this->deltaTime);
 
@@ -73,6 +78,9 @@ namespace Engine {
 
                 this->window->clear();
                 this->currentScene->Render();
+                for (Entity* entity : this->currentScene->entities) {
+                    entity->Render(this->window);
+                }
                 this->window->display();
             }
             else {
