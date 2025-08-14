@@ -14,7 +14,7 @@ namespace Engine {
             void SetFont(const sf::Font&);
             void SetCharacterSize(unsigned int);
             void SetStyle(sf::Text::Style);
-            [[nodiscard]] const std::string& getString() const;
+            [[nodiscard]] const sf::String& getString() const;
             [[nodiscard]] const sf::Font* GetFont() const;
             [[nodiscard]] unsigned int GetCharacterSize() const;
             [[nodiscard]] uint32_t GetStyle() const;

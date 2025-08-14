@@ -19,13 +19,34 @@ namespace Engine {
                 this->frameTimeAccumulator = 0.0f;
             }
             this->frameTime = deltaTime * 1000.0f; // Convert to milliseconds
-            this->entityCount = static_cast<int>((*this->currentScene)->entities.size());
+
+            this->entityCount = 0;
+
+            if (this->engine_scenes) {
+                // lo stack non è iterabile direttamente senza copiarlo
+                std::stack<Scene*> temp = *this->engine_scenes;
+                while (!temp.empty()) {
+                    Scene* s = temp.top();
+                    if (s) {
+                        this->entityCount += static_cast<int>(s->entities.size());
+                    }
+                    temp.pop();
+                }
+            }
+
+            if (this->engine_overlays) {
+                for (Scene* overlay : *this->engine_overlays) {
+                    if (overlay) {
+                        this->entityCount += static_cast<int>(overlay->entities.size());
+                    }
+                }
+            }
 
             this->overlayText->GetComponent<Components::TextComponent>("DebugText")->SetText(
                 "FPS: " + std::to_string(static_cast<int>(this->fps)) +
                 "\nFrame Time: " + std::to_string(static_cast<int>(this->frameTime)) + " ms" +
                 "\nEntities: " + std::to_string(this->entityCount) +
-                "\nCurrent Scene: " + typeid(*this->currentScene).name()
+                "\nCurrent Scene: " + std::string(typeid(**this->currentScene).name())
             );
         }
 

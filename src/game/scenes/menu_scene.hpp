@@ -15,7 +15,7 @@ namespace GameScene {
             void Render() override;
 
         private:
-            sf::RectangleShape rectangle;
+            // sf::RectangleShape rectangle;
         };
 
 } // namespace GameScene

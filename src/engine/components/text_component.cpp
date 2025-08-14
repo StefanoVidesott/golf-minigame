@@ -33,7 +33,7 @@ namespace Engine {
             this->text.setStyle(style);
         }
 
-        const std::string& TextComponent::getString() const {
+        const sf::String& TextComponent::getString() const {
             return this->text.getString();
         }
 

@@ -15,7 +15,10 @@ namespace Engine {
                 void HandleEvent(const std::optional<sf::Event>&) override;
                 void Render() override;
 
-                Scene **currentScene = nullptr;
+                Scene **currentScene;
+                std::stack<Scene*> *engine_scenes;
+                std::vector<Scene*> *engine_overlays;
+
             private:
                 Entity *overlayText = nullptr;
 

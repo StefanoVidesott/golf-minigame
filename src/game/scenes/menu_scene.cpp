@@ -4,8 +4,8 @@ namespace GameScene {
 
     void MenuScene::Start() {
         // Initialize the menu scene
-        this->rectangle.setSize(sf::Vector2f(200, 100));
-        this->rectangle.setFillColor(sf::Color::Green);
+        // this->rectangle.setSize(sf::Vector2f(200, 100));
+        // this->rectangle.setFillColor(sf::Color::Green);
 
         Engine::ResourceManager::ResourceManager::loadFont("TitleFont", "res/font/font.ttf");
 
@@ -13,7 +13,6 @@ namespace GameScene {
         Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Golf Minigame", 50);
         titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
         this->entities.push_back(std::unique_ptr<Engine::Entity>(titleEntity));
-
     }
 
     void MenuScene::Update(float deltaTime) {
@@ -27,7 +26,7 @@ namespace GameScene {
     void MenuScene::Render() {
         // Render the menu scene
         if (window) {
-            window->draw(rectangle);
+            // window->draw(rectangle);
         }
     }
 
