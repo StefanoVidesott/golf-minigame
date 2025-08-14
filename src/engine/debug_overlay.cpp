@@ -2,6 +2,11 @@
 
 #if defined(__linux__)
 #include <unistd.h>
+#elif defined(__APPLE__) && defined(__MACH__)
+#include <mach/mach.h>
+#elif defined(_WIN32)
+#include <windows.h>
+#include <psapi.h>
 #endif
 
 namespace Engine {
@@ -68,6 +73,27 @@ namespace Engine {
                             memoryUsage = std::to_string(mem_kb / 1024) + " MB";
                         }
                         fclose(file);
+                    }
+                }
+
+            #elif defined(__APPLE__) && defined(__MACH__)
+                #include <mach/mach.h>
+                {
+                    struct task_basic_info info;
+                    mach_msg_type_number_t infoCount = TASK_BASIC_INFO_COUNT;
+                    if (task_info(mach_task_self(), TASK_BASIC_INFO,
+                                (task_info_t)&info, &infoCount) == KERN_SUCCESS) {
+                        memoryUsage = std::to_string(info.resident_size / (1024 * 1024)) + " MB";
+                    }
+                }
+
+            #elif defined(_WIN32)
+                #include <windows.h>
+                #include <psapi.h>
+                {
+                    PROCESS_MEMORY_COUNTERS pmc;
+                    if (GetProcessMemoryInfo(GetCurrentProcess(), &pmc, sizeof(pmc))) {
+                        memoryUsage = std::to_string(pmc.WorkingSetSize / (1024 * 1024)) + " MB";
                     }
                 }
             #endif
