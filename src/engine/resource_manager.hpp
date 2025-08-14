@@ -3,8 +3,10 @@
 #include <stack>
 #include <memory>
 #include <string>
+#include <iostream>
 #include <stdexcept>
 #include <unordered_map>
+#include <unordered_set>
 #include <SFML/Graphics.hpp>
 
 namespace Engine {

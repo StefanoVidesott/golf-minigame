@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(SFML)
 add_executable(golf-minigame src/main.cpp
     src/game/application.cpp
     src/engine/engine.cpp
+    src/engine/scene.cpp
     src/engine/entity.cpp
     src/engine/resource_manager.cpp
 

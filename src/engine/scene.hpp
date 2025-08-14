@@ -8,10 +8,9 @@ namespace Engine {
         class Scene {
             public:
                 Scene() = default;
-                virtual ~Scene() = default;
+                virtual ~Scene();
 
                 virtual void Start() = 0;
-                virtual void FixedUpdate(float) = 0;
                 virtual void Update(float) = 0;
                 virtual void HandleEvent(const std::optional<sf::Event>&) = 0;
                 virtual void Render() = 0;
@@ -20,7 +19,7 @@ namespace Engine {
                 bool continueInPause = false;
                 bool loaded = false;
                 bool active = false;
-                std::vector<Entity*> entities;
+                std::vector<std::unique_ptr<Entity>> entities;
         };
 
     } // namespace Scene

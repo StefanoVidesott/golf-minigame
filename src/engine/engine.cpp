@@ -6,19 +6,20 @@ namespace Engine {
         this->window = new sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Golf-Minigame");
         this->window->setVerticalSyncEnabled(true);
         this->window->setFramerateLimit(144);
-
-        ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
     }
 
     Engine::~Engine() {
         delete window;
-        while (!scenes.empty()) {
-            delete scenes.top();
-            scenes.pop();
-        }
-        if (currentScene) {
-            delete currentScene;
-            currentScene = nullptr;
+        if (!scenes.empty()) {
+            std::unordered_set<Scene::Scene*> deleted;
+            while (!scenes.empty()) {
+                Scene::Scene* s = scenes.top();
+                if (!deleted.count(s)) {
+                    delete s;
+                    deleted.insert(s);
+                }
+                scenes.pop();
+            }
         }
     }
 
@@ -39,13 +40,23 @@ namespace Engine {
     void Engine::DropScene() {
         if (currentScene) {
             currentScene->active = false;
-            this->scenes.pop();
-            currentScene = this->scenes.top();
-            currentScene->active = true;
+            delete scenes.top();
+            scenes.pop();
+            if (!scenes.empty()) {
+                currentScene = scenes.top();
+                currentScene->active = true;
+            } else {
+                currentScene = nullptr;
+            }
         }
     }
 
+    void Engine::Start() {
+        ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
+    }
+
     void Engine::Run() {
+        this->Start();
         this->Update();
     }
 
@@ -53,18 +64,21 @@ namespace Engine {
         while (this->window->isOpen())
         {
             if(currentScene) {
-                this->fixedDeltaTime = this->deltaClock.reset().asSeconds();
-                this->currentScene->FixedUpdate(this->fixedDeltaTime);
-                for(Entity* entity : this->currentScene->entities) {
-                    entity->Update(this->fixedDeltaTime);
-                }
-                this->deltaTime = this->fixedDeltaTime + this->deltaClock.restart().asSeconds();
+                this->deltaTime = this->deltaClock.restart().asSeconds();
                 this->currentScene->Update(this->deltaTime);
+
+                for (const auto& entity : this->currentScene->entities)
+                {
+                    if (entity) {
+                        entity->Update(this->deltaTime);
+                    }
+                }
 
                 while (const std::optional event = this->window->pollEvent())
                 {
                     if (event->is<sf::Event::Closed>())
                     {
+                        std::cout << "Closing window..." << std::endl;
                         this->window->close();
                     }
                     else if (const auto* resized = event->getIf<sf::Event::Resized>())
@@ -78,8 +92,11 @@ namespace Engine {
 
                 this->window->clear();
                 this->currentScene->Render();
-                for (Entity* entity : this->currentScene->entities) {
-                    entity->Render(this->window);
+                for (const auto& entity : this->currentScene->entities)
+                {
+                    if (entity) {
+                        entity->Render(this->window);
+                    }
                 }
                 this->window->display();
             }
@@ -97,21 +114,3 @@ namespace Engine {
         }
     }
 }
-
-// Preserve ratio:
-
-// else if (const auto* resizeEvent = event->getIf<sf::Event::Resized>()) {
-//     float windowRatio = static_cast<float>(resizeEvent->size.x) / static_cast<float>(resizeEvent->size.y);
-//     float targetRatio = 1920.f / 1080.f; // rapporto del gioco
-
-//     sf::View view = this->window->getView();
-//     if (windowRatio > targetRatio) {
-//         float viewportWidth = targetRatio / windowRatio;
-//         view.setViewport(sf::FloatRect(sf::Vector2f((1.f - viewportWidth) / 2.f, 0.f), sf::Vector2f(viewportWidth, 1.f)));
-//     }
-//     else {
-//         float viewportHeight = windowRatio / targetRatio;
-//         view.setViewport(sf::FloatRect(sf::Vector2f(0.f, (1.f - viewportHeight) / 2.f), sf::Vector2f(1.f, viewportHeight)));
-//     }
-//     this->window->setView(view);
-// }

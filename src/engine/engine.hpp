@@ -14,6 +14,7 @@ namespace Engine {
 
             void Run();
         private:
+            void Start();
             void Update();
 
             sf::RenderWindow *window;
@@ -21,7 +22,6 @@ namespace Engine {
             Scene::Scene *currentScene = nullptr;
             sf::Clock deltaClock;
 
-            float fixedDeltaTime;
             float deltaTime;
     };
 };

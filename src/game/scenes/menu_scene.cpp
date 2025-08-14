@@ -11,13 +11,9 @@ namespace GameScene {
 
         Engine::Entity *titleEntity = new Engine::Entity();
         Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Golf Minigame", 50);
-        titleEntity->AddComponent(titleTextComponent);
-        this->entities.push_back(titleEntity);
+        titleEntity->AddComponent(std::unique_ptr<Engine::Components::Component>(titleTextComponent));
+        this->entities.push_back(std::unique_ptr<Engine::Entity>(titleEntity));
 
-    }
-
-    void MenuScene::FixedUpdate(float fixedDeltaTime) {
-        // Update the menu scene at a fixed interval
     }
 
     void MenuScene::Update(float deltaTime) {

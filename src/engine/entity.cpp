@@ -7,18 +7,14 @@ namespace Engine {
     }
 
     Entity::~Entity() {
-        // Destructor implementation can be added here if needed
-        for (auto& component : components) {
-            delete component; // Clean up dynamically allocated components
-        }
+        components.clear();
     }
 
-    void Entity::AddComponent(Components::Component* component) {
-        if (component) {
-            components.push_back(component);
-        } else {
-            throw std::runtime_error("Attempted to add a null component to the entity.");
+    void Entity::AddComponent(std::unique_ptr<Components::Component> component) {
+        if (!component){
+            throw std::runtime_error("Null component");
         }
+        components.push_back(std::move(component));
     }
 
     void Entity::Update(float deltaTime) {

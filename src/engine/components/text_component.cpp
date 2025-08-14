@@ -3,25 +3,10 @@
 namespace Engine {
     namespace Components {
 
-        TextComponent::TextComponent() {
+        TextComponent::TextComponent(const sf::Font& font, const std::string& text, unsigned int size = 30) : text(font, text, size) {
         }
 
-        TextComponent::TextComponent(const sf::Font& font, const std::string& text, unsigned int size = 30) {
-            this->text = new sf::Text(font, text, size);
-        }
-
-        TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size = 30) {
-            sf::Font& font = Engine::ResourceManager::ResourceManager::getFont(fontName);
-            this->text = new sf::Text(font, text, size);
-        }
-
-        TextComponent::~TextComponent() {
-            delete text;
-        }
-
-        void TextComponent::InitializeText() {
-            text = new sf::Text(Engine::ResourceManager::ResourceManager::getFont("DefaultFont"), "TextComponent", 30);
-            text->setFillColor(sf::Color::White);
+        TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size = 30) : text(Engine::ResourceManager::ResourceManager::getFont(fontName), text, size) {
         }
 
         void TextComponent::Update(float deltaTime) {
@@ -29,7 +14,7 @@ namespace Engine {
         }
 
         void TextComponent::Render(sf::RenderWindow* window) {
-            window->draw(*text);
+            window->draw(text);
         }
 
     } // namespace Components

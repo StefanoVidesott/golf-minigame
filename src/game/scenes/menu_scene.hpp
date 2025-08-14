@@ -10,7 +10,6 @@ namespace GameScene {
             ~MenuScene() override = default;
 
             void Start() override;
-            void FixedUpdate(float) override;
             void Update(float) override;
             void HandleEvent(const std::optional<sf::Event>&) override;
             void Render() override;
