@@ -18,6 +18,8 @@ namespace Engine {
                 virtual void HandleEvent(const std::optional<sf::Event>&) = 0;
                 virtual void RenderBehavior() = 0;
 
+                virtual std::string GetName() const = 0;
+
                 sf::RenderWindow* window = nullptr;
                 bool continueInPause = false;
                 bool loaded = false;

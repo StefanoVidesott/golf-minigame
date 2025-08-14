@@ -27,4 +27,8 @@ namespace ApplicationScene {
         // Render the menu scene
     }
 
+    std::string MenuScene::GetName() const {
+        return "MenuScene";
+    }
+
 } // namespace Scene

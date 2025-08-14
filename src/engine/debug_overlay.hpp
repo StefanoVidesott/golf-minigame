@@ -15,6 +15,8 @@ namespace Engine {
                 void HandleEvent(const std::optional<sf::Event>&) override;
                 void RenderBehavior() override;
 
+                std::string GetName() const override;
+
                 Scene **currentScene;
                 std::stack<Scene*> *engine_scenes;
                 std::vector<Scene*> *engine_overlays;
@@ -22,10 +24,10 @@ namespace Engine {
             private:
                 Entity *overlayText = nullptr;
 
-                float fps = 0.0f; // frames per second
-                float frameTime = 0.0f; // time taken to render a frame
-                float frameTimeAccumulator = 0.0f; // accumulator for frame time
-                int entityCount = 0; // number of entities in the current scene
+                std::vector<float> frameTimes;
+                float fps = 0.0f;
+                float frameTime = 0.0f;
+                int entityCount = 0;
 
                 // TODO: implement background box
 

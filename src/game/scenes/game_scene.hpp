@@ -14,6 +14,8 @@ namespace ApplicationScene {
             void UpdateBehavior(float) override;
             void HandleEvent(const std::optional<sf::Event>&) override;
             void RenderBehavior() override;
+
+            std::string GetName() const override;
         private:
 
     };

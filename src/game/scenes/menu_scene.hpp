@@ -14,6 +14,7 @@ namespace ApplicationScene {
             void HandleEvent(const std::optional<sf::Event>&) override;
             void RenderBehavior() override;
 
+            std::string GetName() const override;
         private:
             // sf::RectangleShape rectangle;
         };
