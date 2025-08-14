@@ -10,16 +10,18 @@ namespace Engine {
         components.clear();
     }
 
-    void Entity::AddComponent(std::unique_ptr<Components::Component> component) {
-        if (!component){
+    void Entity::AddComponent(std::string name, std::unique_ptr<Components::Component> component) {
+        if (!component) {
             throw std::runtime_error("Null component");
         }
-        components.push_back(std::move(component));
+        components[name] = std::move(component);
     }
 
     void Entity::Update(float deltaTime) {
-        for (auto& component : components) {
-            component->Update(deltaTime);
+        for (const auto& component : components) {
+            if (component.second) {
+                component.second->Update(deltaTime);
+            }
         }
     }
 
@@ -29,7 +31,9 @@ namespace Engine {
         }
         else {
             for (auto& component : components) {
-                component->Render(window);
+                if (component.second) {
+                    component.second->Render(window);
+                }
             }
         }
     }

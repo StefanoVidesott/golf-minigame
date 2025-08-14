@@ -13,14 +13,19 @@ FetchContent_Declare(SFML
 FetchContent_MakeAvailable(SFML)
 
 add_executable(golf-minigame src/main.cpp
-    src/game/application.cpp
-    src/engine/engine.cpp
-    src/engine/scene.cpp
-    src/engine/entity.cpp
-    src/engine/resource_manager.cpp
+src/game/application.cpp
+src/engine/engine.cpp
+src/engine/scene.cpp
+src/engine/entity.cpp
+src/engine/input_manager.cpp
+src/engine/resource_manager.cpp
 
-    src/engine/components/text_component.cpp
+src/engine/debug_overlay.cpp
 
-    src/game/scenes/menu_scene.cpp)
+src/engine/components/text_component.cpp
+
+src/game/scenes/menu_scene.cpp
+)
+
 target_compile_features(golf-minigame PRIVATE cxx_std_17)
 target_link_libraries(golf-minigame PRIVATE SFML::Graphics)

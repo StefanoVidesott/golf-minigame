@@ -53,64 +53,96 @@ namespace Engine {
 
     void Engine::Start() {
         ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
+
+        this->debugOverlay = new OverlayScene::DebugOverlayScene();
+        this->debugOverlay->Start();
+        this->debugOverlay->active = true;
+        this->debugOverlay->window = this->window;
+        this->debugOverlay->currentScene = &this->currentScene;
+
+        this->overlays.push_back(this->debugOverlay);
     }
 
     void Engine::Run() {
         this->Start();
-        this->Update();
+
+        while (this->window->isOpen())
+        {
+            this->HandleEvents();
+            this->Update();
+            this->Render();
+        }
+    }
+
+    void Engine::HandleEvents() {
+        this->input.Update();
+        while (const std::optional event = this->window->pollEvent())
+        {
+            if (event->is<sf::Event::Closed>())
+            {
+                this->window->close();
+            }
+            else if (const auto* resized = event->getIf<sf::Event::Resized>())
+            {
+                sf::FloatRect visibleArea({0.f, 0.f}, sf::Vector2f(resized->size));
+                this->window->setView(sf::View(visibleArea));
+            }
+            this->input.HandleEvents(*event);
+            this->currentScene->HandleEvent(event);
+        }
     }
 
     void Engine::Update() {
-        while (this->window->isOpen())
+        this->deltaTime = this->deltaClock.restart().asSeconds();
+        this->currentScene->Update(this->deltaTime);
+
+        for (std::unique_ptr<Entity>& entity : this->currentScene->entities)
         {
-            if(currentScene) {
-                this->deltaTime = this->deltaClock.restart().asSeconds();
-                this->currentScene->Update(this->deltaTime);
-
-                for (const auto& entity : this->currentScene->entities)
-                {
-                    if (entity) {
-                        entity->Update(this->deltaTime);
-                    }
-                }
-
-                while (const std::optional event = this->window->pollEvent())
-                {
-                    if (event->is<sf::Event::Closed>())
-                    {
-                        std::cout << "Closing window..." << std::endl;
-                        this->window->close();
-                    }
-                    else if (const auto* resized = event->getIf<sf::Event::Resized>())
-                    {
-                        // update the view to the new size of the window
-                        sf::FloatRect visibleArea({0.f, 0.f}, sf::Vector2f(resized->size));
-                        this->window->setView(sf::View(visibleArea));
-                    }
-                    this->currentScene->HandleEvent(event);
-                }
-
-                this->window->clear();
-                this->currentScene->Render();
-                for (const auto& entity : this->currentScene->entities)
-                {
-                    if (entity) {
-                        entity->Render(this->window);
-                    }
-                }
-                this->window->display();
-            }
-            else {
-                while (const std::optional event = this->window->pollEvent())
-                {
-                    if (event->is<sf::Event::Closed>())
-                    {
-                        this->window->close();
-                    }
-                }
-                this->window->clear();
-                this->window->display();
+            if (entity) {
+                entity->Update(this->deltaTime);
             }
         }
+
+        for(Scene::Scene* overlay : this->overlays) {
+            overlay->Update(this->deltaTime);
+        }
+
+        for(Scene::Scene* overlay : this->overlays) {
+            for (std::unique_ptr<Entity>& entity : overlay->entities)
+            {
+                if (entity) {
+                    entity->Update(this->deltaTime);
+                }
+            }
+        }
+
     }
-}
+
+    void Engine::Render() {
+        this->window->clear();
+        this->currentScene->Render();
+
+        for (std::unique_ptr<Entity>& entity : this->currentScene->entities)
+        {
+            if (entity) {
+                entity->Render(this->window);
+            }
+        }
+
+        for(Scene::Scene* overlay : this->overlays) {
+            for (std::unique_ptr<Entity>& entity : overlay->entities)
+            {
+                if (entity) {
+                    entity->Render(this->window);
+                }
+            }
+        }
+
+        for(Scene::Scene* overlay : this->overlays) {
+            overlay->Render();
+        }
+
+        this->window->display();
+    }
+
+} // namespace Engine

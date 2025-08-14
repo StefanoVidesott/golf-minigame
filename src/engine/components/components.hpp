@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../resource_manager.hpp"
+#include "../input_manager.hpp"
 
 namespace Engine {
     namespace Components {

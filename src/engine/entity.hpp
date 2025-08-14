@@ -13,12 +13,21 @@ namespace Engine {
         Entity();
         ~Entity();
 
-        void AddComponent(std::unique_ptr<Components::Component>);
+        void AddComponent(std::string, std::unique_ptr<Components::Component>);
+
+        template <typename T>
+        T* GetComponent(const std::string& name) {
+            auto it = components.find(name);
+            if (it != components.end()) {
+                return dynamic_cast<T*>(it->second.get());
+            }
+            return nullptr;
+        }
 
         void Update(float);
         void Render(sf::RenderWindow*);
     private:
-        std::vector<std::unique_ptr<Components::Component>> components;
+        std::unordered_map<std::string, std::unique_ptr<Components::Component>> components;
     };
 
 } // namespace Engine

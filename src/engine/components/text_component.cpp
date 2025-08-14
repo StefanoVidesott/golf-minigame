@@ -14,7 +14,39 @@ namespace Engine {
         }
 
         void TextComponent::Render(sf::RenderWindow* window) {
-            window->draw(text);
+            window->draw(this->text);
+        }
+
+        void TextComponent::SetText(const std::string& newText) {
+            this->text.setString(newText);
+        }
+
+        void TextComponent::SetFont(const sf::Font& font) {
+            this->text.setFont(font);
+        }
+
+        void TextComponent::SetCharacterSize(unsigned int size) {
+            this->text.setCharacterSize(size);
+        }
+
+        void TextComponent::SetStyle(sf::Text::Style style) {
+            this->text.setStyle(style);
+        }
+
+        const std::string& TextComponent::getString() const {
+            return this->text.getString();
+        }
+
+        const sf::Font* TextComponent::GetFont() const {
+            return &this->text.getFont();
+        }
+
+        unsigned int TextComponent::GetCharacterSize() const {
+            return this->text.getCharacterSize();
+        }
+
+        uint32_t TextComponent::GetStyle() const {
+            return static_cast<uint32_t>(this->text.getStyle());
         }
 
     } // namespace Components

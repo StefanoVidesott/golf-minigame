@@ -11,7 +11,7 @@ namespace GameScene {
 
         Engine::Entity *titleEntity = new Engine::Entity();
         Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Golf Minigame", 50);
-        titleEntity->AddComponent(std::unique_ptr<Engine::Components::Component>(titleTextComponent));
+        titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
         this->entities.push_back(std::unique_ptr<Engine::Entity>(titleEntity));
 
     }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "scene.hpp"
+#include "debug_overlay.hpp"
 
 namespace Engine {
 
@@ -9,19 +10,27 @@ namespace Engine {
             Engine();
             ~Engine();
 
+            void Run();
+
             void LoadScene(Scene::Scene*);
             void DropScene();
-
-            void Run();
         private:
             void Start();
+            void HandleEvents();
             void Update();
+            void Render();
 
             sf::RenderWindow *window;
-            std::stack<Scene::Scene*> scenes;
             Scene::Scene *currentScene = nullptr;
             sf::Clock deltaClock;
-
             float deltaTime;
+
+            std::stack<Scene::Scene*> scenes;
+            std::vector<Scene::Scene*> overlays;
+
+            OverlayScene::DebugOverlayScene *debugOverlay;
+
+
+            InputManager input;
     };
 };
