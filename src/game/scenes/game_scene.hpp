@@ -4,18 +4,18 @@
 
 namespace ApplicationScene {
 
-    class MenuScene : public Engine::Scene::Scene {
+    class GameScene : public Engine::Scene::Scene {
+
         public:
-            MenuScene() = default;
-            ~MenuScene() override = default;
+            GameScene();
+            ~GameScene() override = default;
 
             void Start() override;
             void UpdateBehavior(float) override;
             void HandleEvent(const std::optional<sf::Event>&) override;
             void RenderBehavior() override;
-
         private:
-            // sf::RectangleShape rectangle;
-        };
+
+    };
 
 } // namespace ApplicationScene

@@ -5,14 +5,14 @@ namespace Engine {
 
         void DebugOverlayScene::Start() {
             this->overlayText = new Entity();
-            Components::TextComponent *titleTextComponent = new Components::TextComponent("TitleFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", 24);
+            Components::TextComponent *titleTextComponent = new Components::TextComponent("DefaultFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", 24);
             titleTextComponent->SetStyle(sf::Text::Bold);
 
             this->overlayText->AddComponent("DebugText", std::unique_ptr<Components::Component>(titleTextComponent));
             this->entities.push_back(std::unique_ptr<Entity>(this->overlayText));
         }
 
-        void DebugOverlayScene::Update(float deltaTime) {
+        void DebugOverlayScene::UpdateBehavior(float deltaTime) {
             this->frameTimeAccumulator += deltaTime;
             if (this->frameTimeAccumulator >= 1.0f) {
                 this->fps = 1.0f / deltaTime;
@@ -21,9 +21,7 @@ namespace Engine {
             this->frameTime = deltaTime * 1000.0f; // Convert to milliseconds
 
             this->entityCount = 0;
-
             if (this->engine_scenes) {
-                // lo stack non è iterabile direttamente senza copiarlo
                 std::stack<Scene*> temp = *this->engine_scenes;
                 while (!temp.empty()) {
                     Scene* s = temp.top();
@@ -42,11 +40,16 @@ namespace Engine {
                 }
             }
 
+            std::string sceneName = "None";
+            if (this->currentScene && *this->currentScene) {
+                sceneName = typeid(**this->currentScene).name();
+            }
+
             this->overlayText->GetComponent<Components::TextComponent>("DebugText")->SetText(
                 "FPS: " + std::to_string(static_cast<int>(this->fps)) +
                 "\nFrame Time: " + std::to_string(static_cast<int>(this->frameTime)) + " ms" +
                 "\nEntities: " + std::to_string(this->entityCount) +
-                "\nCurrent Scene: " + std::string(typeid(**this->currentScene).name())
+                "\nCurrent Scene: " + sceneName
             );
         }
 
@@ -54,7 +57,7 @@ namespace Engine {
             // Handle events for the debug overlay
         }
 
-        void DebugOverlayScene::Render() {
+        void DebugOverlayScene::RenderBehavior() {
         }
 
     } // namespace OverlayScene

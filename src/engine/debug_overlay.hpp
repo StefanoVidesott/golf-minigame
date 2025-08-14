@@ -11,9 +11,9 @@ namespace Engine {
                 ~DebugOverlayScene() override = default;
 
                 void Start() override;
-                void Update(float) override;
+                void UpdateBehavior(float) override;
                 void HandleEvent(const std::optional<sf::Event>&) override;
-                void Render() override;
+                void RenderBehavior() override;
 
                 Scene **currentScene;
                 std::stack<Scene*> *engine_scenes;
@@ -26,6 +26,8 @@ namespace Engine {
                 float frameTime = 0.0f; // time taken to render a frame
                 float frameTimeAccumulator = 0.0f; // accumulator for frame time
                 int entityCount = 0; // number of entities in the current scene
+
+                // TODO: implement background box
 
         };
     } // namespace OverlayScene

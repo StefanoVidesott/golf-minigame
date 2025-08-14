@@ -10,6 +10,6 @@ Application::~Application() {
 }
 
 void Application::Run() {
-    this->engine->LoadScene(new GameScene::MenuScene());
+    // this->engine->LoadScene(new ApplicationScene::MenuScene());
     this->engine->Run();
 }

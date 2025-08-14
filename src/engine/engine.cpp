@@ -4,8 +4,8 @@ namespace Engine {
 
     Engine::Engine() {
         this->window = new sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Golf-Minigame");
-        this->window->setVerticalSyncEnabled(true);
-        this->window->setFramerateLimit(144);
+        // this->window->setVerticalSyncEnabled(true);
+        // this->window->setFramerateLimit(144);
     }
 
     Engine::~Engine() {
@@ -90,56 +90,34 @@ namespace Engine {
                 this->window->setView(sf::View(visibleArea));
             }
             this->input.HandleEvents(*event);
-            this->currentScene->HandleEvent(event);
+            if(this->currentScene) {
+                this->currentScene->HandleEvent(event);
+            }
+            for(Scene::Scene* overlay : this->overlays) {
+                overlay->HandleEvent(event);
+            }
         }
     }
 
     void Engine::Update() {
         this->deltaTime = this->deltaClock.restart().asSeconds();
-        this->currentScene->Update(this->deltaTime);
-
-        for (std::unique_ptr<Entity>& entity : this->currentScene->entities)
-        {
-            if (entity) {
-                entity->Update(this->deltaTime);
-            }
+        if(this->currentScene) {
+            this->currentScene->Update(this->deltaTime);
         }
 
         for(Scene::Scene* overlay : this->overlays) {
-            overlay->Update(this->deltaTime);
-        }
-
-        for(Scene::Scene* overlay : this->overlays) {
-            for (std::unique_ptr<Entity>& entity : overlay->entities)
-            {
-                if (entity) {
-                    entity->Update(this->deltaTime);
-                }
+            if (overlay) {
+                overlay->Update(this->deltaTime);
             }
         }
-
     }
 
     void Engine::Render() {
         this->window->clear();
-        this->currentScene->Render();
 
-        for (std::unique_ptr<Entity>& entity : this->currentScene->entities)
-        {
-            if (entity) {
-                entity->Render(this->window);
-            }
+        if (this->currentScene) {
+            this->currentScene->Render();
         }
-
-        for(Scene::Scene* overlay : this->overlays) {
-            for (std::unique_ptr<Entity>& entity : overlay->entities)
-            {
-                if (entity) {
-                    entity->Render(this->window);
-                }
-            }
-        }
-
         for(Scene::Scene* overlay : this->overlays) {
             overlay->Render();
         }

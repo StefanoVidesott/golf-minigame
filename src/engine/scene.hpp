@@ -10,10 +10,13 @@ namespace Engine {
                 Scene() = default;
                 virtual ~Scene();
 
+                void Update(float);
+                void Render();
+
                 virtual void Start() = 0;
-                virtual void Update(float) = 0;
+                virtual void UpdateBehavior(float) = 0;
                 virtual void HandleEvent(const std::optional<sf::Event>&) = 0;
-                virtual void Render() = 0;
+                virtual void RenderBehavior() = 0;
 
                 sf::RenderWindow* window = nullptr;
                 bool continueInPause = false;
