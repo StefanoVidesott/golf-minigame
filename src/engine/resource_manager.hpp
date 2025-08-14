@@ -13,43 +13,42 @@ namespace Engine {
     namespace ResourceManager {
 
         class TextureManager {
-        public:
-            TextureManager() = default;
-            ~TextureManager() = default;
+            public:
+                TextureManager() = default;
+                ~TextureManager() = default;
 
-            void loadTexture(const std::string&, const std::string&);
-            sf::Texture& getTexture(const std::string&);
-
-        private:
-            std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textures;
+                void loadTexture(const std::string&, const std::string&);
+                sf::Texture& getTexture(const std::string&);
+            private:
+                std::unordered_map<std::string, std::unique_ptr<sf::Texture>> textures;
         };
 
         class FontManager {
-        public:
-            FontManager() = default;
-            ~FontManager() = default;
+            public:
+                FontManager() = default;
+                ~FontManager() = default;
 
-            void loadFont(const std::string&, const std::string&);
-            sf::Font& getFont(const std::string&);
+                void loadFont(const std::string&, const std::string&);
+                sf::Font& getFont(const std::string&);
 
-        private:
-            std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
+            private:
+                std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
         };
 
         class ResourceManager {
-        public:
-            ResourceManager() = default;
-            ~ResourceManager() = default;
+            public:
+                ResourceManager() = default;
+                ~ResourceManager() = default;
 
-             static void loadTexture(const std::string&, const std::string&);
-            static sf::Texture& getTexture(const std::string&);
+                static void loadTexture(const std::string&, const std::string&);
+                static sf::Texture& getTexture(const std::string&);
 
-            static void loadFont(const std::string&, const std::string&);
-            static sf::Font& getFont(const std::string&);
+                static void loadFont(const std::string&, const std::string&);
+                static sf::Font& getFont(const std::string&);
 
-        private:
-            static TextureManager textureManager;
-            static FontManager fontManager;
+            private:
+                static TextureManager textureManager;
+                static FontManager fontManager;
         };
 
     } // namespace ResourceManager

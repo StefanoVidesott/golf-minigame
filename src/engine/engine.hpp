@@ -30,7 +30,6 @@ namespace Engine {
 
             OverlayScene::DebugOverlayScene *debugOverlay;
 
-
-            InputManager input;
+            InputManager inputManager;
     };
 };

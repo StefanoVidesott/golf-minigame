@@ -22,8 +22,8 @@ namespace Engine {
 
                 sf::RenderWindow* window = nullptr;
                 bool continueInPause = false;
-                bool loaded = false;
                 bool active = false;
+                bool visible = true;
                 std::vector<std::unique_ptr<Entity>> entities;
         };
 

@@ -20,6 +20,7 @@ namespace Engine {
                 Scene **currentScene;
                 std::stack<Scene*> *engine_scenes;
                 std::vector<Scene*> *engine_overlays;
+                InputManager *engine_inputManager = nullptr;
 
             private:
                 Entity *overlayText = nullptr;

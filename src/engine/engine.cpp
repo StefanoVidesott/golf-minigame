@@ -27,7 +27,6 @@ namespace Engine {
         if (scene) {
             scene->Start();
             this->scenes.push(scene);
-            scene->loaded = true;
             scene->active = true;
             scene->window = this->window;
             if (this->currentScene) {
@@ -57,10 +56,12 @@ namespace Engine {
         this->debugOverlay = new OverlayScene::DebugOverlayScene();
         this->debugOverlay->Start();
         this->debugOverlay->active = true;
+        this->debugOverlay->visible = false;
         this->debugOverlay->window = this->window;
         this->debugOverlay->currentScene = &this->currentScene;
         this->debugOverlay->engine_scenes = &this->scenes;
         this->debugOverlay->engine_overlays = &this->overlays;
+        this->debugOverlay->engine_inputManager = &this->inputManager;
 
         this->overlays.push_back(this->debugOverlay);
     }
@@ -77,7 +78,7 @@ namespace Engine {
     }
 
     void Engine::HandleEvents() {
-        this->input.Update();
+        this->inputManager.Update();
         while (const std::optional event = this->window->pollEvent())
         {
             if (event->is<sf::Event::Closed>())
@@ -89,10 +90,15 @@ namespace Engine {
                 sf::FloatRect visibleArea({0.f, 0.f}, sf::Vector2f(resized->size));
                 this->window->setView(sf::View(visibleArea));
             }
-            this->input.HandleEvents(*event);
+
+            this->inputManager.HandleEvents(*event);
+
             if(this->currentScene) {
-                this->currentScene->HandleEvent(event);
+                if (this->currentScene->active) {
+                    this->currentScene->HandleEvent(event);
+                }
             }
+
             for(Scene::Scene* overlay : this->overlays) {
                 overlay->HandleEvent(event);
             }
@@ -102,7 +108,9 @@ namespace Engine {
     void Engine::Update() {
         this->deltaTime = this->deltaClock.restart().asSeconds();
         if(this->currentScene) {
-            this->currentScene->Update(this->deltaTime);
+            if (this->currentScene->active) {
+                this->currentScene->Update(this->deltaTime);
+            }
         }
 
         for(Scene::Scene* overlay : this->overlays) {
@@ -116,10 +124,14 @@ namespace Engine {
         this->window->clear();
 
         if (this->currentScene) {
-            this->currentScene->Render();
+            if (this->currentScene->visible) {
+                this->currentScene->Render();
+            }
         }
         for(Scene::Scene* overlay : this->overlays) {
-            overlay->Render();
+            if (overlay && overlay->visible) {
+                overlay->Render();
+            }
         }
 
         this->window->display();

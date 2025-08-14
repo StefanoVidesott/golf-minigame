@@ -121,7 +121,9 @@ namespace Engine {
 
 
         void DebugOverlayScene::HandleEvent(const std::optional<sf::Event>& event) {
-            // Handle events for the debug overlay
+            if (this->engine_inputManager) {
+                this->engine_inputManager->IsKeyPressed(sf::Keyboard::Key::F3) ? this->visible = !this->visible : false;
+            }
         }
 
         void DebugOverlayScene::RenderBehavior() {
