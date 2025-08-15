@@ -57,10 +57,10 @@ namespace Engine {
 
         ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
 
-        this->debugOverlay = new OverlayScene::DebugOverlayScene();
-        this->debugOverlay->Start();
+        OverlayScene::DebugOverlayScene *debugOverlay = new OverlayScene::DebugOverlayScene();
+        debugOverlay->Start();
 
-        this->overlays.push_back(this->debugOverlay);
+        this->overlays.push_back(debugOverlay);
     }
 
     void Engine::Run() {

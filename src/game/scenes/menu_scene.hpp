@@ -16,7 +16,6 @@ namespace ApplicationScene {
 
             std::string GetName() const override;
         private:
-            // sf::RectangleShape rectangle;
         };
 
 } // namespace ApplicationScene

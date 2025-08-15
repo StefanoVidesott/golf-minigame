@@ -28,8 +28,6 @@ namespace Engine {
             std::stack<Scene::Scene*> scenes;
             std::vector<Scene::Scene*> overlays;
 
-            OverlayScene::DebugOverlayScene *debugOverlay;
-
             InputManager inputManager;
     };
 };
