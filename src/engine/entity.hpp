@@ -5,6 +5,7 @@
 #include "components/components.hpp"
 
 #include "components/text_component.hpp"
+#include "components/rectangle_shape_component.hpp"
 
 namespace Engine {
 

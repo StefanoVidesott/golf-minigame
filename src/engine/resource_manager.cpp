@@ -47,10 +47,37 @@ namespace Engine {
             return *(it->second);
         }
 
+        // ---- SCENE MANAGER ----
+        std::stack<Scene::Scene*> *SceneManager::scenes;
+        std::vector<Scene::Scene*> *SceneManager::overlays;
+        Scene::Scene **SceneManager::currentScene;
+
+        void SceneManager::Initialize(std::stack<Scene::Scene*>* scenesPtr, std::vector<Scene::Scene*>* overlaysPtr, Scene::Scene** currentScenePtr) {
+            this->scenes = scenesPtr;
+            this->overlays = overlaysPtr;
+            this->currentScene = currentScenePtr;
+        }
+
+        std::stack<Scene::Scene*> *SceneManager::GetScenes() {
+            return this->scenes;
+        }
+
+        std::vector<Scene::Scene*> *SceneManager::GetOverlays() {
+            return this->overlays;
+        }
+
+        Scene::Scene **SceneManager::GetCurrentScene() {
+            return this->currentScene;
+        }
+
         // ---- RESOURCE MANAGER ----
 
         TextureManager ResourceManager::textureManager;
         FontManager ResourceManager::fontManager;
+        SceneManager ResourceManager::sceneManager;
+
+        sf::RenderWindow* ResourceManager::window = nullptr;
+        InputManager* ResourceManager::inputManager = nullptr;
 
         void ResourceManager::loadTexture(const std::string& name, const std::string& filePath) {
             textureManager.loadTexture(name, filePath);
@@ -66,6 +93,24 @@ namespace Engine {
 
         sf::Font& ResourceManager::getFont(const std::string& name) {
             return fontManager.getFont(name);
+        }
+
+        void ResourceManager::SetWindow(sf::RenderWindow* win) {
+            window = win;
+        }
+
+        sf::RenderWindow* ResourceManager::GetWindow() {
+            return window;
+        }
+
+        InputManager* ResourceManager::GetInputManager() {
+            return inputManager;
+        }
+
+        InputManager* ResourceManager::SetInputManager(InputManager* inputMgr) {
+            InputManager* oldInputManager = inputManager;
+            inputManager = inputMgr;
+            return oldInputManager;
         }
 
     } // namespace ResourceManager

@@ -23,6 +23,7 @@ src/engine/resource_manager.cpp
 src/engine/debug_overlay.cpp
 
 src/engine/components/text_component.cpp
+src/engine/components/rectangle_shape_component.cpp
 
 src/game/scenes/menu_scene.cpp
 )

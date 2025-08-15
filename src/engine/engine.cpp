@@ -51,6 +51,10 @@ namespace Engine {
     }
 
     void Engine::Start() {
+        ResourceManager::ResourceManager::SetWindow(this->window);
+        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
+        ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays, &this->currentScene);
+
         ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
 
         this->debugOverlay = new OverlayScene::DebugOverlayScene();
@@ -61,7 +65,6 @@ namespace Engine {
         this->debugOverlay->currentScene = &this->currentScene;
         this->debugOverlay->engine_scenes = &this->scenes;
         this->debugOverlay->engine_overlays = &this->overlays;
-        this->debugOverlay->engine_inputManager = &this->inputManager;
 
         this->overlays.push_back(this->debugOverlay);
     }

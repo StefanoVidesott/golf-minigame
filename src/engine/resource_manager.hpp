@@ -10,6 +10,12 @@
 #include <SFML/Graphics.hpp>
 
 namespace Engine {
+    class InputManager;
+
+    namespace Scene {
+        class Scene;
+    }
+
     namespace ResourceManager {
 
         class TextureManager {
@@ -35,6 +41,22 @@ namespace Engine {
                 std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
         };
 
+        class SceneManager {
+            public:
+                SceneManager() = default;
+                ~SceneManager() = default;
+
+                void Initialize(std::stack<Scene::Scene*>*, std::vector<Scene::Scene*>*, Scene::Scene**);
+
+                std::stack<Scene::Scene*> *GetScenes();
+                std::vector<Scene::Scene*> *GetOverlays();
+                Scene::Scene **GetCurrentScene();
+            private:
+                static std::stack<Scene::Scene*> *scenes;
+                static std::vector<Scene::Scene*> *overlays;
+                static Scene::Scene **currentScene;
+        };
+
         class ResourceManager {
             public:
                 ResourceManager() = default;
@@ -46,9 +68,19 @@ namespace Engine {
                 static void loadFont(const std::string&, const std::string&);
                 static sf::Font& getFont(const std::string&);
 
+                static void SetWindow(sf::RenderWindow*);
+                static sf::RenderWindow* GetWindow();
+
+                static InputManager* SetInputManager(InputManager*);
+                static InputManager* GetInputManager();
+
+                static SceneManager sceneManager;
             private:
                 static TextureManager textureManager;
                 static FontManager fontManager;
+
+                static sf::RenderWindow* window;
+                static InputManager* inputManager;
         };
 
     } // namespace ResourceManager

@@ -1,12 +1,12 @@
 #include "debug_overlay.hpp"
 
 #if defined(__linux__)
-#include <unistd.h>
+    #include <unistd.h>
 #elif defined(__APPLE__) && defined(__MACH__)
-#include <mach/mach.h>
+    #include <mach/mach.h>
 #elif defined(_WIN32)
-#include <windows.h>
-#include <psapi.h>
+    #include <windows.h>
+    #include <psapi.h>
 #endif
 
 namespace Engine {
@@ -14,16 +14,17 @@ namespace Engine {
 
         void DebugOverlayScene::Start() {
             this->overlayText = new Entity();
-            Components::TextComponent *titleTextComponent = new Components::TextComponent("DefaultFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", 16);
+            Components::TextComponent *titleTextComponent = new Components::TextComponent("DefaultFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", this->textSize);
             titleTextComponent->SetStyle(sf::Text::Bold);
 
             this->overlayText->AddComponent("DebugText", std::unique_ptr<Components::Component>(titleTextComponent));
+            this->overlayText->AddComponent("RectangleShape", std::make_unique<Components::RectangleShapeComponent>(sf::Vector2f(200.0f, 100.0f)));
             this->entities.push_back(std::unique_ptr<Entity>(this->overlayText));
         }
 
         void DebugOverlayScene::UpdateBehavior(float deltaTime) {
-            static unsigned long long totalFrames = 0;
-            totalFrames++;
+            // static unsigned long long totalFrames = 0;
+            // totalFrames++;
 
             constexpr float smoothing = 0.1f;
             if (this->fps == 0.0f) {
@@ -104,12 +105,12 @@ namespace Engine {
                 "Frame Time: %.2f ms\n"
                 "Entities: %d\n"
                 "Current Scene: %s\n"
-                "Frames Rendered: %llu\n"
+                // "Frames Rendered: %llu\n"
                 "Memory Usage: %s",
                 this->fps, frameTimeMs,
                 this->entityCount,
                 sceneName.c_str(),
-                totalFrames,
+                // totalFrames,
                 memoryUsage.c_str()
             );
 
@@ -121,8 +122,8 @@ namespace Engine {
 
 
         void DebugOverlayScene::HandleEvent(const std::optional<sf::Event>& event) {
-            if (this->engine_inputManager) {
-                this->engine_inputManager->IsKeyPressed(sf::Keyboard::Key::F3) ? this->visible = !this->visible : false;
+            if (ResourceManager::ResourceManager::GetInputManager()) {
+                ResourceManager::ResourceManager::GetInputManager()->IsKeyPressed(sf::Keyboard::Key::F3) ? this->visible = !this->visible : false;
             }
         }
 
