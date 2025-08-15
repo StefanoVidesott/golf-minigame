@@ -21,9 +21,10 @@ namespace Engine {
                 virtual std::string GetName() const = 0;
 
                 sf::RenderWindow* window = nullptr;
-                bool continueInPause = false;
+                // bool continueInPause = false;
                 bool active = false;
                 bool visible = true;
+
                 std::vector<std::unique_ptr<Entity>> entities;
         };
 

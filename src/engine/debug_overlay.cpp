@@ -13,18 +13,34 @@ namespace Engine {
     namespace OverlayScene {
 
         void DebugOverlayScene::Start() {
-            this->overlayText = new Entity();
-            Components::TextComponent *titleTextComponent = new Components::TextComponent("DefaultFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", this->textSize);
-            titleTextComponent->SetStyle(sf::Text::Bold);
+            this->Initialize();
 
-            this->overlayText->AddComponent("DebugText", std::unique_ptr<Components::Component>(titleTextComponent));
-            this->overlayText->AddComponent("RectangleShape", std::make_unique<Components::RectangleShapeComponent>(sf::Vector2f(200.0f, 100.0f)));
+            this->overlayText = new Entity();
+
+            this->textComponent = new Components::TextComponent("DefaultFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", this->textSize);
+            this->textComponent->SetStyle(sf::Text::Bold);
+            this->overlayText->AddComponent("DebugText", std::unique_ptr<Components::Component>(this->textComponent));
+
+            Components::RectangleShapeComponent* rectShape = new Components::RectangleShapeComponent(sf::Vector2f(230.0f, 113.0f));
+            rectShape->SetFillColor(sf::Color(55, 55, 55, 150));
+            rectShape->SetOutlineColor(sf::Color(70, 70, 70, 200));
+            rectShape->SetOutlineThickness(3.0f);
+            this->overlayText->AddComponent("DebugOverlayBackground", std::unique_ptr<Components::Component>(rectShape));
+
             this->entities.push_back(std::unique_ptr<Entity>(this->overlayText));
         }
 
+        void DebugOverlayScene::Initialize() {
+            this->active = true;
+            this->visible = false;
+            this->window = ResourceManager::ResourceManager::GetWindow();
+            this->currentScene = ResourceManager::ResourceManager::sceneManager.GetCurrentScene();
+            this->engine_scenes = ResourceManager::ResourceManager::sceneManager.GetScenes();
+            this->engine_overlays = ResourceManager::ResourceManager::sceneManager.GetOverlays();
+            this->inputManager = ResourceManager::ResourceManager::GetInputManager();
+        }
+
         void DebugOverlayScene::UpdateBehavior(float deltaTime) {
-            // static unsigned long long totalFrames = 0;
-            // totalFrames++;
 
             constexpr float smoothing = 0.1f;
             if (this->fps == 0.0f) {
@@ -99,31 +115,34 @@ namespace Engine {
                 }
             #endif
 
+            std::string mousePosition = "N/A";
+            if (this->inputManager) {
+                sf::Vector2i mousePos = this->inputManager->GetMousePosition();
+                mousePosition = "(" + std::to_string(mousePos.x) + ", " + std::to_string(mousePos.y) + ")";
+            }
+
             char buffer[256];
             snprintf(buffer, sizeof(buffer),
                 "FPS: %.1f\n"
                 "Frame Time: %.2f ms\n"
                 "Entities: %d\n"
                 "Current Scene: %s\n"
-                // "Frames Rendered: %llu\n"
-                "Memory Usage: %s",
+                "Memory Usage: %s\n"
+                "Mouse Position: %s",
                 this->fps, frameTimeMs,
                 this->entityCount,
                 sceneName.c_str(),
-                // totalFrames,
-                memoryUsage.c_str()
+                memoryUsage.c_str(),
+                mousePosition.c_str()
             );
 
-            Components::TextComponent *textComp = this->overlayText->GetComponent<Components::TextComponent>("DebugText");
-            if (textComp) {
-                textComp->SetText(buffer);
-            }
+            this->textComponent->SetText(buffer);
         }
 
 
         void DebugOverlayScene::HandleEvent(const std::optional<sf::Event>& event) {
-            if (ResourceManager::ResourceManager::GetInputManager()) {
-                ResourceManager::ResourceManager::GetInputManager()->IsKeyPressed(sf::Keyboard::Key::F3) ? this->visible = !this->visible : false;
+            if (this->inputManager) {
+                this->inputManager->IsKeyPressed(sf::Keyboard::Key::F3) ? this->visible = !this->visible : false;
             }
         }
 

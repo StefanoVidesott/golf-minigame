@@ -21,12 +21,28 @@ namespace Engine {
             this->shape.setFillColor(color);
         }
 
+        void RectangleShapeComponent::SetOutlineColor(const sf::Color& color) {
+            this->shape.setOutlineColor(color);
+        }
+
+        void RectangleShapeComponent::SetOutlineThickness(float thickness) {
+            this->shape.setOutlineThickness(thickness);
+        }
+
         [[nodiscard]] sf::Vector2f RectangleShapeComponent::GetSize() const {
             return this->shape.getSize();
         }
 
         [[nodiscard]] sf::Color RectangleShapeComponent::GetFillColor() const {
             return this->shape.getFillColor();
+        }
+
+        [[nodiscard]] sf::Color RectangleShapeComponent::GetOutlineColor() const {
+            return this->shape.getOutlineColor();
+        }
+
+        [[nodiscard]] float RectangleShapeComponent::GetOutlineThickness() const {
+            return this->shape.getOutlineThickness();
         }
 
         void RectangleShapeComponent::Update(float deltaTime) {

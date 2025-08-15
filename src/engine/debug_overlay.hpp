@@ -17,18 +17,22 @@ namespace Engine {
 
                 std::string GetName() const override;
 
+            private:
+                void Initialize();
+
+                Entity *overlayText = nullptr;
+                Components::TextComponent *textComponent = nullptr;
+                unsigned int textSize = 15;
+
+                InputManager *inputManager;
+
                 Scene **currentScene;
                 std::stack<Scene*> *engine_scenes;
                 std::vector<Scene*> *engine_overlays;
 
-            private:
-                Entity *overlayText = nullptr;
-                unsigned int textSize = 13;
-
-                std::vector<float> frameTimes;
                 float fps = 0.0f;
                 float frameTime = 0.0f;
                 int entityCount = 0;
-        };
+            };
     } // namespace OverlayScene
 } // namespace Engine

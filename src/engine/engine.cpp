@@ -59,12 +59,6 @@ namespace Engine {
 
         this->debugOverlay = new OverlayScene::DebugOverlayScene();
         this->debugOverlay->Start();
-        this->debugOverlay->active = true;
-        this->debugOverlay->visible = false;
-        this->debugOverlay->window = this->window;
-        this->debugOverlay->currentScene = &this->currentScene;
-        this->debugOverlay->engine_scenes = &this->scenes;
-        this->debugOverlay->engine_overlays = &this->overlays;
 
         this->overlays.push_back(this->debugOverlay);
     }
