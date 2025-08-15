@@ -33,20 +33,24 @@ namespace Engine {
             this->text.setStyle(style);
         }
 
-        const sf::String& TextComponent::getString() const {
+        [[nodiscard]] const sf::String& TextComponent::getString() const {
             return this->text.getString();
         }
 
-        const sf::Font* TextComponent::GetFont() const {
+        [[nodiscard]] const sf::Font* TextComponent::GetFont() const {
             return &this->text.getFont();
         }
 
-        unsigned int TextComponent::GetCharacterSize() const {
+        [[nodiscard]] unsigned int TextComponent::GetCharacterSize() const {
             return this->text.getCharacterSize();
         }
 
-        uint32_t TextComponent::GetStyle() const {
+        [[nodiscard]] uint32_t TextComponent::GetStyle() const {
             return static_cast<uint32_t>(this->text.getStyle());
+        }
+
+        [[nodiscard]] sf::FloatRect TextComponent::GetGlobalBounds() const {
+            return this->text.getGlobalBounds();
         }
 
     } // namespace Components
