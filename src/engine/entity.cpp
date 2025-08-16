@@ -7,7 +7,6 @@ namespace Engine {
     }
 
     Entity::~Entity() {
-        components.clear();
     }
 
     void Entity::AddComponent(std::string name, std::unique_ptr<Components::Component> component) {

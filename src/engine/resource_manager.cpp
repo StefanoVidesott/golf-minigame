@@ -19,7 +19,7 @@ namespace Engine {
             std::unordered_map<std::string, std::unique_ptr<sf::Texture>>::iterator it = textures.find(name);
 
             if (it == textures.end()) {
-                throw std::runtime_error("Texture not found: " + name);
+                return this->getTexture("DefaultTexture");
             }
 
             return *(it->second);
@@ -41,7 +41,7 @@ namespace Engine {
             std::unordered_map<std::string, std::unique_ptr<sf::Font>>::iterator it = fonts.find(name);
 
             if (it == fonts.end()) {
-                throw std::runtime_error("Font not found: " + name);
+                return this->getFont("DefaultFont");
             }
 
             return *(it->second);
@@ -53,21 +53,21 @@ namespace Engine {
         Scene::Scene **SceneManager::currentScene;
 
         void SceneManager::Initialize(std::stack<Scene::Scene*>* scenesPtr, std::vector<Scene::Scene*>* overlaysPtr, Scene::Scene** currentScenePtr) {
-            this->scenes = scenesPtr;
-            this->overlays = overlaysPtr;
-            this->currentScene = currentScenePtr;
+            SceneManager::scenes = scenesPtr;
+            SceneManager::overlays = overlaysPtr;
+            SceneManager::currentScene = currentScenePtr;
         }
 
         std::stack<Scene::Scene*> *SceneManager::GetScenes() {
-            return this->scenes;
+            return SceneManager::scenes;
         }
 
         std::vector<Scene::Scene*> *SceneManager::GetOverlays() {
-            return this->overlays;
+            return SceneManager::overlays;
         }
 
         Scene::Scene **SceneManager::GetCurrentScene() {
-            return this->currentScene;
+            return SceneManager::currentScene;
         }
 
         // ---- RESOURCE MANAGER ----

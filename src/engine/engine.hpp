@@ -20,6 +20,8 @@ namespace Engine {
             void Update();
             void Render();
 
+            void InitResources();
+
             sf::RenderWindow *window;
             Scene::Scene *currentScene = nullptr;
             sf::Clock deltaClock;

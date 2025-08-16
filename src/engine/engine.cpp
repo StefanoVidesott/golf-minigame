@@ -21,6 +21,9 @@ namespace Engine {
                 scenes.pop();
             }
         }
+        for (Scene::Scene* overlay : this->overlays) {
+            delete overlay;
+        }
     }
 
     void Engine::LoadScene(Scene::Scene *scene) {
@@ -51,16 +54,22 @@ namespace Engine {
     }
 
     void Engine::Start() {
-        ResourceManager::ResourceManager::SetWindow(this->window);
-        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
-        ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays, &this->currentScene);
-
-        ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
+        this->InitResources();
 
         OverlayScene::DebugOverlayScene *debugOverlay = new OverlayScene::DebugOverlayScene();
         debugOverlay->Start();
 
         this->overlays.push_back(debugOverlay);
+    }
+
+    void Engine::InitResources() {
+        ResourceManager::ResourceManager::SetWindow(this->window);
+
+        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
+        ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays, &this->currentScene);
+
+        ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
+        ResourceManager::ResourceManager::loadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");
     }
 
     void Engine::Run() {
