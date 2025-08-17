@@ -9,24 +9,26 @@ FetchContent_Declare(SFML
     GIT_TAG 3.0.1
     GIT_SHALLOW ON
     EXCLUDE_FROM_ALL
-    SYSTEM)
+    SYSTEM
+)
 FetchContent_MakeAvailable(SFML)
 
 add_executable(golf-minigame src/main.cpp
-src/game/application.cpp
-src/engine/engine.cpp
-src/engine/scene.cpp
-src/engine/entity.cpp
-src/engine/input_manager.cpp
-src/engine/resource_manager.cpp
+    src/game/application.cpp
+    src/engine/engine.cpp
+    src/engine/scene.cpp
+    src/engine/entity.cpp
+    src/engine/input_manager.cpp
+    src/engine/resource_manager.cpp
 
-src/engine/debug_overlay.cpp
+    src/engine/debug_overlay.cpp
 
-src/engine/components/text_component.cpp
-src/engine/components/rectangle_shape_component.cpp
+    src/engine/components/transform_component.cpp
+    src/engine/components/text_component.cpp
+    src/engine/components/rectangle_shape_component.cpp
 
-src/game/scenes/menu_scene.cpp
-src/game/scenes/game_scene.cpp
+    src/game/scenes/menu_scene.cpp
+    src/game/scenes/game_scene.cpp
 )
 
 target_compile_features(golf-minigame PRIVATE cxx_std_17)

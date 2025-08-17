@@ -3,7 +3,7 @@
 namespace Engine {
 
     Entity::Entity() {
-        // Constructor implementation can be added here if needed
+        this->transform.owner = this;
     }
 
     Entity::~Entity() {
@@ -14,6 +14,7 @@ namespace Engine {
             throw std::runtime_error("Null component");
         }
         components[name] = std::move(component);
+        // TODO: Update position, rotation, and scale of the entity if needed
     }
 
     void Entity::Update(float deltaTime) {
@@ -35,6 +36,18 @@ namespace Engine {
                 }
             }
         }
+    }
+
+    std::vector<Components::Component*> Entity::GetComponentList() {
+        std::vector<Components::Component*> componentList;
+        for (const auto& pair : components) {
+            componentList.push_back(pair.second.get());
+        }
+        return componentList;
+    }
+
+    Components::TransformComponent *Entity::GetTransform() {
+        return &this->transform;
     }
 
 } // namespace Engine

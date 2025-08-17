@@ -14,6 +14,7 @@ namespace Engine {
                 void SetFont(const sf::Font&);
                 void SetCharacterSize(unsigned int);
                 void SetStyle(sf::Text::Style);
+
                 [[nodiscard]] const sf::String& getString() const;
                 [[nodiscard]] const sf::Font* GetFont() const;
                 [[nodiscard]] unsigned int GetCharacterSize() const;
@@ -22,6 +23,7 @@ namespace Engine {
 
                 void Update(float) override;
                 void Render(sf::RenderWindow*) override;
+                void SetPosition(const sf::Vector2f& position) override;
             private:
                 sf::Text text;
         };

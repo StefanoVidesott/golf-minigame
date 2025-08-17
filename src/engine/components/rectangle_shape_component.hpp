@@ -22,6 +22,7 @@ namespace Engine {
 
                 void Update(float) override;
                 void Render(sf::RenderWindow*) override;
+                void SetPosition(const sf::Vector2f& position) override;
             private:
                 sf::RectangleShape shape;
         };

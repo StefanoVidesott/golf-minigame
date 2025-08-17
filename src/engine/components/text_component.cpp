@@ -17,6 +17,10 @@ namespace Engine {
             window->draw(this->text);
         }
 
+        void TextComponent::SetPosition(const sf::Vector2f& position) {
+            this->text.setPosition(position);
+        }
+
         void TextComponent::SetText(const std::string& newText) {
             this->text.setString(newText);
         }

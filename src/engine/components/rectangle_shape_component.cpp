@@ -53,5 +53,9 @@ namespace Engine {
             window->draw(this->shape);
         }
 
+        void RectangleShapeComponent::SetPosition(const sf::Vector2f& position) {
+            this->shape.setPosition(position);
+        }
+
     } // namespace Components
 } // namespace Engine

@@ -6,6 +6,7 @@ namespace Engine {
         this->window = new sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Golf-Minigame");
         // this->window->setVerticalSyncEnabled(true);
         // this->window->setFramerateLimit(144);
+        this->InitResources();
     }
 
     Engine::~Engine() {
@@ -54,8 +55,6 @@ namespace Engine {
     }
 
     void Engine::Start() {
-        this->InitResources();
-
         OverlayScene::DebugOverlayScene *debugOverlay = new OverlayScene::DebugOverlayScene();
         debugOverlay->Start();
 

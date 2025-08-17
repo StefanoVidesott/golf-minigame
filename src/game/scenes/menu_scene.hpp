@@ -16,6 +16,8 @@ namespace ApplicationScene {
 
             std::string GetName() const override;
         private:
+            Engine::Entity *titleEntity;
+            Engine::InputManager *inputManager;
         };
 
 } // namespace ApplicationScene
