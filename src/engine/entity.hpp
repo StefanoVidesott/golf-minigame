@@ -7,6 +7,7 @@
 #include "components/text_component.hpp"
 #include "components/rectangle_shape_component.hpp"
 #include "components/transform_component.hpp"
+#include "components/velocity_component.hpp"
 
 namespace Engine {
 

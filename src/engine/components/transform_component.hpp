@@ -30,7 +30,10 @@ namespace Engine {
 
             Entity* owner = nullptr;
         private:
-            void UpdateEntityComponents();
+            void UpdateEntityPosition();
+            void UpdateEntityRotation();
+            void UpdateEntityScale();
+            void UpdateEntityTransform();
 
             sf::Vector2f position;
             float rotation;

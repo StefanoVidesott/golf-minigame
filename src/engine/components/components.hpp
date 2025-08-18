@@ -3,6 +3,9 @@
 #include "../input_manager.hpp"
 
 namespace Engine {
+
+    class Entity;
+
     namespace Components {
 
         class Component {
@@ -16,6 +19,12 @@ namespace Engine {
                 virtual void SetPosition(const sf::Vector2f&) {}
                 virtual void SetRotation(float) {}
                 virtual void SetScale(const sf::Vector2f&) {}
+
+                void SetOwner(Engine::Entity* _owner) {
+                    this->owner = _owner;
+                }
+            protected:
+                Engine::Entity *owner;
         };
 
     } // namespace Components

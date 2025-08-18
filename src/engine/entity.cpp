@@ -13,6 +13,7 @@ namespace Engine {
         if (!component) {
             throw std::runtime_error("Null component");
         }
+        component->SetOwner(this);
         components[name] = std::move(component);
         // TODO: Update position, rotation, and scale of the entity if needed
     }

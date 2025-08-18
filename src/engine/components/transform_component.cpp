@@ -8,32 +8,32 @@ namespace Engine {
 
         TransformComponent::TransformComponent(const sf::Vector2f& pos)
             : position(pos), rotation(0.f), scale(1.f, 1.f) {
-                this->UpdateEntityComponents();
+                this->UpdateEntityTransform();
             }
 
         void TransformComponent::SetPosition(const sf::Vector2f& pos) {
             position = pos;
-            this->UpdateEntityComponents();
+            this->UpdateEntityPosition();
         }
 
         void TransformComponent::Move(const sf::Vector2f& delta) {
             position += delta;
-            this->UpdateEntityComponents();
+            this->UpdateEntityPosition();
         }
 
         void TransformComponent::SetRotation(float rot) {
             rotation = rot;
-            this->UpdateEntityComponents();
+            this->UpdateEntityRotation();
         }
 
         void TransformComponent::Rotate(float delta) {
             rotation += delta;
-            this->UpdateEntityComponents();
+            this->UpdateEntityRotation();
         }
 
         void TransformComponent::SetScale(const sf::Vector2f& s) {
             scale = s;
-            this->UpdateEntityComponents();
+            this->UpdateEntityScale();
         }
 
         [[nodiscard]] sf::Vector2f TransformComponent::GetPosition() const {
@@ -55,7 +55,7 @@ namespace Engine {
         void TransformComponent::Render(sf::RenderWindow* window) {
         }
 
-        void TransformComponent::UpdateEntityComponents() {
+        void TransformComponent::UpdateEntityTransform() {
             if (this->owner) {
                 for (Components::Component* component : this->owner->GetComponentList()) {
                     if (component) {
@@ -67,5 +67,37 @@ namespace Engine {
             }
         }
 
-    }
-}
+        void TransformComponent::UpdateEntityPosition() {
+            if (this->owner) {
+                for (Components::Component* component : this->owner->GetComponentList()) {
+                    if (component) {
+                        component->SetPosition(this->GetPosition());
+                    }
+                }
+            }
+        }
+
+
+        void TransformComponent::UpdateEntityRotation() {
+            if (this->owner) {
+                for (Components::Component* component : this->owner->GetComponentList()) {
+                    if (component) {
+                        component->SetRotation(this->GetRotation());
+                    }
+                }
+            }
+        }
+
+
+        void TransformComponent::UpdateEntityScale() {
+            if (this->owner) {
+                for (Components::Component* component : this->owner->GetComponentList()) {
+                    if (component) {
+                        component->SetScale(this->GetScale());
+                    }
+                }
+            }
+        }
+
+    } // namespace Components
+} // namespace Engine
