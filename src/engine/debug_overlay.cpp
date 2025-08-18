@@ -34,7 +34,6 @@ namespace Engine {
             this->active = true;
             this->visible = false;
             this->window = ResourceManager::ResourceManager::GetWindow();
-            this->currentScene = ResourceManager::ResourceManager::sceneManager.GetCurrentScene();
             this->engine_scenes = ResourceManager::ResourceManager::sceneManager.GetScenes();
             this->engine_overlays = ResourceManager::ResourceManager::sceneManager.GetOverlays();
             this->inputManager = ResourceManager::ResourceManager::GetInputManager();
@@ -56,26 +55,20 @@ namespace Engine {
 
             this->entityCount = 0;
             if (this->engine_scenes) {
-                std::stack<Scene*> temp = *this->engine_scenes;
-                while (!temp.empty()) {
-                    Scene* s = temp.top();
-                    if (s) {
-                        this->entityCount += static_cast<int>(s->entities.size());
-                    }
-                    temp.pop();
-                }
+                this->entityCount += static_cast<int>(this->engine_scenes->top()->entities.size());
             }
+
             if (this->engine_overlays) {
-                for (Scene* overlay : *this->engine_overlays) {
-                    if (overlay) {
-                        this->entityCount += static_cast<int>(overlay->entities.size());
+                for (const std::unique_ptr<Scene>& overlay : *this->engine_overlays) {
+                    if (overlay.get() && overlay.get()->active) {
+                        this->entityCount += static_cast<int>(overlay.get()->entities.size());
                     }
                 }
             }
 
             std::string sceneName = "None";
-            if (this->currentScene && *this->currentScene) {
-                sceneName = (*this->currentScene)->GetName();
+            if (this->engine_scenes && !this->engine_scenes->empty()) {
+                sceneName = this->engine_scenes->top()->GetName();
             }
 
             std::string memoryUsage = "N/A";

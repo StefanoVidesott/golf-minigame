@@ -12,7 +12,7 @@ namespace Engine {
 
             void Run();
 
-            void LoadScene(Scene::Scene*);
+            void LoadScene(std::unique_ptr<Scene::Scene>);
             void DropScene();
         private:
             void Start();
@@ -23,12 +23,11 @@ namespace Engine {
             void InitResources();
 
             sf::RenderWindow *window;
-            Scene::Scene *currentScene = nullptr;
             sf::Clock deltaClock;
             float deltaTime;
 
-            std::stack<Scene::Scene*> scenes;
-            std::vector<Scene::Scene*> overlays;
+            std::stack<std::unique_ptr<Scene::Scene>> scenes;
+            std::vector<std::unique_ptr<Scene::Scene>> overlays;
 
             InputManager inputManager;
     };

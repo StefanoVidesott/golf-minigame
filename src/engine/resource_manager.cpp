@@ -48,26 +48,20 @@ namespace Engine {
         }
 
         // ---- SCENE MANAGER ----
-        std::stack<Scene::Scene*> *SceneManager::scenes;
-        std::vector<Scene::Scene*> *SceneManager::overlays;
-        Scene::Scene **SceneManager::currentScene;
+        std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::scenes;
+        std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::overlays;
 
-        void SceneManager::Initialize(std::stack<Scene::Scene*>* scenesPtr, std::vector<Scene::Scene*>* overlaysPtr, Scene::Scene** currentScenePtr) {
+        void SceneManager::Initialize(std::stack<std::unique_ptr<Scene::Scene>>* scenesPtr, std::vector<std::unique_ptr<Scene::Scene>>* overlaysPtr) {
             SceneManager::scenes = scenesPtr;
             SceneManager::overlays = overlaysPtr;
-            SceneManager::currentScene = currentScenePtr;
         }
 
-        std::stack<Scene::Scene*> *SceneManager::GetScenes() {
+        std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::GetScenes() {
             return SceneManager::scenes;
         }
 
-        std::vector<Scene::Scene*> *SceneManager::GetOverlays() {
+        std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::GetOverlays() {
             return SceneManager::overlays;
-        }
-
-        Scene::Scene **SceneManager::GetCurrentScene() {
-            return SceneManager::currentScene;
         }
 
         // ---- RESOURCE MANAGER ----

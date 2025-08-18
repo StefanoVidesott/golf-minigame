@@ -10,6 +10,6 @@ Application::~Application() {
 }
 
 void Application::Run() {
-    this->engine->LoadScene(new ApplicationScene::MenuScene());
+    this->engine->LoadScene(std::make_unique<ApplicationScene::MenuScene>());
     this->engine->Run();
 }

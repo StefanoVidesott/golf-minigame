@@ -26,9 +26,8 @@ namespace Engine {
 
                 InputManager *inputManager;
 
-                Scene **currentScene;
-                std::stack<Scene*> *engine_scenes;
-                std::vector<Scene*> *engine_overlays;
+                std::stack<std::unique_ptr<Scene>> *engine_scenes;
+                std::vector<std::unique_ptr<Scene>> *engine_overlays;
 
                 float fps = 0.0f;
                 float frameTime = 0.0f;

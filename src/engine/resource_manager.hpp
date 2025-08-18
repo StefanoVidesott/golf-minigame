@@ -46,15 +46,13 @@ namespace Engine {
                 SceneManager() = default;
                 ~SceneManager() = default;
 
-                void Initialize(std::stack<Scene::Scene*>*, std::vector<Scene::Scene*>*, Scene::Scene**);
+                void Initialize(std::stack<std::unique_ptr<Scene::Scene>>*, std::vector<std::unique_ptr<Scene::Scene>>*);
 
-                std::stack<Scene::Scene*> *GetScenes();
-                std::vector<Scene::Scene*> *GetOverlays();
-                Scene::Scene **GetCurrentScene();
+                std::stack<std::unique_ptr<Scene::Scene>> *GetScenes();
+                std::vector<std::unique_ptr<Scene::Scene>> *GetOverlays();
             private:
-                static std::stack<Scene::Scene*> *scenes;
-                static std::vector<Scene::Scene*> *overlays;
-                static Scene::Scene **currentScene;
+                static std::stack<std::unique_ptr<Scene::Scene>> *scenes;
+                static std::vector<std::unique_ptr<Scene::Scene>> *overlays;
         };
 
         class ResourceManager {
