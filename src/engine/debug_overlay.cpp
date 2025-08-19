@@ -54,12 +54,12 @@ namespace Engine {
             float frameTimeMs = this->frameTime * 1000.0f;
 
             this->entityCount = 0;
-            if (this->engine_scenes) {
+            if (this->engine_scenes && !this->engine_scenes->empty()) {
                 this->entityCount += static_cast<int>(this->engine_scenes->top()->entities.size());
             }
 
             if (this->engine_overlays) {
-                for (const std::unique_ptr<Scene>& overlay : *this->engine_overlays) {
+                for (const std::unique_ptr<Engine::Scene::Scene>& overlay : *this->engine_overlays) {
                     if (overlay.get() && overlay.get()->active) {
                         this->entityCount += static_cast<int>(overlay.get()->entities.size());
                     }
@@ -78,7 +78,7 @@ namespace Engine {
                     if (file) {
                         long rss;
                         if (fscanf(file, "%*s%ld", &rss) == 1) {
-                            long page_size_kb = sysconf(_SC_PAGE_SIZE) / 1024;
+                            long page_size_kb = sysconf(_SC_PAGESIZE) / 1024;
                             long mem_kb = rss * page_size_kb;
                             memoryUsage = std::to_string(mem_kb / 1024) + " MB";
                         }

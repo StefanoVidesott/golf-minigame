@@ -21,7 +21,6 @@ namespace Engine {
                 virtual std::string GetName() const = 0;
 
                 sf::RenderWindow* window = nullptr;
-                // bool continueInPause = false;
                 bool active = false;
                 bool visible = true;
 

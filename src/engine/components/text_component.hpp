@@ -6,8 +6,8 @@ namespace Engine {
     namespace Components {
         class TextComponent : public Component {
             public:
-                TextComponent(const sf::Font&, const std::string&, unsigned int);
-                TextComponent(const std::string, const std::string&, unsigned int);
+                TextComponent(const sf::Font&, const std::string&, unsigned int = 30);
+                TextComponent(const std::string, const std::string&, unsigned int = 30);
                 ~TextComponent() override = default;
 
                 void SetText(const std::string&);

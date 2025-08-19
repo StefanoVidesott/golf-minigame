@@ -9,35 +9,33 @@ namespace Engine {
 
     namespace Components {
         class TransformComponent : public Component {
-        public:
-            TransformComponent();
-            TransformComponent(const sf::Vector2f&);
+            public:
+                TransformComponent();
+                TransformComponent(const sf::Vector2f&);
 
-            void SetPosition(const sf::Vector2f&);
-            void Move(const sf::Vector2f&);
+                void SetPosition(const sf::Vector2f&);
+                void Move(const sf::Vector2f&);
 
-            void SetRotation(float);
-            void Rotate(float);
+                void SetRotation(float);
+                void Rotate(float);
 
-            void SetScale(const sf::Vector2f&);
+                void SetScale(const sf::Vector2f&);
 
-            [[nodiscard]] sf::Vector2f GetPosition() const;
-            [[nodiscard]] float GetRotation() const;
-            [[nodiscard]] sf::Vector2f GetScale() const;
+                [[nodiscard]] sf::Vector2f GetPosition() const;
+                [[nodiscard]] float GetRotation() const;
+                [[nodiscard]] sf::Vector2f GetScale() const;
 
-            void Update(float) override;
-            void Render(sf::RenderWindow*) override;
+                void Update(float) override;
+                void Render(sf::RenderWindow*) override;
+                void UpdateEntityTransform();
+            private:
+                void UpdateEntityPosition();
+                void UpdateEntityRotation();
+                void UpdateEntityScale();
 
-            Entity* owner = nullptr;
-        private:
-            void UpdateEntityPosition();
-            void UpdateEntityRotation();
-            void UpdateEntityScale();
-            void UpdateEntityTransform();
-
-            sf::Vector2f position;
-            float rotation;
-            sf::Vector2f scale;
+                sf::Vector2f position;
+                float rotation;
+                sf::Vector2f scale;
         };
     }
 }

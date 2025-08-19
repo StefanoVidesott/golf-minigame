@@ -3,7 +3,7 @@
 namespace Engine {
 
     Entity::Entity() {
-        this->transform.owner = this;
+        this->transform.SetOwner(this);
     }
 
     Entity::~Entity() {
@@ -15,7 +15,7 @@ namespace Engine {
         }
         component->SetOwner(this);
         components[name] = std::move(component);
-        // TODO: Update position, rotation, and scale of the entity if needed
+        this->transform.UpdateEntityTransform();
     }
 
     void Entity::Update(float deltaTime) {

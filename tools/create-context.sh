@@ -12,6 +12,7 @@ fi
 touch context.md
 echo "Creating context.md file..."
 # Find all files in the "include" directory and its subdirectories
+echo "Engine and game using SFML 3.0.1" >> context.md
 find src -type f | while read -r file; do
     # Get the file name without the path
     filename=$(basename "$file")

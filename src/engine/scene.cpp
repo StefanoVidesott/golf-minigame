@@ -4,7 +4,6 @@ namespace Engine {
     namespace Scene {
 
         Scene::~Scene() {
-            entities.clear();
         }
 
         void Scene::Update(float deltaTime) {
@@ -21,7 +20,6 @@ namespace Engine {
 
             if (!this->window) {
                 throw std::runtime_error("Render window is not initialized");
-                return; // Ensure the window is valid before rendering
             }
             for (const std::unique_ptr<Entity>& entity : entities) {
                 if (entity) {

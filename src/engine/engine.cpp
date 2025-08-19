@@ -11,15 +11,6 @@ namespace Engine {
 
     Engine::~Engine() {
         delete window;
-        while (!this->scenes.empty()) {
-            this->scenes.pop();
-        }
-        for (auto& overlay : this->overlays) {
-            if (overlay) {
-                overlay.reset();
-            }
-        }
-        this->overlays.clear();
     }
 
     void Engine::LoadScene(std::unique_ptr<Scene::Scene> scene) {
@@ -45,10 +36,10 @@ namespace Engine {
     }
 
     void Engine::Start() {
-        OverlayScene::DebugOverlayScene *debugOverlay = new OverlayScene::DebugOverlayScene();
+        std::unique_ptr<OverlayScene::DebugOverlayScene> debugOverlay = std::make_unique<OverlayScene::DebugOverlayScene>();
         debugOverlay->Start();
 
-        this->overlays.push_back(std::unique_ptr<Scene::Scene>(debugOverlay));
+        this->overlays.push_back(std::move(debugOverlay));
     }
 
     void Engine::InitResources() {
@@ -88,8 +79,8 @@ namespace Engine {
 
             this->inputManager.HandleEvents(*event);
 
-            if(this->scenes.top()) {
-                if (this->scenes.top()->active) {
+            if(!this->scenes.empty()) {
+                if (this->scenes.top() && this->scenes.top()->active) {
                     this->scenes.top()->HandleEvent(event);
                 }
             }
@@ -103,7 +94,7 @@ namespace Engine {
     void Engine::Update() {
         this->deltaTime = this->deltaClock.restart().asSeconds();
         if(!this->scenes.empty()) {
-            if (this->scenes.top().get()->active) {
+            if (this->scenes.top() && this->scenes.top()->active) {
                 this->scenes.top().get()->Update(this->deltaTime);
             }
         }
