@@ -2,25 +2,27 @@
 
 namespace Engine {
 
-    Engine::Engine() {
-        this->window = new sf::RenderWindow(sf::VideoMode({1920u, 1080u}), "Golf-Minigame");
+    Engine::Engine(sf::VideoMode mode, const std::string& title, unsigned int style) {
+        this->window = std::make_unique<sf::RenderWindow>(mode, title, style);
         // this->window->setVerticalSyncEnabled(true);
         // this->window->setFramerateLimit(144);
         this->InitResources();
     }
 
     Engine::~Engine() {
-        delete window;
+        this->scenes = std::stack<std::unique_ptr<Scene::Scene>>();
+        this->overlays.clear();
+        this->window.reset();
     }
 
     void Engine::LoadScene(std::unique_ptr<Scene::Scene> scene) {
         if (scene) {
-            scene->Start();
             scene->active = true;
-            scene->window = this->window;
+            scene->window = this->window.get();
             if (!this->scenes.empty()) {
                 this->scenes.top()->active = false;
             }
+            scene->Start();
             this->scenes.push(std::move(scene));
         }
     }
@@ -43,13 +45,13 @@ namespace Engine {
     }
 
     void Engine::InitResources() {
-        ResourceManager::ResourceManager::SetWindow(this->window);
+        ResourceManager::ResourceManager::SetWindow(this->window.get());
 
         ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
         ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays);
 
-        ResourceManager::ResourceManager::loadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
-        ResourceManager::ResourceManager::loadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");
+        ResourceManager::ResourceManager::LoadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
+        ResourceManager::ResourceManager::LoadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");
     }
 
     void Engine::Run() {
@@ -65,7 +67,7 @@ namespace Engine {
 
     void Engine::HandleEvents() {
         this->inputManager.Update();
-        while (const std::optional event = this->window->pollEvent())
+        while (std::optional<sf::Event> event = this->window->pollEvent())
         {
             if (event->is<sf::Event::Closed>())
             {
@@ -110,7 +112,7 @@ namespace Engine {
         this->window->clear();
 
         if (!this->scenes.empty()) {
-            if (this->scenes.top()->visible) {
+            if (this->scenes.top() && this->scenes.top()->visible) {
                 this->scenes.top()->Render();
             }
         }
@@ -121,6 +123,12 @@ namespace Engine {
         }
 
         this->window->display();
+    }
+
+    void Engine::SetWindowPosition(const sf::Vector2i& position) {
+        if (this->window) {
+            this->window->setPosition(position);
+        }
     }
 
 } // namespace Engine

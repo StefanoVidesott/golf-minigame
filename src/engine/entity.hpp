@@ -4,9 +4,10 @@
 #include <SFML/Graphics.hpp>
 #include "components/components.hpp"
 
+#include "components/transform_component.hpp"
 #include "components/text_component.hpp"
 #include "components/rectangle_shape_component.hpp"
-#include "components/transform_component.hpp"
+#include "components/sprite_component.hpp"
 #include "components/velocity_component.hpp"
 
 namespace Engine {

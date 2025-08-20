@@ -15,19 +15,20 @@ namespace Engine {
         void DebugOverlayScene::Start() {
             this->Initialize();
 
-            this->overlayText = new Entity();
+            this->overlayInfo = new Entity();
+            this->overlayInfo->GetTransform()->SetPosition(sf::Vector2f(4.0f, 4.0f));
 
             this->textComponent = new Components::TextComponent("DefaultFont", "FPS:\nFrame Time:\nEntities:\nCurrent Scene:", this->textSize);
             this->textComponent->SetStyle(sf::Text::Bold);
-            this->overlayText->AddComponent("DebugText", std::unique_ptr<Components::Component>(this->textComponent));
+            this->overlayInfo->AddComponent("DebugText", std::unique_ptr<Components::Component>(this->textComponent));
 
             Components::RectangleShapeComponent* rectShape = new Components::RectangleShapeComponent(sf::Vector2f(230.0f, 113.0f));
             rectShape->SetFillColor(sf::Color(55, 55, 55, 150));
             rectShape->SetOutlineColor(sf::Color(70, 70, 70, 200));
             rectShape->SetOutlineThickness(3.0f);
-            this->overlayText->AddComponent("DebugOverlayBackground", std::unique_ptr<Components::Component>(rectShape));
+            this->overlayInfo->AddComponent("DebugOverlayBackground", std::unique_ptr<Components::Component>(rectShape));
 
-            this->entities.push_back(std::unique_ptr<Entity>(this->overlayText));
+            this->entities.push_back(std::unique_ptr<Entity>(this->overlayInfo));
         }
 
         void DebugOverlayScene::Initialize() {
@@ -122,7 +123,8 @@ namespace Engine {
                 "Current Scene: %s\n"
                 "Memory Usage: %s\n"
                 "Mouse Position: %s",
-                this->fps, frameTimeMs,
+                this->fps,
+                frameTimeMs,
                 this->entityCount,
                 sceneName.c_str(),
                 memoryUsage.c_str(),

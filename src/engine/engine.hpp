@@ -7,10 +7,12 @@ namespace Engine {
 
     class Engine {
         public:
-            Engine();
+            Engine(sf::VideoMode, const std::string& = "Engine Window", unsigned int = sf::Style::Default);
             ~Engine();
 
             void Run();
+
+            void SetWindowPosition(const sf::Vector2i&);
 
             void LoadScene(std::unique_ptr<Scene::Scene>);
             void DropScene();
@@ -22,7 +24,7 @@ namespace Engine {
 
             void InitResources();
 
-            sf::RenderWindow *window;
+            std::unique_ptr<sf::RenderWindow> window;
             sf::Clock deltaClock;
             float deltaTime;
 

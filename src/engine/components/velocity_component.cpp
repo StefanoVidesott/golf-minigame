@@ -9,8 +9,12 @@ namespace Engine {
 
         void VelocityComponent::Update(float deltaTime) {
             if (this->velocity != sf::Vector2f(0, 0)) {
+                float factor = 1.f - this->friction * deltaTime;
+                if (factor < 0.f) {
+                    factor = 0.f;
+                }
                 this->owner->GetTransform()->Move(this->velocity * deltaTime);
-                this->velocity *= (1.0f - this->friction * deltaTime);
+                this->velocity *= (factor);
             }
             if (this->velocity.x < this->threshold && this->velocity.x > -this->threshold) {
                 this->velocity.x = 0;

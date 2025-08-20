@@ -25,6 +25,7 @@ add_executable(golf-minigame src/main.cpp
 
     src/engine/components/transform_component.cpp
     src/engine/components/text_component.cpp
+    src/engine/components/sprite_component.cpp
     src/engine/components/rectangle_shape_component.cpp
     src/engine/components/velocity_component.cpp
 

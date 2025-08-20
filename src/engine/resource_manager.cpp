@@ -5,7 +5,7 @@ namespace Engine {
 
         // ---- TEXTURE MANAGER ----
 
-        void TextureManager::loadTexture(const std::string& name, const std::string& filePath) {
+        void TextureManager::LoadTexture(const std::string& name, const std::string& filePath) {
             std::unique_ptr<sf::Texture> texturePtr(new sf::Texture());
 
             if (!texturePtr->loadFromFile(filePath)) {
@@ -15,19 +15,19 @@ namespace Engine {
             textures[name] = std::move(texturePtr);
         }
 
-        sf::Texture& TextureManager::getTexture(const std::string& name) {
+        sf::Texture& TextureManager::GetTexture(const std::string& name) {
             std::unordered_map<std::string, std::unique_ptr<sf::Texture>>::iterator it = textures.find(name);
+            if (it != textures.end()) return *(it->second);
 
-            if (it == textures.end()) {
-                return this->getTexture("DefaultTexture");
-            }
+            std::unordered_map<std::string, std::unique_ptr<sf::Texture>>::iterator def = textures.find("DefaultTexture");
+            if (def != textures.end()) return *(def->second);
 
-            return *(it->second);
+            throw std::runtime_error("Texture not found: " + name + " (and DefaultTexture missing)");
         }
 
         // ---- FONT MANAGER ----
 
-        void FontManager::loadFont(const std::string& name, const std::string& filePath) {
+        void FontManager::LoadFont(const std::string& name, const std::string& filePath) {
             std::unique_ptr<sf::Font> fontPtr(new sf::Font());
 
             if (!fontPtr->openFromFile(filePath)) {
@@ -37,19 +37,19 @@ namespace Engine {
             fonts[name] = std::move(fontPtr);
         }
 
-        sf::Font& FontManager::getFont(const std::string& name) {
+        sf::Font& FontManager::GetFont(const std::string& name) {
             std::unordered_map<std::string, std::unique_ptr<sf::Font>>::iterator it = fonts.find(name);
+            if (it != fonts.end()) return *(it->second);
 
-            if (it == fonts.end()) {
-                return this->getFont("DefaultFont");
-            }
+            std::unordered_map<std::string, std::unique_ptr<sf::Font>>::iterator def = fonts.find("DefaultFont");
+            if (def != fonts.end()) return *(def->second);
 
-            return *(it->second);
+            throw std::runtime_error("Font not found: " + name + " (and DefaultFont missing)");
         }
 
         // ---- SCENE MANAGER ----
-        std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::scenes;
-        std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::overlays;
+        std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::scenes = nullptr;
+        std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::overlays = nullptr;
 
         void SceneManager::Initialize(std::stack<std::unique_ptr<Scene::Scene>>* scenesPtr, std::vector<std::unique_ptr<Scene::Scene>>* overlaysPtr) {
             SceneManager::scenes = scenesPtr;
@@ -73,20 +73,20 @@ namespace Engine {
         sf::RenderWindow* ResourceManager::window = nullptr;
         InputManager* ResourceManager::inputManager = nullptr;
 
-        void ResourceManager::loadTexture(const std::string& name, const std::string& filePath) {
-            textureManager.loadTexture(name, filePath);
+        void ResourceManager::LoadTexture(const std::string& name, const std::string& filePath) {
+            textureManager.LoadTexture(name, filePath);
         }
 
-        sf::Texture& ResourceManager::getTexture(const std::string& name) {
-            return textureManager.getTexture(name);
+        sf::Texture& ResourceManager::GetTexture(const std::string& name) {
+            return textureManager.GetTexture(name);
         }
 
-        void ResourceManager::loadFont(const std::string& name, const std::string& filePath) {
-            fontManager.loadFont(name, filePath);
+        void ResourceManager::LoadFont(const std::string& name, const std::string& filePath) {
+            fontManager.LoadFont(name, filePath);
         }
 
-        sf::Font& ResourceManager::getFont(const std::string& name) {
-            return fontManager.getFont(name);
+        sf::Font& ResourceManager::GetFont(const std::string& name) {
+            return fontManager.GetFont(name);
         }
 
         void ResourceManager::SetWindow(sf::RenderWindow* win) {

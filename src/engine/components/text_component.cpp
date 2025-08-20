@@ -6,7 +6,7 @@ namespace Engine {
         TextComponent::TextComponent(const sf::Font& font, const std::string& text, unsigned int size) : text(font, text, size) {
         }
 
-        TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size) : text(Engine::ResourceManager::ResourceManager::getFont(fontName), text, size) {
+        TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size) : text(Engine::ResourceManager::ResourceManager::GetFont(fontName), text, size) {
         }
 
         void TextComponent::Update(float deltaTime) {

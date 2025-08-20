@@ -20,7 +20,7 @@ namespace Engine {
             private:
                 void Initialize();
 
-                Entity *overlayText = nullptr;
+                Entity *overlayInfo = nullptr;
                 Components::TextComponent *textComponent = nullptr;
                 unsigned int textSize = 15;
 

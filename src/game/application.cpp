@@ -2,7 +2,8 @@
 #include "scenes/menu_scene.hpp"
 
 Application::Application() {
-    this->engine = new Engine::Engine();
+    this->engine = new Engine::Engine(sf::VideoMode({960u, 720u}), "Golf-Minigame", sf::Style::Close);
+    this->engine->SetWindowPosition(sf::Vector2i(100, 100));
 }
 
 Application::~Application() {

@@ -4,15 +4,22 @@ namespace ApplicationScene {
 
     void MenuScene::Start() {
         this->inputManager = Engine::ResourceManager::ResourceManager::GetInputManager();
-        Engine::ResourceManager::ResourceManager::loadFont("TitleFont", "res/font/font.ttf");
+        Engine::ResourceManager::ResourceManager::LoadFont("TitleFont", "res/font/font.ttf");
+        Engine::ResourceManager::ResourceManager::LoadTexture("background", "res/gfx/bg.png");
 
-        titleEntity = new Engine::Entity();
+        Engine::Entity *bg = new Engine::Entity();
+        Engine::Components::SpriteComponent *bgSpriteComponent = new Engine::Components::SpriteComponent(Engine::ResourceManager::ResourceManager::GetTexture("background"));
+        bg->GetTransform()->SetScale(sf::Vector2f(1.5f, 1.5f));
+        bg->AddComponent("BackgroundSprite", std::unique_ptr<Engine::Components::Component>(bgSpriteComponent));
+        this->entities.push_back(std::unique_ptr<Engine::Entity>(bg));
+
+        this->titleEntity = new Engine::Entity();
         Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Golf Minigame", 50);
         Engine::Components::VelocityComponent *velocityComponent = new Engine::Components::VelocityComponent();
         velocityComponent->SetFriction(1.75f);
-        titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
-        titleEntity->AddComponent("Velocity", std::unique_ptr<Engine::Components::Component>(velocityComponent));
-        this->entities.push_back(std::unique_ptr<Engine::Entity>(titleEntity));
+        this->titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
+        this->titleEntity->AddComponent("Velocity", std::unique_ptr<Engine::Components::Component>(velocityComponent));
+        this->entities.push_back(std::unique_ptr<Engine::Entity>(this->titleEntity));
     }
 
     void MenuScene::UpdateBehavior(float deltaTime) {
@@ -31,16 +38,15 @@ namespace ApplicationScene {
         }
         if (direction != sf::Vector2f(0,0)) {
             direction = direction.normalized();
-            sf::Vector2f velocityVector = direction * 250.0f; // Normalize direction and set speed
+            sf::Vector2f velocityVector = direction * 250.0f;
             if (direction.x == 0) {
                 velocityVector.x = this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->GetVelocity().x;
             }
             else if (direction.y == 0) {
                 velocityVector.y = this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->GetVelocity().y;
             }
-            this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->SetVelocity(velocityVector); // Set velocity to move the title entity
+            this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->SetVelocity(velocityVector);
         }
-        // this->titleEntity->GetTransform()->SetPosition(sf::Vector2f(this->inputManager->GetMousePosition().x, this->inputManager->GetMousePosition().y));
     }
 
     void MenuScene::HandleEvent(const std::optional<sf::Event>& event) {
