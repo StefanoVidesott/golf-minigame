@@ -6,9 +6,11 @@ namespace Engine {
         // ---- Constructors ----
 
         TextComponent::TextComponent(const sf::Font& font, const std::string& text, unsigned int size) : text(font, text, size) {
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size) : text(Engine::ResourceManager::ResourceManager::GetFont(fontName), text, size) {
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         // ---- Component Methods ----
@@ -18,18 +20,21 @@ namespace Engine {
 
         void TextComponent::Render(sf::RenderWindow* window) {
             window->draw(this->text);
+            this->gizmo.Render(window);
         }
 
         void TextComponent::SetPosition(const sf::Vector2f& position) {
             this->text.setPosition(position);
+            this->gizmo.SetPosition(this->text.getGlobalBounds().position + this->text.getOrigin());
         }
 
         void TextComponent::SetRotation(sf::Angle angle) {
             this->text.setRotation(angle);
+            this->gizmo.SetRotation(angle);
         }
 
-        void TextComponent::SetScale(const sf::Vector2f& factors) {
-            this->text.setScale(factors);
+        void TextComponent::SetScale(const sf::Vector2f& scale) {
+            this->text.setScale(scale);
         }
 
         [[nodiscard]] sf::FloatRect TextComponent::GetGlobalBounds() const {
@@ -56,22 +61,27 @@ namespace Engine {
 
         void TextComponent::SetOrigin(const sf::Vector2f& origin) {
             this->text.setOrigin(origin);
+            this->gizmo.SetOrigin(origin);
         }
 
         void TextComponent::SetText(const std::string& newText) {
             this->text.setString(newText);
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         void TextComponent::SetFont(const sf::Font& font) {
             this->text.setFont(font);
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         void TextComponent::SetCharacterSize(unsigned int size) {
             this->text.setCharacterSize(size);
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         void TextComponent::SetStyle(sf::Text::Style style) {
             this->text.setStyle(style);
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         void TextComponent::SetFillColor(const sf::Color& color) {
@@ -84,6 +94,7 @@ namespace Engine {
 
         void TextComponent::SetOutlineThickness(float thickness) {
             this->text.setOutlineThickness(thickness);
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
         [[nodiscard]] const sf::String& TextComponent::GetString() const {
@@ -100,6 +111,10 @@ namespace Engine {
 
         [[nodiscard]] uint32_t TextComponent::GetStyle() const {
             return static_cast<uint32_t>(this->text.getStyle());
+        }
+
+        void TextComponent::SetGizmoVisible(bool visible) {
+            this->gizmo.SetVisible(visible);
         }
 
     } // namespace Components

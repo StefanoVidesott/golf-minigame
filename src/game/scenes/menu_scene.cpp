@@ -18,8 +18,9 @@ namespace ApplicationScene {
         titleTextComponent->SetOrigin(sf::Vector2f(titleTextComponent->GetGlobalBounds().size.x/2, titleTextComponent->GetGlobalBounds().size.y/2));
         titleTextComponent->SetOutlineColor(sf::Color::Black);
         titleTextComponent->SetOutlineThickness(5.f);
-        titleEntity->GetTransform()->SetPosition(sf::Vector2f(this->window->getSize().x/2, 125));
+        titleTextComponent->SetGizmoVisible(true);
 
+        titleEntity->GetTransform()->SetPosition(sf::Vector2f(this->window->getSize().x/2, 125));
         titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
         this->entities.push_back(std::move(titleEntity));
     }
