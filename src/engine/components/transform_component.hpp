@@ -14,15 +14,14 @@ namespace Engine {
                 TransformComponent(const sf::Vector2f&);
 
                 void SetPosition(const sf::Vector2f&);
-                void Move(const sf::Vector2f&);
-
-                void SetRotation(float);
-                void Rotate(float);
-
+                void SetRotation(sf::Angle);
                 void SetScale(const sf::Vector2f&);
 
+                void Rotate(sf::Angle);
+                void Move(const sf::Vector2f&);
+
                 [[nodiscard]] sf::Vector2f GetPosition() const;
-                [[nodiscard]] float GetRotation() const;
+                [[nodiscard]] sf::Angle GetRotation() const;
                 [[nodiscard]] sf::Vector2f GetScale() const;
 
                 void Update(float) override;
@@ -34,7 +33,7 @@ namespace Engine {
                 void UpdateEntityScale();
 
                 sf::Vector2f position;
-                float rotation;
+                sf::Angle rotation;
                 sf::Vector2f scale;
         };
     }

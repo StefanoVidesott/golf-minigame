@@ -13,40 +13,18 @@ namespace ApplicationScene {
         bg->AddComponent("BackgroundSprite", std::unique_ptr<Engine::Components::Component>(bgSpriteComponent));
         this->entities.push_back(std::unique_ptr<Engine::Entity>(bg));
 
-        this->titleEntity = new Engine::Entity();
-        Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Golf Minigame", 50);
-        Engine::Components::VelocityComponent *velocityComponent = new Engine::Components::VelocityComponent();
-        velocityComponent->SetFriction(1.75f);
-        this->titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
-        this->titleEntity->AddComponent("Velocity", std::unique_ptr<Engine::Components::Component>(velocityComponent));
-        this->entities.push_back(std::unique_ptr<Engine::Entity>(this->titleEntity));
+        std::unique_ptr<Engine::Entity> titleEntity = std::make_unique<Engine::Entity>();
+        Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("TitleFont", "Gooolf!", 115);
+        titleTextComponent->SetOrigin(sf::Vector2f(titleTextComponent->GetGlobalBounds().size.x/2, titleTextComponent->GetGlobalBounds().size.y/2));
+        titleTextComponent->SetOutlineColor(sf::Color::Black);
+        titleTextComponent->SetOutlineThickness(5.f);
+        titleEntity->GetTransform()->SetPosition(sf::Vector2f(this->window->getSize().x/2, 125));
+
+        titleEntity->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
+        this->entities.push_back(std::move(titleEntity));
     }
 
     void MenuScene::UpdateBehavior(float deltaTime) {
-        sf::Vector2f direction;
-        if (this->inputManager->IsKeyDown(sf::Keyboard::Key::Left)) {
-            direction.x -= 1;
-        }
-        if (this->inputManager->IsKeyDown(sf::Keyboard::Key::Right)) {
-            direction.x += 1;
-        }
-        if (this->inputManager->IsKeyDown(sf::Keyboard::Key::Up)) {
-            direction.y -= 1;
-        }
-        if (this->inputManager->IsKeyDown(sf::Keyboard::Key::Down)) {
-            direction.y += 1;
-        }
-        if (direction != sf::Vector2f(0,0)) {
-            direction = direction.normalized();
-            sf::Vector2f velocityVector = direction * 250.0f;
-            if (direction.x == 0) {
-                velocityVector.x = this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->GetVelocity().x;
-            }
-            else if (direction.y == 0) {
-                velocityVector.y = this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->GetVelocity().y;
-            }
-            this->titleEntity->GetComponent<Engine::Components::VelocityComponent>("Velocity")->SetVelocity(velocityVector);
-        }
     }
 
     void MenuScene::HandleEvent(const std::optional<sf::Event>& event) {

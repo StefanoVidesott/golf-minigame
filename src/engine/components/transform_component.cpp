@@ -4,10 +4,10 @@
 namespace Engine {
     namespace Components {
         TransformComponent::TransformComponent()
-            : position(0.f, 0.f), rotation(0.f), scale(1.f, 1.f) {}
+            : position(0.f, 0.f), rotation(), scale(1.f, 1.f) {}
 
         TransformComponent::TransformComponent(const sf::Vector2f& pos)
-            : position(pos), rotation(0.f), scale(1.f, 1.f) {
+            : position(pos), rotation(), scale(1.f, 1.f) {
                 this->UpdateEntityTransform();
             }
 
@@ -21,12 +21,12 @@ namespace Engine {
             this->UpdateEntityPosition();
         }
 
-        void TransformComponent::SetRotation(float rot) {
-            rotation = rot;
+        void TransformComponent::SetRotation(sf::Angle angle) {
+            rotation = angle;
             this->UpdateEntityRotation();
         }
 
-        void TransformComponent::Rotate(float delta) {
+        void TransformComponent::Rotate(sf::Angle delta) {
             rotation += delta;
             this->UpdateEntityRotation();
         }
@@ -40,7 +40,7 @@ namespace Engine {
             return position;
         }
 
-        [[nodiscard]] float TransformComponent::GetRotation() const {
+        [[nodiscard]] sf::Angle TransformComponent::GetRotation() const {
             return rotation;
         }
 
