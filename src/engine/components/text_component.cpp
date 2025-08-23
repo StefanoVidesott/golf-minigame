@@ -41,6 +41,10 @@ namespace Engine {
             return this->text.getGlobalBounds();
         }
 
+        [[nodiscard]] sf::FloatRect TextComponent::GetLocalBounds() const {
+            return this->text.getLocalBounds();
+        }
+
         [[nodiscard]] sf::Vector2f TextComponent::GetOrigin() const {
             return this->text.getOrigin();
         }
@@ -64,7 +68,7 @@ namespace Engine {
             this->gizmo.SetOrigin(origin);
         }
 
-        void TextComponent::SetText(const std::string& newText) {
+        void TextComponent::SetString(const std::string& newText) {
             this->text.setString(newText);
             this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }

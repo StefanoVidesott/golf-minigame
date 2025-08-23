@@ -19,10 +19,13 @@ namespace Engine {
                 [[nodiscard]] sf::Color GetFillColor() const;
                 [[nodiscard]] sf::Color GetOutlineColor() const;
                 [[nodiscard]] float GetOutlineThickness() const;
+                [[nodiscard]] sf::FloatRect GetGlobalBounds() const;
 
                 void Update(float) override;
                 void Render(sf::RenderWindow*) override;
-                void SetPosition(const sf::Vector2f& position) override;
+                void SetPosition(const sf::Vector2f&) override;
+
+                void SetOrigin(const sf::Vector2f&);
             private:
                 sf::RectangleShape shape;
         };

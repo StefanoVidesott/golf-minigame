@@ -13,7 +13,8 @@ FetchContent_Declare(SFML
 )
 FetchContent_MakeAvailable(SFML)
 
-add_executable(golf-minigame src/main.cpp
+add_executable(golf-minigame
+    src/main.cpp
     src/game/application.cpp
     src/engine/engine.cpp
     src/engine/scene.cpp
@@ -29,6 +30,8 @@ add_executable(golf-minigame src/main.cpp
     src/engine/components/rectangle_shape_component.cpp
     src/engine/components/velocity_component.cpp
     src/engine/components/gizmos/rectangle_gizmo.cpp
+
+    src/engine/entities/text_button.cpp
 
     src/game/scenes/menu_scene.cpp
     src/game/scenes/game_scene.cpp

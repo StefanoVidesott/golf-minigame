@@ -17,6 +17,7 @@ namespace ApplicationScene {
             std::string GetName() const override;
         private:
             Engine::InputManager *inputManager;
+            Engine::Entities::TextButton* playButton;
         };
 
 } // namespace ApplicationScene

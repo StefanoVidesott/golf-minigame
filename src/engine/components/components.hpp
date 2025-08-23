@@ -21,6 +21,7 @@ namespace Engine {
                 virtual void SetScale(const sf::Vector2f&) {}
 
                 [[nodiscard]] virtual sf::FloatRect GetGlobalBounds() const { return sf::FloatRect(); }
+                [[nodiscard]] virtual sf::FloatRect GetLocalBounds() const { return sf::FloatRect(); }
                 [[nodiscard]] virtual sf::Vector2f GetOrigin() const { return sf::Vector2f(); }
                 [[nodiscard]] virtual sf::Vector2f GetPosition() const { return sf::Vector2f(); }
                 [[nodiscard]] virtual sf::Angle GetRotation() const { return sf::Angle(); }

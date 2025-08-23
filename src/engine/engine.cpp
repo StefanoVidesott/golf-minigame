@@ -95,6 +95,7 @@ namespace Engine {
 
     void Engine::Update() {
         this->deltaTime = this->deltaClock.restart().asSeconds();
+
         if(!this->scenes.empty()) {
             if (this->scenes.top() && this->scenes.top()->active) {
                 this->scenes.top().get()->Update(this->deltaTime);

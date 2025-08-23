@@ -131,7 +131,7 @@ namespace Engine {
                 mousePosition.c_str()
             );
 
-            this->textComponent->SetText(buffer);
+            this->textComponent->SetString(buffer);
         }
 
 

@@ -2,6 +2,8 @@
 
 #include "entity.hpp"
 
+#include "entities/text_button.hpp"
+
 namespace Engine {
     namespace Scene {
 

@@ -45,6 +45,10 @@ namespace Engine {
             return this->shape.getOutlineThickness();
         }
 
+        [[nodiscard]] sf::FloatRect RectangleShapeComponent::GetGlobalBounds() const {
+            return this->shape.getGlobalBounds();
+        }
+
         void RectangleShapeComponent::Update(float deltaTime) {
             // Update logic for the rectangle shape
         }
@@ -55,6 +59,10 @@ namespace Engine {
 
         void RectangleShapeComponent::SetPosition(const sf::Vector2f& position) {
             this->shape.setPosition(position);
+        }
+
+        void RectangleShapeComponent::SetOrigin(const sf::Vector2f& origin) {
+            this->shape.setOrigin(origin);
         }
 
     } // namespace Components

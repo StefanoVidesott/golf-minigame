@@ -20,13 +20,14 @@ namespace Engine {
                 void SetScale(const sf::Vector2f&) override;
 
                 [[nodiscard]] sf::FloatRect GetGlobalBounds() const override;
+                [[nodiscard]] sf::FloatRect GetLocalBounds() const override;
                 [[nodiscard]] sf::Vector2f GetOrigin() const override;
                 [[nodiscard]] sf::Vector2f GetPosition() const override;
                 [[nodiscard]] sf::Angle GetRotation() const override;
                 [[nodiscard]] sf::Vector2f GetScale() const override;
 
                 // Text methods
-                void SetText(const std::string&);
+                void SetString(const std::string&);
                 void SetFont(const sf::Font&);
                 void SetCharacterSize(unsigned int);
                 void SetStyle(sf::Text::Style);
