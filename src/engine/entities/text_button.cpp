@@ -30,24 +30,31 @@ namespace Engine {
 
 
         void TextButton::Update(float deltaTime) {
-            if (this->GetGlobalBounds().contains(static_cast<sf::Vector2f>(this->inputManager->GetMousePosition()))) {
-                Engine::Components::RectangleShapeComponent* backgroundComponent = this->GetComponent<Engine::Components::RectangleShapeComponent>("background");
+            bool isContained = this->GetGlobalBounds().contains(static_cast<sf::Vector2f>(this->inputManager->GetMousePosition()));
+            Engine::Components::RectangleShapeComponent* backgroundComponent = this->GetComponent<Engine::Components::RectangleShapeComponent>("background");
+            if (isContained) {
                 if (this->inputManager->IsMouseButtonDown(sf::Mouse::Button::Left)) {
                     backgroundComponent->SetFillColor(this->clickedBackgroundColor);
-                    if (this->wasButtonReleased) {
+                    if (!this->actionOnRelease && this->wasButtonReleased) {
                         this->onClick();
                     }
                     this->wasButtonPressed = true;
                     this->wasButtonReleased = false;
                 } else {
                     backgroundComponent->SetFillColor(this->hoverBackgroundColor);
-                    if (this->wasButtonPressed) {
-                        this->wasButtonReleased = true;
-                        this->wasButtonPressed = false;
-                    }
                 }
             } else {
-                this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->SetFillColor(this->normalBackgroundColor);
+                backgroundComponent->SetFillColor(this->normalBackgroundColor);
+            }
+
+            if (!this->inputManager->IsMouseButtonDown(sf::Mouse::Button::Left)) {
+                if (this->wasButtonPressed) {
+                    this->wasButtonReleased = true;
+                    this->wasButtonPressed = false;
+                    if(this->actionOnRelease && isContained) {
+                        this->onClick();
+                    }
+                }
             }
         }
 

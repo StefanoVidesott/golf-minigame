@@ -22,6 +22,7 @@ namespace Engine {
                 void SetBackgroundOutlineThickness(float);
 
                 void SetOnClick(std::function<void()>);
+                void SetActionOnRelease(bool);
 
                 void Update(float);
 
@@ -39,6 +40,8 @@ namespace Engine {
                 std::function<void()> onClick;
                 bool wasButtonPressed = false;
                 bool wasButtonReleased = true;
+
+                bool actionOnRelease = true;
         };
     } // namespace Entities
 } // namespace Engine
