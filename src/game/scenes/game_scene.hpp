@@ -5,9 +5,8 @@
 namespace ApplicationScene {
 
     class GameScene : public Engine::Scene::Scene {
-
         public:
-            GameScene();
+            GameScene() = default;
             ~GameScene() override = default;
 
             void Start() override;
@@ -17,7 +16,6 @@ namespace ApplicationScene {
 
             std::string GetName() const override;
         private:
-
+            Engine::InputManager *inputManager;
     };
-
 } // namespace ApplicationScene

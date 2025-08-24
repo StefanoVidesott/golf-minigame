@@ -19,9 +19,11 @@ namespace Engine {
         if (scene) {
             scene->active = true;
             scene->window = this->window.get();
+
             if (!this->scenes.empty()) {
                 this->scenes.top()->active = false;
             }
+
             scene->Start();
             this->scenes.push(std::move(scene));
         }
@@ -48,7 +50,10 @@ namespace Engine {
         ResourceManager::ResourceManager::SetWindow(this->window.get());
 
         ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
-        ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays);
+        ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays,
+            [this](std::unique_ptr<Scene::Scene> scene) { this->LoadScene(std::move(scene)); },
+            [this]() { this->DropScene(); }
+        );
 
         ResourceManager::ResourceManager::LoadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
         ResourceManager::ResourceManager::LoadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");

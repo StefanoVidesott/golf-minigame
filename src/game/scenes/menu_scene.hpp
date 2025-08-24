@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../engine/scene.hpp"
+#include "game_scene.hpp"
 
 namespace ApplicationScene {
 
@@ -18,6 +18,8 @@ namespace ApplicationScene {
         private:
             Engine::InputManager *inputManager;
             Engine::Entities::TextButton* playButton;
+
+            void OnPlayButtonClick();
         };
 
 } // namespace ApplicationScene

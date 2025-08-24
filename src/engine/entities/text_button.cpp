@@ -2,8 +2,10 @@
 
 namespace Engine {
     namespace Entities {
-        TextButton::TextButton(const std::string& text, const std::string& fontName, int fontSize) {
+        TextButton::TextButton(const std::string& text, std::function<void()> onClick, const std::string& fontName, int fontSize) {
             this->inputManager = Engine::ResourceManager::ResourceManager::GetInputManager();
+
+            this->onClick = onClick;
 
             Components::TextComponent* textComponent = new Components::TextComponent(fontName, text, fontSize);
             Components::RectangleShapeComponent* backgroundComponent = new Components::RectangleShapeComponent();
@@ -32,8 +34,17 @@ namespace Engine {
                 Engine::Components::RectangleShapeComponent* backgroundComponent = this->GetComponent<Engine::Components::RectangleShapeComponent>("background");
                 if (this->inputManager->IsMouseButtonDown(sf::Mouse::Button::Left)) {
                     backgroundComponent->SetFillColor(this->clickedBackgroundColor);
+                    if (this->wasButtonReleased) {
+                        this->onClick();
+                    }
+                    this->wasButtonPressed = true;
+                    this->wasButtonReleased = false;
                 } else {
                     backgroundComponent->SetFillColor(this->hoverBackgroundColor);
+                    if (this->wasButtonPressed) {
+                        this->wasButtonReleased = true;
+                        this->wasButtonPressed = false;
+                    }
                 }
             } else {
                 this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->SetFillColor(this->normalBackgroundColor);

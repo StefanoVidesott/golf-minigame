@@ -5,6 +5,7 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
+#include <functional>
 #include <unordered_map>
 #include <unordered_set>
 #include <SFML/Graphics.hpp>
@@ -46,13 +47,19 @@ namespace Engine {
                 SceneManager() = default;
                 ~SceneManager() = default;
 
-                void Initialize(std::stack<std::unique_ptr<Scene::Scene>>*, std::vector<std::unique_ptr<Scene::Scene>>*);
+                void Initialize(std::stack<std::unique_ptr<Scene::Scene>>*, std::vector<std::unique_ptr<Scene::Scene>>*, std::function<void(std::unique_ptr<Scene::Scene>)>, std::function<void()>);
+
+                static void LoadScene(std::unique_ptr<Scene::Scene> scene);
+                static void DropScene();
 
                 std::stack<std::unique_ptr<Scene::Scene>> *GetScenes();
                 std::vector<std::unique_ptr<Scene::Scene>> *GetOverlays();
             private:
                 static std::stack<std::unique_ptr<Scene::Scene>> *scenes;
                 static std::vector<std::unique_ptr<Scene::Scene>> *overlays;
+
+                static std::function<void(std::unique_ptr<Scene::Scene>)> LoadSceneFunction;
+                static std::function<void()> DropSceneFunction;
         };
 
         class ResourceManager {

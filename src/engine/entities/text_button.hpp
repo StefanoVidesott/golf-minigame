@@ -6,7 +6,7 @@ namespace Engine {
     namespace Entities {
         class TextButton : public Entity {
             public:
-                TextButton(const std::string&, const std::string& = "default", int = 30);
+                TextButton(const std::string&, std::function<void()>, const std::string& = "default", int = 30);
                 ~TextButton() = default;
 
                 void SetTextString(const std::string&);
@@ -21,6 +21,8 @@ namespace Engine {
                 void SetBackgroundOutlineColor(const sf::Color&);
                 void SetBackgroundOutlineThickness(float);
 
+                void SetOnClick(std::function<void()>);
+
                 void Update(float);
 
                 [[nodiscard]] sf::FloatRect GetGlobalBounds();
@@ -33,6 +35,10 @@ namespace Engine {
                 sf::Color clickedBackgroundColor = sf::Color::Green;
 
                 InputManager *inputManager;
+
+                std::function<void()> onClick;
+                bool wasButtonPressed = false;
+                bool wasButtonReleased = true;
         };
     } // namespace Entities
 } // namespace Engine

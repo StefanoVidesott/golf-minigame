@@ -26,7 +26,7 @@ namespace ApplicationScene {
         this->entities.push_back(std::move(titleEntity));
 
         // Create Play Button
-        this->playButton = new Engine::Entities::TextButton("Play", "GameFont", 70);
+        this->playButton = new Engine::Entities::TextButton("Play", [this]() { this->OnPlayButtonClick(); }, "GameFont", 70);
         this->playButton->GetTransform()->SetPosition(sf::Vector2f(this->window->getSize().x / 2, 300));
         this->entities.push_back(std::unique_ptr<Engine::Entity>(this->playButton));
     }
@@ -44,6 +44,10 @@ namespace ApplicationScene {
 
     std::string MenuScene::GetName() const {
         return "MenuScene";
+    }
+
+    void MenuScene::OnPlayButtonClick() {
+        Engine::ResourceManager::ResourceManager::sceneManager.LoadScene(std::make_unique<GameScene>());
     }
 
 } // namespace Scene

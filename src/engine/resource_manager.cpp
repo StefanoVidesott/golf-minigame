@@ -1,5 +1,7 @@
 #include "resource_manager.hpp"
 
+#include "scene.hpp"
+
 namespace Engine {
     namespace ResourceManager {
 
@@ -51,9 +53,17 @@ namespace Engine {
         std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::scenes = nullptr;
         std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::overlays = nullptr;
 
-        void SceneManager::Initialize(std::stack<std::unique_ptr<Scene::Scene>>* scenesPtr, std::vector<std::unique_ptr<Scene::Scene>>* overlaysPtr) {
+        std::function<void(std::unique_ptr<Scene::Scene>)> SceneManager::LoadSceneFunction = nullptr;
+        std::function<void()> SceneManager::DropSceneFunction = nullptr;
+
+        void SceneManager::Initialize(std::stack<std::unique_ptr<Scene::Scene>>* scenesPtr,
+        std::vector<std::unique_ptr<Scene::Scene>>* overlaysPtr,
+        std::function<void(std::unique_ptr<Scene::Scene>)> loadFunc,
+        std::function<void()> dropFunc) {
             SceneManager::scenes = scenesPtr;
             SceneManager::overlays = overlaysPtr;
+            SceneManager::LoadSceneFunction = std::move(loadFunc);
+            SceneManager::DropSceneFunction = std::move(dropFunc);
         }
 
         std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::GetScenes() {
@@ -62,6 +72,14 @@ namespace Engine {
 
         std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::GetOverlays() {
             return SceneManager::overlays;
+        }
+
+        void SceneManager::LoadScene(std::unique_ptr<Scene::Scene> scene) {
+            if (LoadSceneFunction) LoadSceneFunction(std::move(scene));
+        }
+
+        void SceneManager::DropScene() {
+            if (DropSceneFunction) DropSceneFunction();
         }
 
         // ---- RESOURCE MANAGER ----

@@ -3,7 +3,6 @@
 namespace Engine {
 
     void InputManager::Update() {
-        // azzera gli eventi "one–frame"
         keyPressed.clear();
         keyReleased.clear();
         mouseButtonPressed.clear();
