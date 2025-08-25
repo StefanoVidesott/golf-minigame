@@ -67,5 +67,62 @@ namespace Engine {
             this->UpdateBackground();
         }
 
+        void TextButton::SetTextFont(const std::string& fontName) {
+            this->GetComponent<Engine::Components::TextComponent>("text")->SetFont(fontName);
+            this->UpdateBackground();
+        }
+
+        void TextButton::SetTextFont(const sf::Font& font) {
+            this->GetComponent<Engine::Components::TextComponent>("text")->SetFont(font);
+            this->UpdateBackground();
+        }
+
+        void TextButton::SetTextSize(unsigned int size) {
+            this->GetComponent<Engine::Components::TextComponent>("text")->SetCharacterSize(size);
+            this->UpdateBackground();
+        }
+
+        void TextButton::SetTextColor(const sf::Color& color) {
+            this->GetComponent<Engine::Components::TextComponent>("text")->SetFillColor(color);
+        }
+
+        void TextButton::SetTextOutlineColor(const sf::Color& color) {
+            this->GetComponent<Engine::Components::TextComponent>("text")->SetOutlineColor(color);
+            this->UpdateBackground();
+        }
+
+        void TextButton::SetTextOutlineThickness(float thickness) {
+            this->GetComponent<Engine::Components::TextComponent>("text")->SetOutlineThickness(thickness);
+            this->UpdateBackground();
+        }
+
+        void TextButton::SetBackgroundColors(const sf::Color& normal, const sf::Color& hover, const sf::Color& clicked) {
+            this->normalBackgroundColor = normal;
+            this->hoverBackgroundColor = hover;
+            this->clickedBackgroundColor = clicked;
+            this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->SetFillColor(normal);
+        }
+
+        void TextButton::SetBackgroundMargin(const sf::Vector2f& margin) {
+            this->backgroundMargin = margin;
+            this->UpdateBackground();
+        }
+
+        void TextButton::SetBackgroundOutlineColor(const sf::Color& color) {
+            this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->SetOutlineColor(color);
+        }
+
+        void TextButton::SetBackgroundOutlineThickness(float thickness) {
+            this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->SetOutlineThickness(thickness);
+        }
+
+        void TextButton::SetBackgroundTexture(const sf::Texture& texture) {
+            this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->SetTexture(texture);
+        }
+
+        void TextButton::SetActionOnRelease(bool action) {
+            this->actionOnRelease = action;
+        }
+
     }
 }

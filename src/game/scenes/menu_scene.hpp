@@ -18,8 +18,10 @@ namespace ApplicationScene {
         private:
             Engine::InputManager *inputManager;
             Engine::Entities::TextButton* playButton;
+            Engine::Entities::TextButton* settingsButton;
 
             void OnPlayButtonClick();
+            void OnSettingsButtonClick();
         };
 
 } // namespace ApplicationScene

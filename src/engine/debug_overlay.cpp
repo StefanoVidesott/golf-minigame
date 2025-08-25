@@ -35,8 +35,8 @@ namespace Engine {
             this->active = true;
             this->visible = false;
             this->window = ResourceManager::ResourceManager::GetWindow();
-            this->engine_scenes = ResourceManager::ResourceManager::sceneManager.GetScenes();
-            this->engine_overlays = ResourceManager::ResourceManager::sceneManager.GetOverlays();
+            this->engine_scenes = ResourceManager::ResourceManager::GetSceneManager()->GetScenes();
+            this->engine_overlays = ResourceManager::ResourceManager::GetSceneManager()->GetOverlays();
             this->inputManager = ResourceManager::ResourceManager::GetInputManager();
         }
 

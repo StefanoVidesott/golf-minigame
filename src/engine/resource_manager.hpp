@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 namespace Engine {
     class InputManager;
@@ -42,6 +43,29 @@ namespace Engine {
                 std::unordered_map<std::string, std::unique_ptr<sf::Font>> fonts;
         };
 
+        class AudioManager {
+            public:
+                AudioManager() = default;
+                ~AudioManager() = default;
+
+                void LoadSound(const std::string&, const std::string&);
+                sf::SoundBuffer& GetSound(const std::string&);
+
+                void LoadMusic(const std::string&, const std::string&);
+                sf::Music& GetMusic(const std::string&);
+                sf::Music* GetCurrentMusic();
+
+                void SetCurrentMusic(const std::string&);
+                void PlayMusic();
+                void PauseMusic();
+                void StopMusic();
+
+            private:
+                std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>> sounds;
+                std::unordered_map<std::string, std::unique_ptr<sf::Music>> music;
+                sf::Music *currentMusic = nullptr;
+        };
+
         class SceneManager {
             public:
                 SceneManager() = default;
@@ -49,17 +73,17 @@ namespace Engine {
 
                 void Initialize(std::stack<std::unique_ptr<Scene::Scene>>*, std::vector<std::unique_ptr<Scene::Scene>>*, std::function<void(std::unique_ptr<Scene::Scene>)>, std::function<void()>);
 
-                static void LoadScene(std::unique_ptr<Scene::Scene> scene);
-                static void DropScene();
+                void LoadScene(std::unique_ptr<Scene::Scene> scene);
+                void DropScene();
 
                 std::stack<std::unique_ptr<Scene::Scene>> *GetScenes();
                 std::vector<std::unique_ptr<Scene::Scene>> *GetOverlays();
             private:
-                static std::stack<std::unique_ptr<Scene::Scene>> *scenes;
-                static std::vector<std::unique_ptr<Scene::Scene>> *overlays;
+                std::stack<std::unique_ptr<Scene::Scene>> *scenes;
+                std::vector<std::unique_ptr<Scene::Scene>> *overlays;
 
-                static std::function<void(std::unique_ptr<Scene::Scene>)> LoadSceneFunction;
-                static std::function<void()> DropSceneFunction;
+                std::function<void(std::unique_ptr<Scene::Scene>)> LoadSceneFunction;
+                std::function<void()> DropSceneFunction;
         };
 
         class ResourceManager {
@@ -67,25 +91,32 @@ namespace Engine {
                 ResourceManager() = default;
                 ~ResourceManager() = default;
 
-                static void LoadTexture(const std::string&, const std::string&);
-                static sf::Texture& GetTexture(const std::string&);
-
-                static void LoadFont(const std::string&, const std::string&);
-                static sf::Font& GetFont(const std::string&);
-
                 static void SetWindow(sf::RenderWindow*);
                 static sf::RenderWindow* GetWindow();
 
-                static InputManager* SetInputManager(InputManager*);
+                static void SetTextureManager(TextureManager*);
+                static TextureManager* GetTextureManager();
+
+                static void SetFontManager(FontManager*);
+                static FontManager* GetFontManager();
+
+                static void SetAudioManager(AudioManager*);
+                static AudioManager* GetAudioManager();
+
+                static void SetSceneManager(SceneManager*);
+                static SceneManager* GetSceneManager();
+
+                static void SetInputManager(InputManager*);
                 static InputManager* GetInputManager();
 
-                static SceneManager sceneManager;
-            private:
-                static TextureManager textureManager;
-                static FontManager fontManager;
+                private:
+                static TextureManager* textureManager;
+                static FontManager* fontManager;
+                static AudioManager* audioManager;
+                static SceneManager* sceneManager;
+                static InputManager* inputManager;
 
                 static sf::RenderWindow* window;
-                static InputManager* inputManager;
         };
 
     } // namespace ResourceManager

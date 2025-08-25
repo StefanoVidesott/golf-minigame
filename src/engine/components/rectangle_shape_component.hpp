@@ -14,6 +14,8 @@ namespace Engine {
                 void SetFillColor(const sf::Color&);
                 void SetOutlineColor(const sf::Color&);
                 void SetOutlineThickness(float);
+                void SetTexture(const std::string&);
+                void SetTexture(const sf::Texture&);
 
                 [[nodiscard]] sf::Vector2f GetSize() const;
                 [[nodiscard]] sf::Color GetFillColor() const;

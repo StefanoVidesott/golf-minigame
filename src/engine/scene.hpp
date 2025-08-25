@@ -10,7 +10,7 @@ namespace Engine {
         class Scene {
             public:
                 Scene() = default;
-                virtual ~Scene();
+                virtual ~Scene() = default;
 
                 void Update(float);
                 void Render();
@@ -21,10 +21,13 @@ namespace Engine {
                 virtual void RenderBehavior() = 0;
 
                 virtual std::string GetName() const = 0;
+                virtual void ToggleGizmos();
 
                 sf::RenderWindow* window = nullptr;
                 bool active = false;
                 bool visible = true;
+
+                bool gizmosEnabled = false;
 
                 std::vector<std::unique_ptr<Entity>> entities;
         };

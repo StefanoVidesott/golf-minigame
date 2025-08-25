@@ -29,6 +29,14 @@ namespace Engine {
             this->shape.setOutlineThickness(thickness);
         }
 
+        void RectangleShapeComponent::SetTexture(const std::string& textureId) {
+            this->shape.setTexture(&ResourceManager::ResourceManager::GetTextureManager()->GetTexture(textureId));
+        }
+
+        void RectangleShapeComponent::SetTexture(const sf::Texture& texture) {
+            this->shape.setTexture(&texture);
+        }
+
         [[nodiscard]] sf::Vector2f RectangleShapeComponent::GetSize() const {
             return this->shape.getSize();
         }

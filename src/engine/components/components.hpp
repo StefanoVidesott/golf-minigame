@@ -13,8 +13,8 @@ namespace Engine {
                 Component() = default;
                 virtual ~Component() = default;
 
-                virtual void Update(float) = 0;
-                virtual void Render(sf::RenderWindow*) = 0;
+                virtual void Update(float) {};
+                virtual void Render(sf::RenderWindow*) {};
 
                 virtual void SetPosition(const sf::Vector2f&) {}
                 virtual void SetRotation(sf::Angle) {}
@@ -27,11 +27,17 @@ namespace Engine {
                 [[nodiscard]] virtual sf::Angle GetRotation() const { return sf::Angle(); }
                 [[nodiscard]] virtual sf::Vector2f GetScale() const { return sf::Vector2f(1.f, 1.f); }
 
-                void SetOwner(Engine::Entity* _owner) {
+                void SetOwner(Entity* _owner) {
                     this->owner = _owner;
                 }
+
+                void SetGizmoEnabled(bool enabled) {
+                    this->gizmoEnabled = enabled;
+                }
+
             protected:
-                Engine::Entity *owner;
+                Entity *owner;
+                bool gizmoEnabled = false;
         };
 
     } // namespace Components

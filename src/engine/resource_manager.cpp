@@ -49,29 +49,94 @@ namespace Engine {
             throw std::runtime_error("Font not found: " + name + " (and DefaultFont missing)");
         }
 
+        // ---- AUDIO MANAGER ----
+
+        void AudioManager::LoadSound(const std::string& name, const std::string& filePath) {
+            std::unique_ptr<sf::SoundBuffer> soundPtr(new sf::SoundBuffer());
+
+            if (!soundPtr->loadFromFile(filePath)) {
+                throw std::runtime_error("Failed to load sound: " + filePath);
+            }
+
+            sounds[name] = std::move(soundPtr);
+        }
+
+        sf::SoundBuffer& AudioManager::GetSound(const std::string& name) {
+            std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>>::iterator it = sounds.find(name);
+            if (it != sounds.end()) return *(it->second);
+
+            std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>>::iterator def = sounds.find("DefaultSound"); // TODO
+            if (def != sounds.end()) return *(def->second);
+
+            throw std::runtime_error("Sound not found: " + name + " (and DefaultSound missing)");
+        }
+
+        void AudioManager::LoadMusic(const std::string& name, const std::string& filePath) {
+            std::unique_ptr<sf::Music> musicPtr(new sf::Music());
+
+            if (!musicPtr->openFromFile(filePath)) {
+                throw std::runtime_error("Failed to load music: " + filePath);
+            }
+
+            music[name] = std::move(musicPtr);
+        }
+
+        sf::Music& AudioManager::GetMusic(const std::string& name) {
+            std::unordered_map<std::string, std::unique_ptr<sf::Music>>::iterator it = music.find(name);
+            if (it != music.end()) return *(it->second);
+
+            std::unordered_map<std::string, std::unique_ptr<sf::Music>>::iterator def = music.find("DefaultMusic");
+            if (def != music.end()) return *(def->second);
+
+            throw std::runtime_error("Music not found: " + name + " (and DefaultMusic missing)");
+        }
+
+        sf::Music* AudioManager::GetCurrentMusic() {
+            return currentMusic;
+        }
+
+        void AudioManager::SetCurrentMusic(const std::string& name) {
+            sf::Music* musicPtr = &GetMusic(name);
+            if (musicPtr) {
+                currentMusic = musicPtr;
+            }
+        }
+
+        void AudioManager::PlayMusic() {
+            if (currentMusic) {
+                currentMusic->play();
+            }
+        }
+
+        void AudioManager::PauseMusic() {
+            if (currentMusic) {
+                currentMusic->pause();
+            }
+        }
+
+        void AudioManager::StopMusic() {
+            if (currentMusic) {
+                currentMusic->stop();
+            }
+        }
+
         // ---- SCENE MANAGER ----
-        std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::scenes = nullptr;
-        std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::overlays = nullptr;
-
-        std::function<void(std::unique_ptr<Scene::Scene>)> SceneManager::LoadSceneFunction = nullptr;
-        std::function<void()> SceneManager::DropSceneFunction = nullptr;
-
         void SceneManager::Initialize(std::stack<std::unique_ptr<Scene::Scene>>* scenesPtr,
         std::vector<std::unique_ptr<Scene::Scene>>* overlaysPtr,
         std::function<void(std::unique_ptr<Scene::Scene>)> loadFunc,
         std::function<void()> dropFunc) {
-            SceneManager::scenes = scenesPtr;
-            SceneManager::overlays = overlaysPtr;
-            SceneManager::LoadSceneFunction = std::move(loadFunc);
-            SceneManager::DropSceneFunction = std::move(dropFunc);
+            this->scenes = scenesPtr;
+            this->overlays = overlaysPtr;
+            this->LoadSceneFunction = std::move(loadFunc);
+            this->DropSceneFunction = std::move(dropFunc);
         }
 
         std::stack<std::unique_ptr<Scene::Scene>> *SceneManager::GetScenes() {
-            return SceneManager::scenes;
+            return this->scenes;
         }
 
         std::vector<std::unique_ptr<Scene::Scene>> *SceneManager::GetOverlays() {
-            return SceneManager::overlays;
+            return this->overlays;
         }
 
         void SceneManager::LoadScene(std::unique_ptr<Scene::Scene> scene) {
@@ -84,28 +149,13 @@ namespace Engine {
 
         // ---- RESOURCE MANAGER ----
 
-        TextureManager ResourceManager::textureManager;
-        FontManager ResourceManager::fontManager;
-        SceneManager ResourceManager::sceneManager;
+        TextureManager *ResourceManager::textureManager;
+        FontManager *ResourceManager::fontManager;
+        AudioManager *ResourceManager::audioManager;
+        SceneManager *ResourceManager::sceneManager;
+        InputManager *ResourceManager::inputManager;
 
-        sf::RenderWindow* ResourceManager::window = nullptr;
-        InputManager* ResourceManager::inputManager = nullptr;
-
-        void ResourceManager::LoadTexture(const std::string& name, const std::string& filePath) {
-            textureManager.LoadTexture(name, filePath);
-        }
-
-        sf::Texture& ResourceManager::GetTexture(const std::string& name) {
-            return textureManager.GetTexture(name);
-        }
-
-        void ResourceManager::LoadFont(const std::string& name, const std::string& filePath) {
-            fontManager.LoadFont(name, filePath);
-        }
-
-        sf::Font& ResourceManager::GetFont(const std::string& name) {
-            return fontManager.GetFont(name);
-        }
+        sf::RenderWindow *ResourceManager::window = nullptr;
 
         void ResourceManager::SetWindow(sf::RenderWindow* win) {
             window = win;
@@ -115,14 +165,44 @@ namespace Engine {
             return window;
         }
 
-        InputManager* ResourceManager::GetInputManager() {
-            return inputManager;
+        void ResourceManager::SetTextureManager(TextureManager* texMgr) {
+            textureManager = texMgr;
         }
 
-        InputManager* ResourceManager::SetInputManager(InputManager* inputMgr) {
-            InputManager* oldInputManager = inputManager;
+        TextureManager* ResourceManager::GetTextureManager() {
+            return textureManager;
+        }
+
+        void ResourceManager::SetFontManager(FontManager* fontMgr) {
+            fontManager = fontMgr;
+        }
+
+        FontManager* ResourceManager::GetFontManager() {
+            return fontManager;
+        }
+
+        void ResourceManager::SetAudioManager(AudioManager* audioMgr) {
+            audioManager = audioMgr;
+        }
+
+        AudioManager* ResourceManager::GetAudioManager() {
+            return audioManager;
+        }
+
+        void ResourceManager::SetSceneManager(SceneManager* sceneMgr) {
+            sceneManager = sceneMgr;
+        }
+
+        SceneManager* ResourceManager::GetSceneManager() {
+            return sceneManager;
+        }
+
+        void ResourceManager::SetInputManager(InputManager* inputMgr) {
             inputManager = inputMgr;
-            return oldInputManager;
+        }
+
+        InputManager* ResourceManager::GetInputManager() {
+            return inputManager;
         }
 
     } // namespace ResourceManager

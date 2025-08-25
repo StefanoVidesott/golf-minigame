@@ -31,6 +31,10 @@ namespace Engine {
             std::stack<std::unique_ptr<Scene::Scene>> scenes;
             std::vector<std::unique_ptr<Scene::Scene>> overlays;
 
+            ResourceManager::TextureManager textureManager;
+            ResourceManager::FontManager fontManager;
+            ResourceManager::AudioManager audioManager;
+            ResourceManager::SceneManager sceneManager;
             InputManager inputManager;
     };
 };

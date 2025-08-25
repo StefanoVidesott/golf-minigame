@@ -9,7 +9,7 @@ namespace Engine {
             this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
-        TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size) : text(Engine::ResourceManager::ResourceManager::GetFont(fontName), text, size) {
+        TextComponent::TextComponent(const std::string fontName, const std::string& text, unsigned int size) : text(Engine::ResourceManager::ResourceManager::GetFontManager()->GetFont(fontName), text, size) {
             this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 
@@ -75,6 +75,11 @@ namespace Engine {
 
         void TextComponent::SetFont(const sf::Font& font) {
             this->text.setFont(font);
+            this->gizmo.SetSize(this->text.getGlobalBounds().size);
+        }
+
+        void TextComponent::SetFont(const std::string& fontName) {
+            this->text.setFont(Engine::ResourceManager::ResourceManager::GetFontManager()->GetFont(fontName));
             this->gizmo.SetSize(this->text.getGlobalBounds().size);
         }
 

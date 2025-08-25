@@ -47,16 +47,21 @@ namespace Engine {
     }
 
     void Engine::InitResources() {
+        ResourceManager::ResourceManager::SetTextureManager(&this->textureManager);
+        ResourceManager::ResourceManager::SetFontManager(&this->fontManager);
+        ResourceManager::ResourceManager::SetAudioManager(&this->audioManager);
+        ResourceManager::ResourceManager::SetSceneManager(&this->sceneManager);
+        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
+
         ResourceManager::ResourceManager::SetWindow(this->window.get());
 
-        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
-        ResourceManager::ResourceManager::sceneManager.Initialize(&this->scenes, &this->overlays,
+        this->sceneManager.Initialize(&this->scenes, &this->overlays,
             [this](std::unique_ptr<Scene::Scene> scene) { this->LoadScene(std::move(scene)); },
             [this]() { this->DropScene(); }
         );
 
-        ResourceManager::ResourceManager::LoadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
-        ResourceManager::ResourceManager::LoadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");
+        this->fontManager.LoadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
+        this->textureManager.LoadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");
     }
 
     void Engine::Run() {

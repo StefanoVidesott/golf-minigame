@@ -29,6 +29,7 @@ namespace Engine {
                 // Text methods
                 void SetString(const std::string&);
                 void SetFont(const sf::Font&);
+                void SetFont(const std::string&);
                 void SetCharacterSize(unsigned int);
                 void SetStyle(sf::Text::Style);
                 void SetFillColor(const sf::Color&);

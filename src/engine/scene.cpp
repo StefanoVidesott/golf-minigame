@@ -3,9 +3,6 @@
 namespace Engine {
     namespace Scene {
 
-        Scene::~Scene() {
-        }
-
         void Scene::Update(float deltaTime) {
             this->UpdateBehavior(deltaTime);
             for (std::unique_ptr<Entity>& entity : entities) {
@@ -24,6 +21,19 @@ namespace Engine {
             for (const std::unique_ptr<Entity>& entity : entities) {
                 if (entity) {
                     entity->Render(this->window);
+                }
+            }
+        }
+
+        void Scene::ToggleGizmos() {
+            this->gizmosEnabled = !this->gizmosEnabled;
+            for (const std::unique_ptr<Entity>& entity : entities) {
+                if (entity) {
+                    for (Components::Component* component : entity->GetComponentList()) {
+                        if (component) {
+                            component->SetGizmoEnabled(this->gizmosEnabled);
+                        }
+                    }
                 }
             }
         }

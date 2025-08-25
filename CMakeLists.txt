@@ -30,7 +30,6 @@ add_executable(golf-minigame
     src/engine/components/rectangle_shape_component.cpp
     src/engine/components/velocity_component.cpp
     src/engine/components/gizmos/rectangle_gizmo.cpp
-
     src/engine/entities/text_button.cpp
 
     src/game/scenes/menu_scene.cpp
@@ -38,4 +37,4 @@ add_executable(golf-minigame
 )
 
 target_compile_features(golf-minigame PRIVATE cxx_std_17)
-target_link_libraries(golf-minigame PRIVATE SFML::Graphics)
+target_link_libraries(golf-minigame PRIVATE SFML::Graphics SFML::Audio)
