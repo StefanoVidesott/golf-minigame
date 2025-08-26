@@ -6,7 +6,7 @@ namespace Engine {
     namespace Entities {
         class TextButton : public Entity {
             public:
-                TextButton(const std::string&, std::function<void()>, const std::string& = "default", int = 30); //
+                TextButton(const std::string&, std::function<void()>, const std::string& = "default", int = 30);
                 ~TextButton() = default;
 
                 void SetTextString(const std::string&);
@@ -26,11 +26,11 @@ namespace Engine {
                 void SetOnClick(std::function<void()>);
                 void SetActionOnRelease(bool);
 
-                void Update(float); //
+                void Update(float);
 
-                [[nodiscard]] sf::FloatRect GetGlobalBounds(); //
+                [[nodiscard]] sf::FloatRect GetGlobalBounds();
             private:
-                void UpdateBackground(); //
+                void UpdateBackground();
                 sf::Vector2f backgroundMargin = sf::Vector2f(20.f, 15.f);
 
                 sf::Color normalBackgroundColor = sf::Color::Blue;

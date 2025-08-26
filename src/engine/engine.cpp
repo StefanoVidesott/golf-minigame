@@ -17,11 +17,11 @@ namespace Engine {
 
     void Engine::LoadScene(std::unique_ptr<Scene::Scene> scene) {
         if (scene) {
-            scene->active = true;
-            scene->window = this->window.get();
+            scene->SetActive(true);
+            scene->SetWindow(this->window.get());
 
             if (!this->scenes.empty()) {
-                this->scenes.top()->active = false;
+                this->scenes.top()->SetActive(false);
             }
 
             scene->Start();
@@ -31,10 +31,10 @@ namespace Engine {
 
     void Engine::DropScene() {
         if (!this->scenes.empty()) {
-            this->scenes.top()->active = false;
+            this->scenes.top()->SetActive(false);
             this->scenes.pop();
             if (!this->scenes.empty()) {
-                this->scenes.top()->active = true;
+                this->scenes.top()->SetActive(true);
             }
         }
     }
@@ -92,7 +92,7 @@ namespace Engine {
             this->inputManager.HandleEvents(*event);
 
             if(!this->scenes.empty()) {
-                if (this->scenes.top() && this->scenes.top()->active) {
+                if (this->scenes.top() && this->scenes.top()->IsActive()) {
                     this->scenes.top()->HandleEvent(event);
                 }
             }
@@ -107,7 +107,7 @@ namespace Engine {
         this->deltaTime = this->deltaClock.restart().asSeconds();
 
         if(!this->scenes.empty()) {
-            if (this->scenes.top() && this->scenes.top()->active) {
+            if (this->scenes.top() && this->scenes.top()->IsActive()) {
                 this->scenes.top().get()->Update(this->deltaTime);
             }
         }
@@ -123,12 +123,12 @@ namespace Engine {
         this->window->clear();
 
         if (!this->scenes.empty()) {
-            if (this->scenes.top() && this->scenes.top()->visible) {
+            if (this->scenes.top() && this->scenes.top()->IsVisible()) {
                 this->scenes.top()->Render();
             }
         }
         for(const std::unique_ptr<Scene::Scene>& overlay : this->overlays) {
-            if (overlay && overlay->visible) {
+            if (overlay && overlay->IsVisible()) {
                 overlay->Render();
             }
         }

@@ -23,7 +23,20 @@ namespace Engine {
                 virtual std::string GetName() const = 0;
                 virtual void ToggleGizmos();
 
-                sf::RenderWindow* window = nullptr;
+                void SetWindow(sf::RenderWindow*);
+                void SetActive(bool);
+                void SetVisible(bool);
+                void SetGizmosEnabled(bool);
+
+                bool IsActive() const;
+                bool IsVisible() const;
+                bool AreGizmosEnabled() const;
+
+                std::vector<std::unique_ptr<Entity>> *GetEntityList();
+                int GetEntityCount() const;
+
+            protected:
+                sf::RenderWindow *window = nullptr;
                 bool active = false;
                 bool visible = true;
 

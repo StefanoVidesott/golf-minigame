@@ -38,5 +38,41 @@ namespace Engine {
             }
         }
 
+        void Scene::SetWindow(sf::RenderWindow* window) {
+            this->window = window;
+        }
+
+        void Scene::SetActive(bool active) {
+            this->active = active;
+        }
+
+        void Scene::SetVisible(bool visible) {
+            this->visible = visible;
+        }
+
+        void Scene::SetGizmosEnabled(bool gizmosEnabled) {
+            this->gizmosEnabled = gizmosEnabled;
+        }
+
+        bool Scene::IsActive() const {
+            return this->active;
+        }
+
+        bool Scene::IsVisible() const {
+            return this->visible;
+        }
+
+        bool Scene::AreGizmosEnabled() const {
+            return this->gizmosEnabled;
+        }
+
+        std::vector<std::unique_ptr<Entity>> *Scene::GetEntityList() {
+            return &entities;
+        }
+
+        int Scene::GetEntityCount() const {
+            return static_cast<int>(entities.size());
+        }
+
     } // namespace Scene
 } // namespace Engine

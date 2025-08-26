@@ -56,13 +56,13 @@ namespace Engine {
 
             this->entityCount = 0;
             if (this->engine_scenes && !this->engine_scenes->empty()) {
-                this->entityCount += static_cast<int>(this->engine_scenes->top()->entities.size());
+                this->entityCount += static_cast<int>(this->engine_scenes->top()->GetEntityCount());
             }
 
             if (this->engine_overlays) {
                 for (const std::unique_ptr<Engine::Scene::Scene>& overlay : *this->engine_overlays) {
-                    if (overlay.get() && overlay.get()->active) {
-                        this->entityCount += static_cast<int>(overlay.get()->entities.size());
+                    if (overlay.get() && overlay.get()->IsActive()) {
+                        this->entityCount += static_cast<int>(overlay.get()->GetEntityCount());
                     }
                 }
             }
