@@ -67,11 +67,11 @@ namespace Engine {
         }
 
         std::vector<std::unique_ptr<Entity>> *Scene::GetEntityList() {
-            return &entities;
+            return &this->entities;
         }
 
         int Scene::GetEntityCount() const {
-            return static_cast<int>(entities.size());
+            return static_cast<int>(this->entities.size());
         }
 
     } // namespace Scene

@@ -1,0 +1,124 @@
+#!/bin/bash
+set -e
+
+# ====== STYLE ======
+NL="\n"; NL2="${NL}${NL}"
+ESC="\033"
+
+NORM="${ESC}[0m"
+BOLD="${ESC}[1m"
+RVON="${ESC}[7m"
+RVOFF="${ESC}[27m"
+
+COL_DFLT="${ESC}[39m"
+COL_LGRN="${ESC}[92m"
+COL_LYEL="${ESC}[93m"
+COL_LMAG="${ESC}[95m"
+COL_LCYN="${ESC}[96m"
+
+function _echo {
+    echo -en "$@"
+}
+
+# ====== LOG HELPERS ======
+function step  { _echo " ${BOLD}${COL_LGRN}$1${NORM}${COL_DFLT}${NL}"; }
+
+# ====== INIT ======
+_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+source "${_DIR}/tools/funcs.sh"
+
+E_NAME="SV ENGINE"
+CREDITS="by ${BOLD}Stefano Videsott${NORM}"
+INTESTATION="${NL}${COL_LMAG}${RVON}${BOLD} $E_NAME ${NORM}${COL_LYEL} ${CREDITS}${NORM}${COL_DFLT}${NL2}"
+
+VERBOSE=false
+NO_ENCODE=false
+
+# ====== HELP ======
+function usage {
+    _echo "${BOLD}Usage:${NORM} svdev <command> [options]${NL}"
+    _echo "${NL}Commands:${NL}"
+    echo "  build         Build project (with encode by default)"
+    echo "  run           Run application"
+    echo "  encode        Encode resources only"
+    echo "  clean         Remove build directory"
+    echo
+    echo "Options:"
+    echo "  -v, --verbose Show detailed logs"
+    echo "  --no-encode   Skip encode when building"
+    echo "  -h, --help    Show this help message"
+    echo
+}
+
+# ====== PARSE ARGS ======
+COMMAND=""
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        build|run|encode|clean) COMMAND="$1" ;;
+        -v|--verbose) VERBOSE=true ;;
+        --no-encode) NO_ENCODE=true ;;
+        -h|--help) _echo "$INTESTATION"; usage; exit 0 ;;
+        *) _echo "$INTESTATION"; _echo "${SYMB_CROSS} Unknown arg: $1 ${NL}"; usage; exit 1 ;;
+    esac
+    shift
+done
+
+if [ -z "$COMMAND" ]; then
+    _echo "$INTESTATION"
+    echo "❌ no command given"
+    usage
+    exit 1
+fi
+
+# ====== COMMANDS ======
+function do_build {
+    step "BUILDING PROJECT"
+    if [ "$VERBOSE" = true ]; then
+        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=ON
+        cmake --build build -- VERBOSE=1
+    else
+        cmake -B build -DCMAKE_VERBOSE_MAKEFILE=OFF
+        cmake --build build
+    fi
+    _echo "${NL}"
+
+    if [ "$NO_ENCODE" = false ]; then
+        do_encode
+    fi
+}
+
+function do_encode {
+    step "ENCODING RESOURCES"
+    if [ "$VERBOSE" = true ]; then
+        . "${_DIR}/tools/encode_resources.sh" --verbose
+    else
+        . "${_DIR}/tools/encode_resources.sh"
+    fi
+    _echo "${NL}"
+    step "DONE"
+}
+
+function do_run {
+    step "STARTING APPLICATION"
+    _echo "${COL_LCYN}"
+    cd "${_DIR}/build/bin"
+    ./golf-minigame
+    _echo "${COL_DFLT}${NL}"
+    step "APPLICATION TERMINATED"
+}
+
+function do_clean {
+    step "CLEANING BUILD DIR"
+    rm -rf "${_DIR}/build"
+    step "BUILD DIR REMOVED"
+}
+
+# ====== MAIN ======
+_echo "$INTESTATION"
+
+case "$COMMAND" in
+    build) do_build ;;
+    run) do_run ;;
+    encode) do_encode ;;
+    clean) do_clean ;;
+esac

@@ -14,6 +14,9 @@ COL_LYEL="${ESC}[93m"
 COL_LMAG="${ESC}[95m"
 COL_LCYN="${ESC}[96m"
 
+SYMB_CHECK="\xE2\x9C\x94"
+SYMB_CROSS="\xE2\x9D\x8C"
+
 function _echo {
     echo -en "$@"
 }
