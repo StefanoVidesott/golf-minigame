@@ -5,17 +5,58 @@
 namespace Engine {
     namespace ResourceManager {
 
+        std::unordered_map<std::string, std::shared_ptr<std::vector<unsigned char>>> ResourceManager::g_decodedBlobs;
+
+        std::string ResourceManager::NormalizePath(const std::string& path) {
+            if (path.rfind("./", 0) == 0) return path.substr(2);
+            return path;
+        }
+
+        static std::string EncodePath(const std::string& path) {
+            return base64::to_base64(path);
+        }
+
+        std::shared_ptr<std::vector<unsigned char>> ResourceManager::GetDecodedBlob(const std::string& name) {
+            std::string norm = NormalizePath(name);
+            auto it = g_decodedBlobs.find(norm);
+            if (it != g_decodedBlobs.end()) return it->second;
+
+            const std::string encodedPath = EncodePath(norm);
+            const std::string encFilePath = "res/" + encodedPath;
+
+            std::ifstream in(encFilePath);
+            if (!in) {
+                throw std::runtime_error("Encoded resource file not found: " + encFilePath);
+            }
+
+            std::stringstream buffer;
+            buffer << in.rdbuf();
+            std::string encoded = buffer.str();
+
+            encoded.erase(std::remove_if(encoded.begin(), encoded.end(), ::isspace), encoded.end());
+
+            std::string tmp = base64::from_base64(encoded);
+            auto blob = std::make_shared<std::vector<unsigned char>>(tmp.begin(), tmp.end());
+
+            g_decodedBlobs.emplace(norm, blob);
+
+            // std::cout << "Decoded & cached: " << norm << " from " << encFilePath << " (" << blob->size() << " bytes)\n";
+
+            return blob;
+        }
+
         // ---- TEXTURE MANAGER ----
 
         void TextureManager::LoadTexture(const std::string& name, const std::string& filePath) {
-            std::unique_ptr<sf::Texture> texturePtr(new sf::Texture());
+            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto texturePtr = std::make_unique<sf::Texture>();
 
-            if (!texturePtr->loadFromFile(filePath)) {
-                throw std::runtime_error("Failed to load texture: " + filePath);
+            if (!texturePtr->loadFromMemory(data->data(), data->size())) {
+                throw std::runtime_error("Failed to load texture from encoded file: " + filePath);
             }
-
             textures[name] = std::move(texturePtr);
         }
+
 
         sf::Texture& TextureManager::GetTexture(const std::string& name) {
             std::unordered_map<std::string, std::unique_ptr<sf::Texture>>::iterator it = textures.find(name);
@@ -30,14 +71,17 @@ namespace Engine {
         // ---- FONT MANAGER ----
 
         void FontManager::LoadFont(const std::string& name, const std::string& filePath) {
-            std::unique_ptr<sf::Font> fontPtr(new sf::Font());
+            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto fontPtr = std::make_unique<sf::Font>();
 
-            if (!fontPtr->openFromFile(filePath)) {
-                throw std::runtime_error("Failed to load font: " + filePath);
+            if (!fontPtr->openFromMemory(data->data(), data->size())) {
+                throw std::runtime_error("Failed to load font from encoded file: " + filePath);
             }
-
+            // opzionale: tieni un riferimento al blob se vuoi essere ultra-sicuro
+            // (dipende dalla tua versione di SFML; con openFromMemory meglio tenerlo)
             fonts[name] = std::move(fontPtr);
         }
+
 
         sf::Font& FontManager::GetFont(const std::string& name) {
             std::unordered_map<std::string, std::unique_ptr<sf::Font>>::iterator it = fonts.find(name);
@@ -52,14 +96,15 @@ namespace Engine {
         // ---- AUDIO MANAGER ----
 
         void AudioManager::LoadSound(const std::string& name, const std::string& filePath) {
-            std::unique_ptr<sf::SoundBuffer> soundPtr(new sf::SoundBuffer());
+            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto soundPtr = std::make_unique<sf::SoundBuffer>();
 
-            if (!soundPtr->loadFromFile(filePath)) {
-                throw std::runtime_error("Failed to load sound: " + filePath);
+            if (!soundPtr->loadFromMemory(data->data(), data->size())) {
+                throw std::runtime_error("Failed to load sound from encoded file: " + filePath);
             }
-
             sounds[name] = std::move(soundPtr);
         }
+
 
         sf::SoundBuffer& AudioManager::GetSound(const std::string& name) {
             std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>>::iterator it = sounds.find(name);
@@ -72,14 +117,18 @@ namespace Engine {
         }
 
         void AudioManager::LoadMusic(const std::string& name, const std::string& filePath) {
-            std::unique_ptr<sf::Music> musicPtr(new sf::Music());
+            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto musicPtr = std::make_unique<sf::Music>();
 
-            if (!musicPtr->openFromFile(filePath)) {
-                throw std::runtime_error("Failed to load music: " + filePath);
+            if (!musicPtr->openFromMemory(data->data(), data->size())) {
+                throw std::runtime_error("Failed to load music from encoded file: " + filePath);
             }
 
+            // conserva il blob finché la musica è in uso
+            musicBlobs[name] = data;
             music[name] = std::move(musicPtr);
         }
+
 
         sf::Music& AudioManager::GetMusic(const std::string& name) {
             std::unordered_map<std::string, std::unique_ptr<sf::Music>>::iterator it = music.find(name);

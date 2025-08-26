@@ -13,8 +13,6 @@ namespace Engine {
         }
 
         void Scene::Render() {
-            this->RenderBehavior();
-
             if (!this->window) {
                 throw std::runtime_error("Render window is not initialized");
             }
@@ -23,6 +21,8 @@ namespace Engine {
                     entity->Render(this->window);
                 }
             }
+
+            this->RenderBehavior();
         }
 
         void Scene::ToggleGizmos() {

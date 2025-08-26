@@ -3,13 +3,16 @@
 #include <stack>
 #include <memory>
 #include <string>
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <functional>
 #include <unordered_map>
 #include <unordered_set>
-#include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+
+#include "include/base64.hpp"
 
 namespace Engine {
     class InputManager;
@@ -64,6 +67,8 @@ namespace Engine {
                 std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>> sounds;
                 std::unordered_map<std::string, std::unique_ptr<sf::Music>> music;
                 sf::Music *currentMusic = nullptr;
+
+                std::unordered_map<std::string, std::shared_ptr<std::vector<unsigned char>>> musicBlobs;
         };
 
         class SceneManager {
@@ -109,7 +114,11 @@ namespace Engine {
                 static void SetInputManager(InputManager*);
                 static InputManager* GetInputManager();
 
-                private:
+                static std::string NormalizePath(const std::string&);
+                static std::shared_ptr<std::vector<unsigned char>> GetDecodedBlob(const std::string&);
+            private:
+                static std::unordered_map<std::string, std::shared_ptr<std::vector<unsigned char>>> g_decodedBlobs;
+
                 static TextureManager* textureManager;
                 static FontManager* fontManager;
                 static AudioManager* audioManager;
@@ -117,6 +126,7 @@ namespace Engine {
                 static InputManager* inputManager;
 
                 static sf::RenderWindow* window;
+
         };
 
     } // namespace ResourceManager

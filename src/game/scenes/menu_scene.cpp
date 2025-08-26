@@ -4,14 +4,14 @@ namespace ApplicationScene {
 
     void MenuScene::Start() {
         // Initialize Resources
-        this->inputManager = Engine::ResourceManager::ResourceManager::GetInputManager();
+        this->inputManager = Engine::ResourceManager::ResourceManager::ResourceManager::GetInputManager();
         Engine::ResourceManager::ResourceManager::GetFontManager()->LoadFont("GameFont", "res/font/font.ttf");
         Engine::ResourceManager::ResourceManager::GetTextureManager()->LoadTexture("background", "res/gfx/bg.png");
         Engine::ResourceManager::ResourceManager::GetTextureManager()->LoadTexture("tile64_light", "res/gfx/tile64_light.png");
 
         Engine::ResourceManager::ResourceManager::GetAudioManager()->LoadMusic("BackgroundMusic", "res/music/bg_music.wav");
         Engine::ResourceManager::ResourceManager::GetAudioManager()->SetCurrentMusic("BackgroundMusic");
-        Engine::ResourceManager::ResourceManager::GetAudioManager()->PlayMusic();
+        // Engine::ResourceManager::ResourceManager::GetAudioManager()->PlayMusic(); // TODO reactivate
 
         // Create Background Entity
         Engine::Entity *bg = new Engine::Entity();

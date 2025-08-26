@@ -60,8 +60,8 @@ namespace Engine {
             [this]() { this->DropScene(); }
         );
 
-        this->fontManager.LoadFont("DefaultFont", "./src/engine/res/font/CreatoDisplay-Regular.otf");
-        this->textureManager.LoadTexture("DefaultTexture", "./src/engine/res/gfx/templategrid_orm.png");
+        this->fontManager.LoadFont("DefaultFont", "src/engine/res/font/CreatoDisplay-Regular.otf");
+        this->textureManager.LoadTexture("DefaultTexture", "src/engine/res/gfx/templategrid_orm.png");
     }
 
     void Engine::Run() {
