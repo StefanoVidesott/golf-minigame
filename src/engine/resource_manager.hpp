@@ -4,13 +4,16 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include <iostream>
+#include <algorithm>
 #include <stdexcept>
 #include <functional>
 #include <unordered_map>
 #include <unordered_set>
 #include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
+#include <fstream>
 
 #include "include/base64.hpp"
 

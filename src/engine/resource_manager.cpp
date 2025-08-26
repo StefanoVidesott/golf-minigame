@@ -48,7 +48,7 @@ namespace Engine {
         // ---- TEXTURE MANAGER ----
 
         void TextureManager::LoadTexture(const std::string& name, const std::string& filePath) {
-            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto data = ResourceManager::GetDecodedBlob(filePath);
             auto texturePtr = std::make_unique<sf::Texture>();
 
             if (!texturePtr->loadFromMemory(data->data(), data->size())) {
@@ -71,7 +71,7 @@ namespace Engine {
         // ---- FONT MANAGER ----
 
         void FontManager::LoadFont(const std::string& name, const std::string& filePath) {
-            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto data = ResourceManager::GetDecodedBlob(filePath);
             auto fontPtr = std::make_unique<sf::Font>();
 
             if (!fontPtr->openFromMemory(data->data(), data->size())) {
@@ -96,7 +96,7 @@ namespace Engine {
         // ---- AUDIO MANAGER ----
 
         void AudioManager::LoadSound(const std::string& name, const std::string& filePath) {
-            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto data = ResourceManager::GetDecodedBlob(filePath);
             auto soundPtr = std::make_unique<sf::SoundBuffer>();
 
             if (!soundPtr->loadFromMemory(data->data(), data->size())) {
@@ -110,14 +110,14 @@ namespace Engine {
             std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>>::iterator it = sounds.find(name);
             if (it != sounds.end()) return *(it->second);
 
-            std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>>::iterator def = sounds.find("DefaultSound"); // TODO
+            std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>>::iterator def = sounds.find("DefaultSound"); // TODO load default sound
             if (def != sounds.end()) return *(def->second);
 
             throw std::runtime_error("Sound not found: " + name + " (and DefaultSound missing)");
         }
 
         void AudioManager::LoadMusic(const std::string& name, const std::string& filePath) {
-            auto data = ResourceManager::ResourceManager::GetDecodedBlob(filePath);
+            auto data = ResourceManager::GetDecodedBlob(filePath);
             auto musicPtr = std::make_unique<sf::Music>();
 
             if (!musicPtr->openFromMemory(data->data(), data->size())) {
@@ -134,7 +134,7 @@ namespace Engine {
             std::unordered_map<std::string, std::unique_ptr<sf::Music>>::iterator it = music.find(name);
             if (it != music.end()) return *(it->second);
 
-            std::unordered_map<std::string, std::unique_ptr<sf::Music>>::iterator def = music.find("DefaultMusic");
+            std::unordered_map<std::string, std::unique_ptr<sf::Music>>::iterator def = music.find("DefaultMusic"); // TODO load default music
             if (def != music.end()) return *(def->second);
 
             throw std::runtime_error("Music not found: " + name + " (and DefaultMusic missing)");
