@@ -14,10 +14,12 @@ namespace ApplicationScene {
             void UpdateBehavior(float) override;
             void HandleEvent(const std::optional<sf::Event>&) override;
             void RenderBehavior() override;
+            void PlaceEntities() override;
 
             std::string GetName() const override;
         private:
-            Engine::InputManager *inputManager;
+            Engine::Entity *bg;
+            Engine::Entity *titleEntity;
             Engine::Entities::TextButton* playButton;
             Engine::Entities::TextButton* settingsButton;
 

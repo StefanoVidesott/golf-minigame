@@ -3,6 +3,7 @@
 #include "entity.hpp"
 
 #include "entities/text_button.hpp"
+#include "entities/dropdown.hpp"
 
 namespace Engine {
     namespace Scene {
@@ -19,6 +20,7 @@ namespace Engine {
                 virtual void UpdateBehavior(float) = 0;
                 virtual void HandleEvent(const std::optional<sf::Event>&) = 0;
                 virtual void RenderBehavior() = 0;
+                virtual void PlaceEntities() {}
 
                 virtual std::string GetName() const = 0;
                 virtual void ToggleGizmos();

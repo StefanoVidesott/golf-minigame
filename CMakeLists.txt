@@ -30,7 +30,9 @@ add_executable(golf-minigame
     src/engine/components/rectangle_shape_component.cpp
     src/engine/components/velocity_component.cpp
     src/engine/components/gizmos/rectangle_gizmo.cpp
+
     src/engine/entities/text_button.cpp
+    src/engine/entities/dropdown.cpp
 
     src/game/scenes/menu_scene.cpp
     src/game/scenes/game_scene.cpp

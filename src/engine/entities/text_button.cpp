@@ -62,9 +62,15 @@ namespace Engine {
             return this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->GetGlobalBounds();
         }
 
+        [[nodiscard]] sf::FloatRect TextButton::GetLocalBounds() {
+            return this->GetComponent<Engine::Components::RectangleShapeComponent>("background")->GetLocalBounds();
+        }
+
         void TextButton::SetTextString(const std::string& text) {
             this->GetComponent<Engine::Components::TextComponent>("text")->SetString(text);
-            this->UpdateBackground();
+            if (this->autoCorrectBg) {
+                this->UpdateBackground();
+            }
         }
 
         void TextButton::SetTextFont(const std::string& fontName) {
@@ -122,6 +128,10 @@ namespace Engine {
 
         void TextButton::SetActionOnRelease(bool action) {
             this->actionOnRelease = action;
+        }
+
+        void TextButton::EnableAutoBackgroundResize(bool enabled) {
+            this->autoCorrectBg = enabled;
         }
 
     }

@@ -33,6 +33,7 @@ namespace Engine {
             this->scenes.pop();
             if (!this->scenes.empty()) {
                 this->scenes.top()->SetActive(true);
+                this->scenes.top()->PlaceEntities();
             }
         }
     }

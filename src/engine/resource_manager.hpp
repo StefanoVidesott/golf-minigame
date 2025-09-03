@@ -114,15 +114,86 @@ namespace Engine {
                     this->configFilePath = path;
                 }
 
-            private:
-                void InitDefaultSettings();
                 void ApplySettings();
                 void ApplyVideoSettings();
                 void ApplyWindowSize();
+            private:
+                void InitDefaultSettings();
 
                 std::string configFilePath;
                 std::unordered_map<std::string, std::string> settings;
-            };
+        };
+
+
+        // ---------------------------
+        // template specializations
+        // ---------------------------
+
+        // string
+        template <>
+        inline std::string SettingsManager::Get<std::string>(
+            const std::string& key, const std::string& fallback) const {
+            auto it = settings.find(key);
+            return (it != settings.end()) ? it->second : fallback;
+        }
+        template <>
+        inline void SettingsManager::Set<std::string>(
+            const std::string& key, const std::string& value) {
+            settings[key] = value;
+        }
+
+        // int
+        template <>
+        inline int SettingsManager::Get<int>(
+            const std::string& key, const int& fallback) const {
+            auto it = settings.find(key);
+            if (it != settings.end()) {
+                try { return std::stoi(it->second); }
+                catch (...) { return fallback; }
+            }
+            return fallback;
+        }
+        template <>
+        inline void SettingsManager::Set<int>(
+            const std::string& key, const int& value) {
+            settings[key] = std::to_string(value);
+        }
+
+        // float
+        template <>
+        inline float SettingsManager::Get<float>(
+            const std::string& key, const float& fallback) const {
+            auto it = settings.find(key);
+            if (it != settings.end()) {
+                try { return std::stof(it->second); }
+                catch (...) { return fallback; }
+            }
+            return fallback;
+        }
+        template <>
+        inline void SettingsManager::Set<float>(
+            const std::string& key, const float& value) {
+            settings[key] = std::to_string(value);
+        }
+
+        // bool
+        template <>
+        inline bool SettingsManager::Get<bool>(
+            const std::string& key, const bool& fallback) const {
+            auto it = settings.find(key);
+            if (it != settings.end()) {
+                std::string val = it->second;
+                std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+                if (val == "true" || val == "1" || val == "yes") return true;
+                if (val == "false" || val == "0" || val == "no") return false;
+            }
+            return fallback;
+        }
+        template <>
+        inline void SettingsManager::Set<bool>(
+            const std::string& key, const bool& value) {
+            settings[key] = value ? "true" : "false";
+        }
 
         class ResourceManager {
             public:
