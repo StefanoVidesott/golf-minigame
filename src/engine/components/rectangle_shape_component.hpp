@@ -26,6 +26,8 @@ namespace Engine {
                 void Update(float) override;
                 void Render(sf::RenderWindow*) override;
                 void SetPosition(const sf::Vector2f&) override;
+                void SetRotation(sf::Angle) override;
+                void SetScale(const sf::Vector2f&) override;
 
                 void SetOrigin(const sf::Vector2f&);
             private:

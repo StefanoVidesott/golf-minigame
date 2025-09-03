@@ -4,8 +4,6 @@ namespace Engine {
 
     Engine::Engine(sf::VideoMode mode, const std::string& title, unsigned int style) {
         this->window = std::make_unique<sf::RenderWindow>(mode, title, style);
-        // this->window->setVerticalSyncEnabled(true);
-        // this->window->setFramerateLimit(144);
         this->InitResources();
     }
 
@@ -47,13 +45,16 @@ namespace Engine {
     }
 
     void Engine::InitResources() {
+        ResourceManager::ResourceManager::SetWindow(this->window.get());
+
         ResourceManager::ResourceManager::SetTextureManager(&this->textureManager);
         ResourceManager::ResourceManager::SetFontManager(&this->fontManager);
         ResourceManager::ResourceManager::SetAudioManager(&this->audioManager);
         ResourceManager::ResourceManager::SetSceneManager(&this->sceneManager);
         ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
 
-        ResourceManager::ResourceManager::SetWindow(this->window.get());
+        ResourceManager::ResourceManager::SetSettingsManager(&this->settingsManager);
+        this->settingsManager.LoadSettings();
 
         this->sceneManager.Initialize(&this->scenes, &this->overlays,
             [this](std::unique_ptr<Scene::Scene> scene) { this->LoadScene(std::move(scene)); },

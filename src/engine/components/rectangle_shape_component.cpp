@@ -69,6 +69,14 @@ namespace Engine {
             this->shape.setPosition(position);
         }
 
+        void RectangleShapeComponent::SetRotation(sf::Angle angle) {
+            this->shape.setRotation(angle);
+        }
+
+        void RectangleShapeComponent::SetScale(const sf::Vector2f& scale) {
+            this->shape.setScale(scale);
+        }
+
         void RectangleShapeComponent::SetOrigin(const sf::Vector2f& origin) {
             this->shape.setOrigin(origin);
         }

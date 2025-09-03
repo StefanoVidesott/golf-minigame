@@ -35,6 +35,7 @@ namespace Engine {
             ResourceManager::FontManager fontManager;
             ResourceManager::AudioManager audioManager;
             ResourceManager::SceneManager sceneManager;
+            ResourceManager::SettingsManager settingsManager;
             InputManager inputManager;
     };
 };

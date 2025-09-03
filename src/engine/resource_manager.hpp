@@ -94,6 +94,36 @@ namespace Engine {
                 std::function<void()> DropSceneFunction;
         };
 
+        class SettingsManager {
+            public:
+                SettingsManager(const std::string &file_path = "settings.ini") {
+                    SetConfigFilePath(file_path);
+                }
+                ~SettingsManager() = default;
+
+                void LoadSettings();
+                void SaveSettings() const;
+
+                template <typename T>
+                T Get(const std::string& key, const T& fallback = T{}) const;
+
+                template <typename T>
+                void Set(const std::string& key, const T& value);
+
+                void SetConfigFilePath(const std::string& path) {
+                    this->configFilePath = path;
+                }
+
+            private:
+                void InitDefaultSettings();
+                void ApplySettings();
+                void ApplyVideoSettings();
+                void ApplyWindowSize();
+
+                std::string configFilePath;
+                std::unordered_map<std::string, std::string> settings;
+            };
+
         class ResourceManager {
             public:
                 ResourceManager() = default;
@@ -117,6 +147,9 @@ namespace Engine {
                 static void SetInputManager(InputManager*);
                 static InputManager* GetInputManager();
 
+                static SettingsManager* GetSettingsManager();
+                static void SetSettingsManager(SettingsManager*);
+
                 static std::string NormalizePath(const std::string&);
                 static std::shared_ptr<std::vector<unsigned char>> GetDecodedBlob(const std::string&);
             private:
@@ -127,6 +160,7 @@ namespace Engine {
                 static AudioManager* audioManager;
                 static SceneManager* sceneManager;
                 static InputManager* inputManager;
+                static SettingsManager* settingsManager;
 
                 static sf::RenderWindow* window;
 

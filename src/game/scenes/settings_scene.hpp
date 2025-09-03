@@ -1,14 +1,13 @@
 #pragma once
 
 #include "game_scene.hpp"
-#include "settings_scene.hpp"
 
 namespace ApplicationScene {
 
-    class MenuScene : public Engine::Scene::Scene {
+    class SettingsScene : public Engine::Scene::Scene {
         public:
-            MenuScene() = default;
-            ~MenuScene() override = default;
+            SettingsScene() = default;
+            ~SettingsScene() override = default;
 
             void Start() override;
             void UpdateBehavior(float) override;

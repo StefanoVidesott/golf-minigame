@@ -34,6 +34,8 @@ add_executable(golf-minigame
 
     src/game/scenes/menu_scene.cpp
     src/game/scenes/game_scene.cpp
+    src/game/scenes/settings_scene.cpp
+
 )
 
 target_compile_features(golf-minigame PRIVATE cxx_std_17)

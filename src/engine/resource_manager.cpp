@@ -196,12 +196,166 @@ namespace Engine {
             if (DropSceneFunction) DropSceneFunction();
         }
 
+        // ---- SETTINGS MANAGER ----
+
+        void SettingsManager::LoadSettings() {
+            namespace fs = std::filesystem;
+
+            if (!fs::exists(configFilePath)) {
+                if (auto parent = fs::path(configFilePath).parent_path(); !parent.empty()) {
+                    fs::create_directories(parent);
+                }
+                settings.clear();
+                InitDefaultSettings();
+                SaveSettings();
+                return;
+            }
+
+            std::ifstream file(configFilePath);
+            if (!file.is_open()) {
+                throw std::runtime_error("Failed to open settings file: " + configFilePath);
+            }
+
+            settings.clear();
+            InitDefaultSettings();
+
+            std::string line;
+            while (std::getline(file, line)) {
+                if (line.empty() || line[0] == '#') continue;
+                std::istringstream iss(line);
+                std::string key, value;
+                if (std::getline(iss, key, '=') && std::getline(iss, value)) {
+                    settings[key] = value;
+                }
+            }
+
+            this->ApplySettings();
+        }
+
+        void SettingsManager::SaveSettings() const {
+            namespace fs = std::filesystem;
+
+            if (auto parent = fs::path(configFilePath).parent_path(); !parent.empty()) {
+                fs::create_directories(parent);
+            }
+
+            std::string tmpPath = configFilePath + ".tmp";
+            {
+                std::ofstream file(tmpPath, std::ios::trunc);
+                if (!file.is_open()) {
+                    throw std::runtime_error("Failed to open settings file for writing: " + tmpPath);
+                }
+
+                for (const auto& [key, value] : settings) {
+                    file << key << "=" << value << "\n";
+                }
+            }
+            fs::rename(tmpPath, configFilePath);
+        }
+
+        void SettingsManager::InitDefaultSettings() {
+            this->settings["music_volume"]      = "100";
+            this->settings["sfx_volume"]        = "100";
+            this->settings["framerate_limit"]   = "0";
+            this->settings["vertical_sync"]     = "false";
+            this->settings["window_height"]     = "960";
+            this->settings["window_width"]      = "720";
+        }
+
+
+        // string
+        template <>
+        inline std::string SettingsManager::Get<std::string>(const std::string& key, const std::string& fallback) const {
+            auto it = settings.find(key);
+            return (it != settings.end()) ? it->second : fallback;
+        }
+
+        template <>
+        inline void SettingsManager::Set<std::string>(const std::string& key, const std::string& value) {
+            settings[key] = value;
+        }
+
+        // int
+        template <>
+        inline int SettingsManager::Get<int>(const std::string& key, const int& fallback) const {
+            auto it = settings.find(key);
+            if (it != settings.end()) {
+                try { return std::stoi(it->second); }
+                catch (...) { return fallback; }
+            }
+            return fallback;
+        }
+
+        template <>
+        inline void SettingsManager::Set<int>(const std::string& key, const int& value) {
+            settings[key] = std::to_string(value);
+        }
+
+        // float
+        template <>
+        inline float SettingsManager::Get<float>(const std::string& key, const float& fallback) const {
+            auto it = settings.find(key);
+            if (it != settings.end()) {
+                try { return std::stof(it->second); }
+                catch (...) { return fallback; }
+            }
+            return fallback;
+        }
+
+        template <>
+        inline void SettingsManager::Set<float>(const std::string& key, const float& value) {
+            settings[key] = std::to_string(value);
+        }
+
+        // bool
+        template <>
+        inline bool SettingsManager::Get<bool>(const std::string& key, const bool& fallback) const {
+            auto it = settings.find(key);
+            if (it != settings.end()) {
+                std::string val = it->second;
+                std::transform(val.begin(), val.end(), val.begin(), ::tolower);
+                if (val == "true" || val == "1" || val == "yes") return true;
+                if (val == "false" || val == "0" || val == "no") return false;
+            }
+            return fallback;
+        }
+
+        template <>
+        inline void SettingsManager::Set<bool>(const std::string& key, const bool& value) {
+            settings[key] = value ? "true" : "false";
+        }
+
+        void SettingsManager::ApplySettings() {
+            this->ApplyWindowSize();
+            this->ApplyVideoSettings();
+        }
+
+        void SettingsManager::ApplyVideoSettings() {
+            bool verticalSync = Get<bool>("vertical_sync");
+            int frameLimit = Get<int>("framerate_limit");
+
+            if (ResourceManager::GetWindow()) {
+                ResourceManager::GetWindow()->setVerticalSyncEnabled(verticalSync);
+                ResourceManager::GetWindow()->setFramerateLimit(frameLimit);
+            }
+        }
+
+        void SettingsManager::ApplyWindowSize() {
+            int width = Get<int>("window_width");
+            int height = Get<int>("window_height");
+
+            if (ResourceManager::GetWindow()) {
+                ResourceManager::GetWindow()->setSize(sf::Vector2u(width, height));
+            }
+        }
+
         // ---- RESOURCE MANAGER ----
 
         TextureManager *ResourceManager::textureManager;
         FontManager *ResourceManager::fontManager;
         AudioManager *ResourceManager::audioManager;
         SceneManager *ResourceManager::sceneManager;
+        SettingsManager *ResourceManager::settingsManager;
         InputManager *ResourceManager::inputManager;
 
         sf::RenderWindow *ResourceManager::window = nullptr;
@@ -252,6 +406,14 @@ namespace Engine {
 
         InputManager* ResourceManager::GetInputManager() {
             return inputManager;
+        }
+
+        void ResourceManager::SetSettingsManager(SettingsManager* settingsMgr) {
+            settingsManager = settingsMgr;
+        }
+
+        SettingsManager* ResourceManager::GetSettingsManager() {
+            return settingsManager;
         }
 
     } // namespace ResourceManager

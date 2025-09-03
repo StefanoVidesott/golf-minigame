@@ -1,8 +1,8 @@
-#include "game_scene.hpp"
+#include "settings_scene.hpp"
 
 namespace ApplicationScene {
 
-    void GameScene::Start() {
+    void SettingsScene::Start() {
         // Create Background Entity
         Engine::Entity *bg = new Engine::Entity();
         Engine::Components::SpriteComponent *bgSpriteComponent = new Engine::Components::SpriteComponent(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("background"));
@@ -15,20 +15,20 @@ namespace ApplicationScene {
 
     }
 
-    void GameScene::UpdateBehavior(float deltaTime) {
+    void SettingsScene::UpdateBehavior(float deltaTime) {
         // Update the game scene
     }
 
-    void GameScene::HandleEvent(const std::optional<sf::Event>& event) {
+    void SettingsScene::HandleEvent(const std::optional<sf::Event>& event) {
         // Handle events for the game scene
     }
 
-    void GameScene::RenderBehavior() {
+    void SettingsScene::RenderBehavior() {
         // Render the game scene
     }
 
-    std::string GameScene::GetName() const {
-        return "GameScene";
+    std::string SettingsScene::GetName() const {
+        return "SettingsScene";
     }
 
 } // namespace ApplicationScene
