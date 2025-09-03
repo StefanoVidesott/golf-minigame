@@ -3,18 +3,7 @@
 namespace ApplicationScene {
 
     void MenuScene::Start() {
-        // Initialize Resources
-        Engine::ResourceManager::ResourceManager::GetFontManager()->LoadFont("GameFont", "res/font/font.ttf");
-        Engine::ResourceManager::ResourceManager::GetTextureManager()->LoadTexture("background", "res/gfx/bg.png");
-        Engine::ResourceManager::ResourceManager::GetTextureManager()->LoadTexture("tile64_light", "res/gfx/tile64_light.png");
-
-        Engine::ResourceManager::ResourceManager::GetAudioManager()->LoadMusic("BackgroundMusic", "res/music/bg_music.wav");
-        Engine::ResourceManager::ResourceManager::GetAudioManager()->SetCurrentMusic("BackgroundMusic");
-        Engine::ResourceManager::ResourceManager::GetAudioManager()->PlayMusic(); // TODO reactivate
-
         // Create Background Entity
-
-
         std::unique_ptr<Engine::Entity> bgPtr = std::make_unique<Engine::Entity>();
         this->bg = bgPtr.get();
         Engine::Components::SpriteComponent *bgSpriteComponent = new Engine::Components::SpriteComponent(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("background"));

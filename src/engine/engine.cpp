@@ -2,9 +2,22 @@
 
 namespace Engine {
 
-    Engine::Engine(sf::VideoMode mode, const std::string& title, unsigned int style) {
-        this->window = std::make_unique<sf::RenderWindow>(mode, title, style);
+    Engine::Engine(sf::VideoMode mode, const std::string& title, unsigned int style, std::function<void()> loadApplicationResources){
+        this->loadApplicationResources = loadApplicationResources;
+
+        ResourceManager::ResourceManager::SetTextureManager(&this->textureManager);
+        ResourceManager::ResourceManager::SetFontManager(&this->fontManager);
+        ResourceManager::ResourceManager::SetAudioManager(&this->audioManager);
+        ResourceManager::ResourceManager::SetSceneManager(&this->sceneManager);
+        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
+        ResourceManager::ResourceManager::SetSettingsManager(&this->settingsManager);
+
         this->InitResources();
+
+        this->window = std::make_unique<sf::RenderWindow>(mode, title, style);
+        ResourceManager::ResourceManager::SetWindow(this->window.get());
+
+        this->settingsManager.LoadSettings();
     }
 
     Engine::~Engine() {
@@ -46,17 +59,6 @@ namespace Engine {
     }
 
     void Engine::InitResources() {
-        ResourceManager::ResourceManager::SetWindow(this->window.get());
-
-        ResourceManager::ResourceManager::SetTextureManager(&this->textureManager);
-        ResourceManager::ResourceManager::SetFontManager(&this->fontManager);
-        ResourceManager::ResourceManager::SetAudioManager(&this->audioManager);
-        ResourceManager::ResourceManager::SetSceneManager(&this->sceneManager);
-        ResourceManager::ResourceManager::SetInputManager(&this->inputManager);
-
-        ResourceManager::ResourceManager::SetSettingsManager(&this->settingsManager);
-        this->settingsManager.LoadSettings();
-
         this->sceneManager.Initialize(&this->scenes, &this->overlays,
             [this](std::unique_ptr<Scene::Scene> scene) { this->LoadScene(std::move(scene)); },
             [this]() { this->DropScene(); }
@@ -64,6 +66,7 @@ namespace Engine {
 
         this->fontManager.LoadFont("DefaultFont", "src/engine/res/font/CreatoDisplay-Regular.otf");
         this->textureManager.LoadTexture("DefaultTexture", "src/engine/res/gfx/templategrid_orm.png");
+        this->loadApplicationResources();
     }
 
     void Engine::Run() {

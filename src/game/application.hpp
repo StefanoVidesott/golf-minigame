@@ -7,6 +7,8 @@ class Application {
         Application();
         ~Application();
 
+        void InitializeResources();
+
         void Run();
     private:
         Engine::Engine* engine;

@@ -7,7 +7,7 @@ namespace Engine {
 
     class Engine {
         public:
-            Engine(sf::VideoMode, const std::string& = "Engine Window", unsigned int = sf::Style::Default);
+            Engine(sf::VideoMode, const std::string& = "Engine Window", unsigned int = sf::Style::Default, std::function<void()> loadApplicationResources = []{});
             ~Engine();
 
             void Run();
@@ -27,6 +27,8 @@ namespace Engine {
             std::unique_ptr<sf::RenderWindow> window;
             sf::Clock deltaClock;
             float deltaTime;
+
+            std::function<void()> loadApplicationResources;
 
             std::stack<std::unique_ptr<Scene::Scene>> scenes;
             std::vector<std::unique_ptr<Scene::Scene>> overlays;
