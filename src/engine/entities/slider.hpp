@@ -21,6 +21,8 @@ namespace Engine {
             void SetTrackColor(const sf::Color& color);
             void SetHandleColor(const sf::Color& color);
             void SetColors(const sf::Color& trackColor, const sf::Color& handleColor);
+            void SetTrackTexture(const sf::Texture& texture);
+            void SetHandleTexture(const sf::Texture& texture);
 
             void SetScale(const sf::Vector2f& scale);
 

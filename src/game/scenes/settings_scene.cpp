@@ -81,13 +81,32 @@ namespace ApplicationScene {
 
         this->musicVolumeSlider = new Engine::Entities::Slider(0.f, 100.f, this->ActualMusicVolume());
         this->musicVolumeSlider->SetSize(sf::Vector2f(200.f, 10.f));
-        // this->musicVolumeSlider->SetTrackColor(sf::Color(200, 200, 200));
-        // this->musicVolumeSlider->SetHandleColor(sf::Color(100, 100, 100));
+        // this->musicVolumeSlider->SetTrackTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
+        this->musicVolumeSlider->SetHandleTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
         this->musicVolumeSlider->SetOnValueChanged(
             [this](float volume) { OnMusicVolumeChanged(volume); }
         );
         this->musicVolumeSlider->SetHandleSize(sf::Vector2f(15.f, 25.f));
-        this->musicVolumeSlider->SetColors(sf::Color(150,150,150), sf::Color::White);
+        this->musicVolumeSlider->SetColors({85, 120, 70}, {255, 255, 255});
+
+        // Create sfx Volume section
+        std::unique_ptr<Engine::Entity> sfxVolumeTextPtr = std::make_unique<Engine::Entity>();
+        this->sfxVolumeText = sfxVolumeTextPtr.get();
+        Engine::Components::TextComponent *sfxVolumeTextComponent = new Engine::Components::TextComponent("GameFont", "SFX Volume:", 28);
+        sfxVolumeTextComponent->SetOrigin(sf::Vector2f(0, sfxVolumeTextComponent->GetGlobalBounds().size.y/2));
+        sfxVolumeTextComponent->SetOutlineColor(sf::Color::Black);
+        sfxVolumeTextComponent->SetOutlineThickness(2.f);
+        sfxVolumeTextPtr->AddComponent("Text", std::unique_ptr<Engine::Components::Component>(sfxVolumeTextComponent));
+
+        this->sfxVolumeSlider = new Engine::Entities::Slider(0.f, 100.f, this->ActualSFXVolume());
+        this->sfxVolumeSlider->SetSize(sf::Vector2f(200.f, 10.f));
+        // this->sfxVolumeSlider->SetTrackTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
+        this->sfxVolumeSlider->SetHandleTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
+        this->sfxVolumeSlider->SetOnValueChanged(
+            [this](float volume) { OnSFXVolumeChanged(volume); }
+        );
+        this->sfxVolumeSlider->SetHandleSize(sf::Vector2f(15.f, 25.f));
+        this->sfxVolumeSlider->SetColors({85, 120, 70}, {255, 255, 255});
 
         // Add entities to the scene
         this->entities.push_back(std::move(bgPtr));
@@ -99,6 +118,8 @@ namespace ApplicationScene {
         this->entities.push_back(std::unique_ptr<Engine::Entity>(this->frameLimitDropdown));
         this->entities.push_back(std::move(musicVolumeTextPtr));
         this->entities.push_back(std::unique_ptr<Engine::Entity>(this->musicVolumeSlider));
+        this->entities.push_back(std::move(sfxVolumeTextPtr));
+        this->entities.push_back(std::unique_ptr<Engine::Entity>(this->sfxVolumeSlider));
 
         this->PlaceEntities();
     }
@@ -129,6 +150,11 @@ namespace ApplicationScene {
         this->musicVolumeText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 300*scaleFactor.y));
         this->musicVolumeSlider->SetScale(scaleFactor);
         this->musicVolumeSlider->SetPosition(sf::Vector2f(360 * scaleFactor.x, 310 * scaleFactor.y));
+
+        this->sfxVolumeText->GetTransform()->SetScale(scaleFactor);
+        this->sfxVolumeText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 360*scaleFactor.y));
+        this->sfxVolumeSlider->SetScale(scaleFactor);
+        this->sfxVolumeSlider->SetPosition(sf::Vector2f(360 * scaleFactor.x, 370 * scaleFactor.y));
     }
 
     void SettingsScene::UpdateBehavior(float deltaTime) {
@@ -199,6 +225,13 @@ namespace ApplicationScene {
         Engine::ResourceManager::ResourceManager::GetAudioManager()->SetMusicVolume(volume);
     }
 
+    void SettingsScene::OnSFXVolumeChanged(float volume) {
+        this->settingsManager->Set("sfx_volume", volume);
+        this->settingsManager->SaveSettings();
+
+        // Engine::ResourceManager::ResourceManager::GetAudioManager()->SetSFXVolume(volume); // TODO
+    }
+
     std::string SettingsScene::ActualResolution() const {
         int width = this->settingsManager->Get<int>("window_width", 1280);
         int height = this->settingsManager->Get<int>("window_height", 720);
@@ -220,6 +253,10 @@ namespace ApplicationScene {
 
     float SettingsScene::ActualMusicVolume() const {
         return this->settingsManager->Get<float>("music_volume", 50.f);
+    }
+
+    float SettingsScene::ActualSFXVolume() const {
+        return this->settingsManager->Get<float>("sfx_volume", 50.f);
     }
 
 } // namespace ApplicationScene

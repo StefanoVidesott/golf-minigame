@@ -29,6 +29,8 @@ namespace ApplicationScene {
             Engine::Entities::Dropdown* frameLimitDropdown;
             Engine::Entity *musicVolumeText;
             Engine::Entities::Slider* musicVolumeSlider;
+            Engine::Entity *sfxVolumeText;
+            Engine::Entities::Slider* sfxVolumeSlider;
 
             // Engine::Entities::TextButton* backButton;
 
@@ -36,11 +38,13 @@ namespace ApplicationScene {
             void OnVSyncButtonClick();
             void OnFrameLimitChanged(const std::string&);
             void OnMusicVolumeChanged(float);
+            void OnSFXVolumeChanged(float);
 
             std::string ActualResolution() const;
             std::string ActualVSyncState() const;
             std::string ActualFrameLimit() const;
             float ActualMusicVolume() const;
+            float ActualSFXVolume() const;
         };
 
 } // namespace ApplicationScene

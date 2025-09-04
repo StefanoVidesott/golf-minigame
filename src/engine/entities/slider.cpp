@@ -9,13 +9,13 @@ namespace Engine {
         {
             this->inputManager = Engine::ResourceManager::ResourceManager::GetInputManager();
 
-            auto trackPtr = std::make_unique<Components::RectangleShapeComponent>();
-            this->track = trackPtr.get();
-            this->AddComponent("Track", std::move(trackPtr));
-
             auto handlePtr = std::make_unique<Components::RectangleShapeComponent>();
             this->handle = handlePtr.get();
             this->AddComponent("Handle", std::move(handlePtr));
+
+            auto trackPtr = std::make_unique<Components::RectangleShapeComponent>();
+            this->track = trackPtr.get();
+            this->AddComponent("Track", std::move(trackPtr));
 
             this->track->SetSize({200.f, 6.f});
             this->track->SetFillColor(sf::Color(150,150,150));
@@ -130,6 +130,14 @@ namespace Engine {
             this->track->SetScale(scale);
             this->handle->SetScale(scale);
             UpdateHandlePosition();
+        }
+
+        void Slider::SetTrackTexture(const sf::Texture& texture) {
+            this->track->SetTexture(texture);
+        }
+
+        void Slider::SetHandleTexture(const sf::Texture& texture) {
+            this->handle->SetTexture(texture);
         }
 
     } // namespace Entities
