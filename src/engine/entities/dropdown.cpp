@@ -4,6 +4,8 @@ namespace Engine {
     namespace Entities {
 
         Dropdown::Dropdown(std::vector<std::string> options, const std::string& selectedOption, const std::string& fontName, int fontSize, const sf::Vector2f& margin) {
+            this->inputManager = Engine::ResourceManager::ResourceManager::GetInputManager();
+
             this->margin = margin;
             this->options = std::move(options);
             this->selectedOption = selectedOption.empty() && !this->options.empty() ? this->options.front() : selectedOption;
@@ -57,16 +59,19 @@ namespace Engine {
             }
         }
 
-        void Dropdown::Update(float dt) {
-            this->mainButton->Update(dt);
-            if (this->isOpen) {
+        bool Dropdown::UpdateInput(float dt) {
+            bool status = this->mainButton->UpdateInput(dt);
+            if (this->isOpen && !status) {
                 for (auto& button : this->optionButtons) {
-                    button->Update(dt);
+                    if (button->UpdateInput(dt)) {
+                        status = true;
+                    }
                 }
             }
+            return status;
         }
 
-        void Dropdown::Render(sf::RenderWindow* window) {
+        void Dropdown::RenderCustomBehavior(sf::RenderWindow* window) {
             this->mainButton->Render(window);
             if (this->isOpen) {
                 for (auto& button : this->optionButtons) {

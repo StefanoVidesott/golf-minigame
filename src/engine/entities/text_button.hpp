@@ -37,7 +37,7 @@ namespace Engine {
             void SetActionOnRelease(bool action);
             void EnableAutoBackgroundResize(bool enabled);
 
-            void Update(float deltaTime);
+            bool UpdateInput(float deltaTime) override;
 
             [[nodiscard]] sf::FloatRect GetGlobalBounds();
             [[nodiscard]] sf::FloatRect GetLocalBounds();

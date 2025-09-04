@@ -10,6 +10,13 @@ namespace Engine {
                     entity->Update(deltaTime);
                 }
             }
+            for (std::unique_ptr<Entity>& entity : entities) {
+                if (entity) {
+                    if(entity->UpdateInput(deltaTime)) {
+                        break;
+                    }
+                }
+            }
         }
 
         void Scene::Render() {

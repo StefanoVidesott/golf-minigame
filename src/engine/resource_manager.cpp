@@ -257,7 +257,7 @@ namespace Engine {
             this->settings["music_volume"]      = "100";
             this->settings["sfx_volume"]        = "100";
             this->settings["framerate_limit"]   = "0";
-            this->settings["vertical_sync"]     = "false";
+            this->settings["vsync"]     = "false";
             this->settings["window_height"]     = "720";
             this->settings["window_width"]      = "960";
         }
@@ -268,7 +268,7 @@ namespace Engine {
         }
 
         void SettingsManager::ApplyVideoSettings() {
-            bool verticalSync = Get<bool>("vertical_sync", false);
+            bool verticalSync = Get<bool>("vsync", false);
             int frameLimit = Get<int>("framerate_limit", 0);
 
             if (ResourceManager::GetWindow()) {

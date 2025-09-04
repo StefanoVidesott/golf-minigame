@@ -18,15 +18,19 @@ namespace ApplicationScene {
             std::string GetName() const override;
         private:
             Engine::InputManager* inputManager;
-            Engine::Entities::Dropdown* resolutionDropdown;
+            Engine::ResourceManager::SettingsManager* settingsManager;
+
             Engine::Entity *bg;
             Engine::Entity *resolutionText;
-            // Engine::Entities::TextButton* settingsButton;
+            Engine::Entities::Dropdown* resolutionDropdown;
+            Engine::Entity *vsyncText;
+            Engine::Entities::TextButton* vsyncButton;
 
-            void OnPlayButtonClick();
-            void OnSettingsButtonClick();
             void UpdateResolution(const std::string&);
+            void OnVSyncButtonClick();
+
             std::string ActualResolution() const;
+            std::string ActualVSyncState() const;
         };
 
 } // namespace ApplicationScene

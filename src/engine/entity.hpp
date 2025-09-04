@@ -32,7 +32,9 @@ namespace Engine {
             Components::TransformComponent* GetTransform();
 
             void Update(float);
+            virtual bool UpdateInput(float) { return false; }
             void Render(sf::RenderWindow*);
+            virtual void RenderBehavior(sf::RenderWindow*) {}
         protected:
             std::unordered_map<std::string, std::unique_ptr<Components::Component>> components;
             Components::TransformComponent transform;

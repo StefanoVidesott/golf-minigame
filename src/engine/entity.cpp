@@ -37,6 +37,7 @@ namespace Engine {
                 }
             }
         }
+        this->RenderBehavior(window);
     }
 
     std::vector<Components::Component*> Entity::GetComponentList() {

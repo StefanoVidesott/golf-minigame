@@ -29,7 +29,7 @@ namespace Engine {
         }
 
 
-        void TextButton::Update(float deltaTime) {
+        bool TextButton::UpdateInput(float deltaTime) {
             bool isContained = this->GetGlobalBounds().contains(static_cast<sf::Vector2f>(this->inputManager->GetMousePosition()));
             Engine::Components::RectangleShapeComponent* backgroundComponent = this->GetComponent<Engine::Components::RectangleShapeComponent>("background");
             if (isContained) {
@@ -56,6 +56,7 @@ namespace Engine {
                     }
                 }
             }
+            return isContained;
         }
 
         [[nodiscard]] sf::FloatRect TextButton::GetGlobalBounds() {

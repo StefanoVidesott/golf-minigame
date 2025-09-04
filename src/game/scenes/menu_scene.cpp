@@ -50,15 +50,12 @@ namespace ApplicationScene {
     }
 
     void MenuScene::UpdateBehavior(float deltaTime) {
-        this->playButton->Update(deltaTime);
-        this->settingsButton->Update(deltaTime);
     }
 
     void MenuScene::HandleEvent(const std::optional<sf::Event>& event) {
     }
 
     void MenuScene::RenderBehavior() {
-        // Render the menu scene
     }
 
     std::string MenuScene::GetName() const {

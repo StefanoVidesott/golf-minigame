@@ -11,8 +11,8 @@ namespace Engine {
             Dropdown(std::vector<std::string> options = {}, const std::string& selectedOption = "", const std::string& fontName = "default", int fontSize = 30, const sf::Vector2f& margin = {20.f, 15.f});
             ~Dropdown() = default;
 
-            void Update(float dt);
-            void Render(sf::RenderWindow* window);
+            bool UpdateInput(float dt) override;
+            void RenderCustomBehavior(sf::RenderWindow*);
 
             void SetButtonTexture(const sf::Texture&);
             void SetButtonColors(const sf::Color&, const sf::Color&, const sf::Color&);
@@ -27,6 +27,8 @@ namespace Engine {
             void ToggleOpen();
             void SelectOption(const std::string& option);
             void LayoutOptions();
+
+            InputManager* inputManager;
 
             bool isOpen {false};
             sf::Vector2f margin;
