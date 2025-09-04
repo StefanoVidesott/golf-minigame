@@ -33,6 +33,7 @@ add_executable(golf-minigame
 
     src/engine/entities/text_button.cpp
     src/engine/entities/dropdown.cpp
+    src/engine/entities/slider.cpp
 
     src/game/scenes/menu_scene.cpp
     src/game/scenes/game_scene.cpp

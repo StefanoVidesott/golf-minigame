@@ -4,6 +4,7 @@
 
 #include "entities/text_button.hpp"
 #include "entities/dropdown.hpp"
+#include "entities/slider.hpp"
 
 namespace Engine {
     namespace Scene {

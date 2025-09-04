@@ -148,6 +148,7 @@ namespace Engine {
             sf::Music* musicPtr = &GetMusic(name);
             if (musicPtr) {
                 currentMusic = musicPtr;
+                currentMusic->setVolume(this->musicVolume);
             }
         }
 
@@ -166,6 +167,13 @@ namespace Engine {
         void AudioManager::StopMusic() {
             if (currentMusic) {
                 currentMusic->stop();
+            }
+        }
+
+        void AudioManager::SetMusicVolume(float volume) {
+            this->musicVolume = std::clamp(volume, 0.f, 100.f);
+            if (currentMusic) {
+                currentMusic->setVolume(this->musicVolume);
             }
         }
 
@@ -265,6 +273,7 @@ namespace Engine {
         void SettingsManager::ApplySettings() {
             this->ApplyWindowSize();
             this->ApplyVideoSettings();
+            this->ApplyAudioSettings();
         }
 
         void SettingsManager::ApplyVideoSettings() {
@@ -283,6 +292,14 @@ namespace Engine {
 
             if (ResourceManager::GetWindow()) {
                 ResourceManager::GetWindow()->setSize(sf::Vector2u(width, height));
+            }
+        }
+
+        void SettingsManager::ApplyAudioSettings() {
+            float musicVolume = Get<float>("music_volume", 100.f);
+
+            if (auto audioMgr = ResourceManager::GetAudioManager(); audioMgr) {
+                audioMgr->SetMusicVolume(musicVolume);
             }
         }
 

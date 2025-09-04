@@ -25,12 +25,22 @@ namespace ApplicationScene {
             Engine::Entities::Dropdown* resolutionDropdown;
             Engine::Entity *vsyncText;
             Engine::Entities::TextButton* vsyncButton;
+            Engine::Entity *frameLimitText;
+            Engine::Entities::Dropdown* frameLimitDropdown;
+            Engine::Entity *musicVolumeText;
+            Engine::Entities::Slider* musicVolumeSlider;
+
+            // Engine::Entities::TextButton* backButton;
 
             void UpdateResolution(const std::string&);
             void OnVSyncButtonClick();
+            void OnFrameLimitChanged(const std::string&);
+            void OnMusicVolumeChanged(float);
 
             std::string ActualResolution() const;
             std::string ActualVSyncState() const;
+            std::string ActualFrameLimit() const;
+            float ActualMusicVolume() const;
         };
 
 } // namespace ApplicationScene

@@ -65,11 +65,14 @@ namespace Engine {
                 void PlayMusic();
                 void PauseMusic();
                 void StopMusic();
+                void SetMusicVolume(float);
+                float GetMusicVolume() const { return musicVolume; }
 
             private:
                 std::unordered_map<std::string, std::unique_ptr<sf::SoundBuffer>> sounds;
                 std::unordered_map<std::string, std::unique_ptr<sf::Music>> music;
                 sf::Music *currentMusic = nullptr;
+                float musicVolume = 100.f;
 
                 std::unordered_map<std::string, std::shared_ptr<std::vector<unsigned char>>> musicBlobs;
         };
@@ -117,6 +120,7 @@ namespace Engine {
                 void ApplySettings();
                 void ApplyVideoSettings();
                 void ApplyWindowSize();
+                void ApplyAudioSettings();
             private:
                 void InitDefaultSettings();
 
