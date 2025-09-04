@@ -11,6 +11,7 @@ namespace Engine {
             Dropdown(std::vector<std::string> options = {}, const std::string& selectedOption = "", const std::string& fontName = "default", int fontSize = 30, const sf::Vector2f& margin = {20.f, 15.f});
             ~Dropdown() = default;
 
+            void UpdateBehavior(float dt) override;
             bool UpdateInput(float dt) override;
             void RenderCustomBehavior(sf::RenderWindow*);
 

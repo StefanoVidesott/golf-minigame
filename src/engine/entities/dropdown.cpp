@@ -71,6 +71,23 @@ namespace Engine {
             return status;
         }
 
+        void Dropdown::UpdateBehavior(float dt) {
+            if (this->isOpen && this->inputManager->IsMouseButtonPressed(sf::Mouse::Button::Left)) {
+                const auto mousePos = static_cast<sf::Vector2f>(this->inputManager->GetMousePosition());
+                const auto mainBounds = this->mainButton->GetGlobalBounds();
+                bool insideAnyButton = mainBounds.contains(mousePos);
+                for (const auto& button : this->optionButtons) {
+                    if (button->GetGlobalBounds().contains(mousePos)) {
+                        insideAnyButton = true;
+                        break;
+                    }
+                }
+                if (!insideAnyButton) {
+                    this->isOpen = false;
+                }
+            }
+        }
+
         void Dropdown::RenderCustomBehavior(sf::RenderWindow* window) {
             this->mainButton->Render(window);
             if (this->isOpen) {

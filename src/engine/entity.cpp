@@ -24,6 +24,7 @@ namespace Engine {
                 component.second->Update(deltaTime);
             }
         }
+        this->UpdateBehavior(deltaTime);
     }
 
     void Entity::Render(sf::RenderWindow* window) {

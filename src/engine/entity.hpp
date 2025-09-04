@@ -32,6 +32,7 @@ namespace Engine {
             Components::TransformComponent* GetTransform();
 
             void Update(float);
+            virtual void UpdateBehavior(float) { }
             virtual bool UpdateInput(float) { return false; }
             void Render(sf::RenderWindow*);
             virtual void RenderBehavior(sf::RenderWindow*) {}
