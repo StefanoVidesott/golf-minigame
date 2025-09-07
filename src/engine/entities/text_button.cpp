@@ -28,7 +28,6 @@ namespace Engine {
             backgroundComponent->SetOrigin(backgroundSize / 2.f);
         }
 
-
         bool TextButton::UpdateInput(float deltaTime) {
             bool isContained = this->GetGlobalBounds().contains(static_cast<sf::Vector2f>(this->inputManager->GetMousePosition()));
             Engine::Components::RectangleShapeComponent* backgroundComponent = this->GetComponent<Engine::Components::RectangleShapeComponent>("background");
@@ -95,12 +94,16 @@ namespace Engine {
 
         void TextButton::SetTextOutlineColor(const sf::Color& color) {
             this->GetComponent<Engine::Components::TextComponent>("text")->SetOutlineColor(color);
-            this->UpdateBackground();
+            if (this->autoCorrectBg) {
+                this->UpdateBackground();
+            }
         }
 
         void TextButton::SetTextOutlineThickness(float thickness) {
             this->GetComponent<Engine::Components::TextComponent>("text")->SetOutlineThickness(thickness);
-            this->UpdateBackground();
+            if (this->autoCorrectBg) {
+                this->UpdateBackground();
+            }
         }
 
         void TextButton::SetBackgroundColors(const sf::Color& normal, const sf::Color& hover, const sf::Color& clicked) {

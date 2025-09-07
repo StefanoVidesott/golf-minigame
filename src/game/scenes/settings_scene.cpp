@@ -12,13 +12,30 @@ namespace ApplicationScene {
         Engine::Components::SpriteComponent *bgSpriteComponent = new Engine::Components::SpriteComponent(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("background"));
         bgPtr->AddComponent("BackgroundSprite", std::unique_ptr<Engine::Components::Component>(bgSpriteComponent));
 
+        // Create Title Text Entity
+        std::unique_ptr<Engine::Entity> titleTextPtr = std::make_unique<Engine::Entity>();
+        this->titleText = titleTextPtr.get();
+        Engine::Components::TextComponent *titleTextComponent = new Engine::Components::TextComponent("GameFont", "Settings", 54);
+        titleTextComponent->SetOrigin(sf::Vector2f(titleTextComponent->GetGlobalBounds().size.x/2, titleTextComponent->GetGlobalBounds().size.y/2));
+        titleTextComponent->SetOutlineColor(sf::Color::Black);
+        titleTextComponent->SetOutlineThickness(4.f);
+        titleTextPtr->AddComponent("TitleText", std::unique_ptr<Engine::Components::Component>(titleTextComponent));
+
+        // Create Back Button Entity
+        std::unique_ptr<Engine::Entities::TextButton> backButtonPtr = std::make_unique<Engine::Entities::TextButton>("Back", [this]() { this->OnBackButtonClick(); }, "GameFont", 26);
+        this->backButton = backButtonPtr.get();
+        backButtonPtr->SetBackgroundTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
+        backButtonPtr->SetBackgroundColors({255, 255, 255}, {200, 200 ,200}, {150 ,150 ,150});
+        backButtonPtr->SetTextOutlineColor(sf::Color::Black);
+        backButtonPtr->SetTextOutlineThickness(2.f);
+
         // Create Resolution section
         std::unique_ptr<Engine::Entity> resolutionTextPtr = std::make_unique<Engine::Entity>();
         this->resolutionText = resolutionTextPtr.get();
         Engine::Components::TextComponent *resolutionTextComponent = new Engine::Components::TextComponent("GameFont", "Window Resolution:", 28);
         resolutionTextComponent->SetOrigin(sf::Vector2f(0, resolutionTextComponent->GetGlobalBounds().size.y/2));
         resolutionTextComponent->SetOutlineColor(sf::Color::Black);
-        resolutionTextComponent->SetOutlineThickness(2.f);
+        resolutionTextComponent->SetOutlineThickness(3.f);
         resolutionTextPtr->AddComponent("Text", std::unique_ptr<Engine::Components::Component>(resolutionTextComponent));
 
         this->resolutionDropdown = new Engine::Entities::Dropdown(
@@ -33,6 +50,8 @@ namespace ApplicationScene {
         );
         this->resolutionDropdown->SetButtonTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
         this->resolutionDropdown->SetButtonColors({255, 255, 255}, {200, 200 ,200}, {150 ,150 ,150});
+        this->resolutionDropdown->SetTextOutlineColor(sf::Color::Black);
+        this->resolutionDropdown->SetTextOutlineThickness(2.f);
 
         // Create vsync section
         std::unique_ptr<Engine::Entity> vsyncTextPtr = std::make_unique<Engine::Entity>();
@@ -40,13 +59,15 @@ namespace ApplicationScene {
         Engine::Components::TextComponent *vsyncTextComponent = new Engine::Components::TextComponent("GameFont", "Vertical Sync:", 28);
         vsyncTextComponent->SetOrigin(sf::Vector2f(0, vsyncTextComponent->GetGlobalBounds().size.y/2));
         vsyncTextComponent->SetOutlineColor(sf::Color::Black);
-        vsyncTextComponent->SetOutlineThickness(2.f);
+        vsyncTextComponent->SetOutlineThickness(3.f);
         vsyncTextPtr->AddComponent("Text", std::unique_ptr<Engine::Components::Component>(vsyncTextComponent));
 
         std::unique_ptr<Engine::Entities::TextButton> vsyncButtonPtr = std::make_unique<Engine::Entities::TextButton>(ActualVSyncState(), [this]() { this->OnVSyncButtonClick(); }, "GameFont", 30);
         this->vsyncButton = vsyncButtonPtr.get();
         vsyncButtonPtr->SetBackgroundTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
         vsyncButtonPtr->SetBackgroundColors({255, 255, 255}, {200, 200 ,200}, {150 ,150 ,150});
+        vsyncButtonPtr->SetTextOutlineColor(sf::Color::Black);
+        vsyncButtonPtr->SetTextOutlineThickness(2.f);
 
         // Create Framelimit section
         std::unique_ptr<Engine::Entity> frameLimitTextPtr = std::make_unique<Engine::Entity>();
@@ -54,7 +75,7 @@ namespace ApplicationScene {
         Engine::Components::TextComponent *frameLimitTextComponent = new Engine::Components::TextComponent("GameFont", "FPS Limit:", 28);
         frameLimitTextComponent->SetOrigin(sf::Vector2f(0, frameLimitTextComponent->GetGlobalBounds().size.y/2));
         frameLimitTextComponent->SetOutlineColor(sf::Color::Black);
-        frameLimitTextComponent->SetOutlineThickness(2.f);
+        frameLimitTextComponent->SetOutlineThickness(3.f);
         frameLimitTextPtr->AddComponent("Text", std::unique_ptr<Engine::Components::Component>(frameLimitTextComponent));
 
         this->frameLimitDropdown = new Engine::Entities::Dropdown(
@@ -69,6 +90,8 @@ namespace ApplicationScene {
         );
         this->frameLimitDropdown->SetButtonTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
         this->frameLimitDropdown->SetButtonColors({255, 255, 255}, {200, 200 ,200}, {150 ,150 ,150});
+        this->frameLimitDropdown->SetTextOutlineColor(sf::Color::Black);
+        this->frameLimitDropdown->SetTextOutlineThickness(2.f);
 
         // Create Music Volume section
         std::unique_ptr<Engine::Entity> musicVolumeTextPtr = std::make_unique<Engine::Entity>();
@@ -76,7 +99,7 @@ namespace ApplicationScene {
         Engine::Components::TextComponent *musicVolumeTextComponent = new Engine::Components::TextComponent("GameFont", "Music Volume:", 28);
         musicVolumeTextComponent->SetOrigin(sf::Vector2f(0, musicVolumeTextComponent->GetGlobalBounds().size.y/2));
         musicVolumeTextComponent->SetOutlineColor(sf::Color::Black);
-        musicVolumeTextComponent->SetOutlineThickness(2.f);
+        musicVolumeTextComponent->SetOutlineThickness(3.f);
         musicVolumeTextPtr->AddComponent("Text", std::unique_ptr<Engine::Components::Component>(musicVolumeTextComponent));
 
         this->musicVolumeSlider = new Engine::Entities::Slider(0.f, 100.f, this->ActualMusicVolume());
@@ -95,7 +118,7 @@ namespace ApplicationScene {
         Engine::Components::TextComponent *sfxVolumeTextComponent = new Engine::Components::TextComponent("GameFont", "SFX Volume:", 28);
         sfxVolumeTextComponent->SetOrigin(sf::Vector2f(0, sfxVolumeTextComponent->GetGlobalBounds().size.y/2));
         sfxVolumeTextComponent->SetOutlineColor(sf::Color::Black);
-        sfxVolumeTextComponent->SetOutlineThickness(2.f);
+        sfxVolumeTextComponent->SetOutlineThickness(3.f);
         sfxVolumeTextPtr->AddComponent("Text", std::unique_ptr<Engine::Components::Component>(sfxVolumeTextComponent));
 
         this->sfxVolumeSlider = new Engine::Entities::Slider(0.f, 100.f, this->ActualSFXVolume());
@@ -110,6 +133,8 @@ namespace ApplicationScene {
 
         // Add entities to the scene
         this->entities.push_back(std::move(bgPtr));
+        this->entities.push_back(std::move(titleTextPtr));
+        this->entities.push_back(std::move(backButtonPtr));
         this->entities.push_back(std::move(resolutionTextPtr));
         this->entities.push_back(std::unique_ptr<Engine::Entity>(this->resolutionDropdown));
         this->entities.push_back(std::move(vsyncTextPtr));
@@ -131,30 +156,36 @@ namespace ApplicationScene {
 
         this->bg->GetTransform()->SetScale(scaleFactor);
 
+        this->titleText->GetTransform()->SetScale(scaleFactor);
+        this->titleText->GetTransform()->SetPosition(sf::Vector2f(windowSize.x / 2.f, 50 * scaleFactor.y));
+
+        this->backButton->GetTransform()->SetScale(scaleFactor);
+        this->backButton->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 60*scaleFactor.y));
+
         this->resolutionText->GetTransform()->SetScale(scaleFactor);
-        this->resolutionText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 120*scaleFactor.y));
+        this->resolutionText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 140*scaleFactor.y));
         this->resolutionDropdown->SetScale(scaleFactor);
-        this->resolutionDropdown->SetPosition(sf::Vector2f(460 * scaleFactor.x, 130 * scaleFactor.y));
+        this->resolutionDropdown->SetPosition(sf::Vector2f(460 * scaleFactor.x, 150 * scaleFactor.y));
 
         this->vsyncText->GetTransform()->SetScale(scaleFactor);
-        this->vsyncText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 180*scaleFactor.y));
+        this->vsyncText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 200*scaleFactor.y));
         this->vsyncButton->GetTransform()->SetScale(scaleFactor);
-        this->vsyncButton->GetTransform()->SetPosition(sf::Vector2f(460 * scaleFactor.x, 190 * scaleFactor.y));
+        this->vsyncButton->GetTransform()->SetPosition(sf::Vector2f(460 * scaleFactor.x, 210 * scaleFactor.y));
 
         this->frameLimitText->GetTransform()->SetScale(scaleFactor);
-        this->frameLimitText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 240*scaleFactor.y));
+        this->frameLimitText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 260*scaleFactor.y));
         this->frameLimitDropdown->SetScale(scaleFactor);
-        this->frameLimitDropdown->SetPosition(sf::Vector2f(460 * scaleFactor.x, 250 * scaleFactor.y));
+        this->frameLimitDropdown->SetPosition(sf::Vector2f(460 * scaleFactor.x, 270 * scaleFactor.y));
 
         this->musicVolumeText->GetTransform()->SetScale(scaleFactor);
-        this->musicVolumeText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 300*scaleFactor.y));
+        this->musicVolumeText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 320*scaleFactor.y));
         this->musicVolumeSlider->SetScale(scaleFactor);
-        this->musicVolumeSlider->SetPosition(sf::Vector2f(360 * scaleFactor.x, 310 * scaleFactor.y));
+        this->musicVolumeSlider->SetPosition(sf::Vector2f(360 * scaleFactor.x, 330 * scaleFactor.y));
 
         this->sfxVolumeText->GetTransform()->SetScale(scaleFactor);
-        this->sfxVolumeText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 360*scaleFactor.y));
+        this->sfxVolumeText->GetTransform()->SetPosition(sf::Vector2f(75*scaleFactor.x, 380*scaleFactor.y));
         this->sfxVolumeSlider->SetScale(scaleFactor);
-        this->sfxVolumeSlider->SetPosition(sf::Vector2f(360 * scaleFactor.x, 370 * scaleFactor.y));
+        this->sfxVolumeSlider->SetPosition(sf::Vector2f(360 * scaleFactor.x, 390 * scaleFactor.y));
     }
 
     void SettingsScene::UpdateBehavior(float deltaTime) {
@@ -195,6 +226,10 @@ namespace ApplicationScene {
             this->window->setSize({static_cast<unsigned int>(width), static_cast<unsigned int>(height)});
             this->PlaceEntities();
         }
+    }
+
+    void SettingsScene::OnBackButtonClick() {
+        Engine::ResourceManager::ResourceManager::GetSceneManager()->DropScene();
     }
 
     void SettingsScene::OnVSyncButtonClick() {

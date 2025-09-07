@@ -142,5 +142,19 @@ namespace Engine {
             }
         }
 
+        void Dropdown::SetTextOutlineColor(const sf::Color& color) {
+            this->mainButton->SetTextOutlineColor(color);
+            for (auto& button : this->optionButtons) {
+                button->SetTextOutlineColor(color);
+            }
+        }
+
+        void Dropdown::SetTextOutlineThickness(float thickness) {
+            this->mainButton->SetTextOutlineThickness(thickness);
+            for (auto& button : this->optionButtons) {
+                button->SetTextOutlineThickness(thickness);
+            }
+        }
+
     } // namespace Entities
 } // namespace Engine

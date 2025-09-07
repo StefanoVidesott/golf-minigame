@@ -18,6 +18,9 @@ namespace Engine {
             void SetButtonTexture(const sf::Texture&);
             void SetButtonColors(const sf::Color&, const sf::Color&, const sf::Color&);
 
+            void SetTextOutlineColor(const sf::Color&);
+            void SetTextOutlineThickness(float);
+
             void SetPosition(const sf::Vector2f& position);
             void SetScale(const sf::Vector2f& scale);
 

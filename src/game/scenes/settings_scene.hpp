@@ -21,6 +21,8 @@ namespace ApplicationScene {
             Engine::ResourceManager::SettingsManager* settingsManager;
 
             Engine::Entity *bg;
+            Engine::Entity *titleText;
+            Engine::Entity *backButton;
             Engine::Entity *resolutionText;
             Engine::Entities::Dropdown* resolutionDropdown;
             Engine::Entity *vsyncText;
@@ -32,7 +34,7 @@ namespace ApplicationScene {
             Engine::Entity *sfxVolumeText;
             Engine::Entities::Slider* sfxVolumeSlider;
 
-            // Engine::Entities::TextButton* backButton;
+            void OnBackButtonClick();
 
             void UpdateResolution(const std::string&);
             void OnVSyncButtonClick();

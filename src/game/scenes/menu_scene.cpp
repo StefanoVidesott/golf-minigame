@@ -25,6 +25,8 @@ namespace ApplicationScene {
         this->playButton->SetBackgroundTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
         this->playButton->SetBackgroundColors({255, 255, 255}, {200, 200 ,200}, {150 ,150 ,150});
         this->entities.push_back(std::unique_ptr<Engine::Entity>(this->playButton));
+        this->playButton->SetTextOutlineColor(sf::Color::Black);
+        this->playButton->SetTextOutlineThickness(2.f);
 
         // Create Settings Button
         this->settingsButton = new Engine::Entities::TextButton("Settings", [this]() { this->OnSettingsButtonClick(); }, "GameFont", 40);
@@ -32,6 +34,9 @@ namespace ApplicationScene {
         this->settingsButton->SetBackgroundTexture(Engine::ResourceManager::ResourceManager::GetTextureManager()->GetTexture("tile64_light"));
         this->settingsButton->SetBackgroundColors({255, 255, 255}, {200, 200 ,200}, {150 ,150 ,150});
         this->entities.push_back(std::unique_ptr<Engine::Entity>(this->settingsButton));
+        this->settingsButton->SetTextOutlineColor(sf::Color::Black);
+        this->settingsButton->SetTextOutlineThickness(2.f);
+
         this->PlaceEntities();
     }
 
